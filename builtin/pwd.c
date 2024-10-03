@@ -1,19 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zerrinayaz <zerrinayaz@student.42.fr>      +#+  +:+       +#+        */
+/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/08 14:42:00 by itulgar           #+#    #+#             */
-/*   Updated: 2024/09/30 19:46:35 by zerrinayaz       ###   ########.fr       */
+/*   Created: 2024/10/02 15:37:45 by zayaz             #+#    #+#             */
+/*   Updated: 2024/10/02 17:47:22 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
-int	error_message(char *str)
+void	pwd(void)
 {
-	printf("<< Error: %s honey >>\n", str);
-	return (0);
+	// büyük küçük harf duyarsız
+	char pwd[1024];
+	getcwd(pwd, sizeof(pwd));
+	printf("%s", pwd);
 }

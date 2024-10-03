@@ -2,16 +2,24 @@ NAME= minishell
 SRCS= main.c\
 	  error.c\
 	  free.c\
+	  lexer_free.c\
 	  init.c\
 	  parser/parser.c\
 	  parser/p_quote.c\
 	  parser/p_pipe.c\
 	  parser/p_redirection.c\
-	  utils/zi_split.c\
-	  utils/zi_split_2.c\
+	  utils/parser_util.c\
+	  utils/parser_util_2.c\
 	  lexer/lexer.c\
+	  lexer/set_meta.c\
 	  lexer/dolar_handler.c\
-	  utils/lexer_list.c\
+	  lexer/dolar_handler_2.c\
+	  utils/lexer_util.c\
+	  builtin/echo.c\
+	  builtin/cd.c\
+	  builtin/pwd.c\
+	  builtin/env.c\
+	  builtin/export.c\
 
 OBJS= $(SRCS:.c=.o)
 CC= gcc

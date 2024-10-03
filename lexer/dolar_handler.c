@@ -1,95 +1,111 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   dolar_handler.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: zerrinayaz <zerrinayaz@student.42.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/29 12:24:13 by itulgar           #+#    #+#             */
+/*   Updated: 2024/09/30 19:46:10 by zerrinayaz       ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
-//  echo "$HOME"'$HOME''"$HOME"' birden fazla dolarlı ise dolar olarak ----dolar
-// setle . tırnak temizlerken birden fazla varsa içini tek tek temizle(execde)
-
-//"$HOME"
-
-int	is_env(char *parser_input, char quote_type)
+static char *before_dolar(t_lexer *parser_input, int *i, int is_in)
 {
-	(void)quote_type;
-	if (ft_strchr(parser_input, 36))
-		return (0);
-	return (1);
+	int len;
+	char *before_cmd;
+
+	len = 0;
+	len = zi_strlen(parser_input->cmd + *i, 36, is_in);
+	before_cmd = ft_substr(parser_input->cmd, *i, len);
+	while (*i < len)
+		(*i)++;
+	return (before_cmd);
 }
-
-char	*get_env(t_program *program, char *parser_input, char c)
+static char *after_quote(t_lexer *parser_input, char *before_cmd, int *i)
 {
-	while (program->envp_list)
+	char *se_dolar;
+
+	se_dolar = before_dolar(parser_input, i, 0);
+	if (se_dolar)
 	{
-		if (!ft_strncmp(program->envp_list->key, parser_input,
-				zi_strlen(parser_input, c)))
-		{
-			return (zi_strlcpy(parser_input, program->envp_list->content,
-					ft_strlen(program->envp_list->content)));
-		}
-		program->envp_list = program->envp_list->next;
+		before_cmd = ft_strjoin(before_cmd, se_dolar);
 	}
-	return (NULL);
+	while (parser_input->cmd[*i] && parser_input->cmd[*i] != 36)
+		(*i)++;
+	return (before_cmd);
 }
 
-void	loc_dolar(t_program *program, t_lexer *parser_inputiz)
+static char *before_dolar_assign(t_program *program, t_lexer *parser_input, char *before_cmd, int *i)
 {
-	char	*parser_input;
-	char	*tmp;
-	int		i;
-	int		j;
+	char *env_str;
+	char *after_dolar;
+	char *tmp;
+	char *key;
+	char *str;
 
-	char	quote_type;
-	char	*tmp2;
-	char	*tmp3;
-	quote_type = '\0';
-	tmp = NULL;
-	j = 0;
-	tmp = malloc(sizeof(char) * (zi_strlen(parser_inputiz->cmd, '$') + 1));
-	if(!tmp)
-		tmp=NULL;                 
-	parser_input = parser_inputiz->cmd;
+	env_str = env_count_str(parser_input, i);
+	after_dolar = ft_substr(parser_input->cmd, *i,
+							(ft_strlen(parser_input->cmd) - *i));
+	if (env_str[0] == '\0')
+		tmp = ft_strjoin(before_cmd, after_dolar);
+	else
+	{
+		key = dolar_env(program, env_str);
+		if (key != NULL)
+		{
+			str = ft_strjoin(before_cmd, key);
+			tmp = ft_strjoin(str, after_dolar);
+		}
+		else
+			tmp = ft_strjoin(before_cmd, after_dolar);
+	}
+	dolar_free(env_str, after_dolar);
+	return (tmp);
+}
+
+static void dq_dolar_env(t_program *program, t_lexer *parser_input, int *i,
+				  char *before_cmd)
+{
+
+	char *tmp;
+
+	if (parser_input->cmd[*i] == '\"')
+		before_cmd = after_quote(parser_input, before_cmd, i);
+	if (parser_input->cmd[*i] == 36)
+	{
+
+		tmp = before_dolar_assign(program, parser_input, before_cmd, i);
+		free(parser_input->cmd);
+		parser_input->cmd = ft_strdup(tmp);
+		if (before_cmd)
+			free(before_cmd);
+
+		if (tmp)
+			free(tmp);
+	}
+}
+
+void dolar_handler(t_program *program, t_lexer *parser_input)
+{
+	char *before_cmd;
+	int i;
+	int j;
+
 	i = 0;
-	while (parser_input[i])
+	j = ft_strlen(parser_input->cmd);
+	while (parser_input->cmd[i])
 	{
-		if (parser_input[i] == '\'' || parser_input[i] == '\"'){
-			quote_type = parser_input[i];
-		}
-		 if ( parser_input[i] != '$' && parser_input[i])
+		before_cmd = before_dolar(parser_input, &i, 1);
+		dq_dolar_env(program, parser_input, &i, before_cmd);
+		if (i >= j)
+			break;
+		else
 		{
-			tmp[j] = parser_input[i];
-			i++;
-			j++;
-		}
-		if (parser_input[i] == '$')
-		{
-			i++;
-			tmp2 = get_env(program, &parser_input[i], quote_type);
-			if (tmp2)
-			{
-				while (parser_input[i] && parser_input[i] != '\''
-					&& parser_input[i] != '\"')
-					i++;
-				tmp3 = ft_strchr(parser_input + i, quote_type);
-				break;
-			}else if(!tmp2)
-				break;
+			j = ft_strlen(parser_input->cmd);
+			i = 0;
 		}
 	}
-	tmp[j] = '\0';
-	tmp = ft_strjoin(tmp, tmp2);
-	parser_inputiz->cmd = ft_strjoin(tmp, tmp3);
-	free(tmp);
-}
-
-int	count_dolar(char *parser_input)
-{
-	int	i;
-	int	count;
-
-	i = 0;
-	count = 0;
-	while (parser_input[i])
-	{
-		if (parser_input[i] == '$')
-			count++;
-		i++;
-	}
-	return (count);
 }

@@ -1,19 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   lexer_free.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zerrinayaz <zerrinayaz@student.42.fr>      +#+  +:+       +#+        */
+/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/08 14:42:00 by itulgar           #+#    #+#             */
-/*   Updated: 2024/09/30 19:46:35 by zerrinayaz       ###   ########.fr       */
+/*   Created: 2024/10/01 19:25:23 by zayaz             #+#    #+#             */
+/*   Updated: 2024/10/01 19:25:25 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	error_message(char *str)
+void	dolar_free(char *env_str, char *after_dolar)
 {
-	printf("<< Error: %s honey >>\n", str);
-	return (0);
+	if (env_str[0] != '\0')
+		free(env_str);
+	if (after_dolar)
+		free(after_dolar);
 }

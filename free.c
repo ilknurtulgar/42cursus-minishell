@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
+/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 17:47:51 by itulgar           #+#    #+#             */
-/*   Updated: 2024/09/21 13:18:34 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/10/02 16:35:42 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	free_envp_list(t_list *envp_list)
+static void	free_envp_list(t_list *envp_list)
 {
 	t_list	*temp;
 
@@ -45,8 +45,8 @@ void	free_parser_input(t_program *program)
 
 	i = 0;
 	j = 0;
-	if(!program->parser_input)
-		return;
+	if (!program->parser_input)
+		return ;
 	while (program->parser_input[i])
 	{
 		j = 0;
