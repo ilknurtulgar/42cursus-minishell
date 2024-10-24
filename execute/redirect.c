@@ -6,15 +6,15 @@
 /*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:53:16 by zayaz             #+#    #+#             */
-/*   Updated: 2024/10/16 18:32:25 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/10/23 20:00:17 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	zi_redirectchr(const char *s, char c)
+int zi_redirectchr(const char *s, char c)
 {
-	char	type;
+	char type;
 
 	while (*s)
 	{
@@ -34,110 +34,115 @@ int	zi_redirectchr(const char *s, char c)
 	return (0);
 }
 
-static void	run_output(char *s)
-{
-	int	fd;
 
-	fd = open(s, O_CREAT | O_RDWR | O_TRUNC, 0644);
-	if (fd == -1)
+void	quote_skip(char *cmd, int *z)
+{
+	char	q_type;
+
+	if (cmd[*z] == '\'' || cmd[*z] == '\"')
 	{
-		perror("Error opening file");
-		return ;
+		q_type = cmd[*z];
+		(*z)++;
+		while (cmd[*z] && cmd[*z] != q_type)
+			(*z)++;
+		if (cmd[*z] == q_type)
+			(*z)++;
 	}
-	if (dup2(fd, STDOUT_FILENO) == -1)
-	{
-		perror("Error opening file");
-		close(fd);
-		return ;
-	}
-	close(fd);
 }
 
-static void	run_input(char *s)
+void	find_loc(char *cmd, int *z)
 {
-	int	fd;
-
-	fd = open(s, O_RDWR);
-	if (fd == -1)
+	while (cmd[*z] != '\0' && cmd[*z] != '>' && cmd[*z] != '<')
 	{
-		printf("minishell: %s: No such file or directoryss\n", s);
-		return ;
+		quote_skip(cmd, z);
+		if (cmd[*z] && (cmd[*z] != '\'' && cmd[*z] != '\"') && (cmd[*z] != '>'
+				&& cmd[*z] != '<'))
+			(*z)++;
 	}
-	if (dup2(fd, STDIN_FILENO) == -1)
-	{
-		perror("Error opening file");
-		close(fd);
-		return ;
-	}
-	close(fd);
 }
 
-static void	append_output(char *s)
+void	load_redi(t_program *program, void run_redirect(char *), int *i, int *j,
+		int *z)
 {
-	int	fd;
+	int		start;
+	int		size;
+	char	*doc;
+	char	*clean_doc;
 
-	fd = open(s, O_CREAT | O_RDWR | O_APPEND, 0644);
-	if (fd == -1)
+	clean_doc = NULL;
+	start = 0;
+	size = 0;
+	doc = NULL;
+	if (program->parser_input[*i][*j]->cmd[*z])
 	{
-		perror("Error opening file");
-		return ;
-	}
-	if (dup2(fd, STDOUT_FILENO) == -1)
-	{
-		perror("Error opening file");
-		close(fd);
-		return ;
-	}
-	close(fd);
-}
-
-void	go_redirect(t_program *program, void run_redirect(char *), char key,
-		int *i, int *j, int split_rd)
-{
-	int		k;
-	char	**redi_cmd;
-	char	*dst;
-
-	dst = NULL;
-	if (zi_strcmp(program->parser_input[*i][*j]->cmd, "<<") != 0
-		&& zi_strcmp(program->parser_input[*i][*j]->cmd, "<") != 0
-		&& zi_strcmp(program->parser_input[*i][*j]->cmd, ">>") != 0
-		&& zi_strcmp(program->parser_input[*i][*j]->cmd, ">") != 0)
-	{
-		redi_cmd = zi_split(program, program->parser_input[*i][*j]->cmd, key,
-				split_rd);
-		k = 1;
-		while (redi_cmd[k])
+		(*z)++;
+		if (program->parser_input[*i][*j]->cmd[*z] == '\0')
 		{
-			if (ft_strchr(redi_cmd[k], 34) || ft_strchr(redi_cmd[k], 39))
-				redi_cmd[k] = zi_sec_strlcpy(dst, redi_cmd[k],
-						ft_strlen(redi_cmd[k]));
-			run_redirect(redi_cmd[k]);
-			k++;
+			start = 0;
+			*z = 0;
+			(*j)++;
 		}
+		else
+			start = (*z);
 	}
-	else
-		run_redirect(program->parser_input[*i][*j + 1]->cmd);
+	find_loc(program->parser_input[*i][*j]->cmd, z);
+	doc = ft_substr(program->parser_input[*i][*j]->cmd, start, ((*z) - start));
+	if (doc != NULL)
+	{
+		clean_doc = del_quote(clean_doc, doc, ft_strlen(doc));
+		printf("clean_doc:%s\n",clean_doc);
+		run_redirect(clean_doc);
+		free(doc);
+		free(clean_doc);
+	}
 }
-
+//<here>>ben>sen<<yo (abort)
+//input yoksa devam etme
 void	redirect(t_program *program, int *i)
 {
 	int	j;
+	int	z;
 
+	program->redi_type = '\0';
 	j = 0;
+	z = 0;
 	while (program->parser_input[*i][j] != NULL
 		&& program->parser_input[*i][j]->cmd)
 	{
-		if (zi_redirectchr(program->parser_input[*i][j]->cmd, '>')
-			&& program->parser_input[*i][j]->key == 7)
-			go_redirect(program, append_output, '>', i, &j, 1);
-		else if (zi_redirectchr(program->parser_input[*i][j]->cmd, '<') != 1
-			&& ft_strchr(program->parser_input[*i][j]->cmd, '<') != 0
-			&& program->parser_input[*i][j]->key == 7)
-			go_redirect(program, run_input, '<', i, &j, 0);
-		else if (ft_strchr(program->parser_input[*i][j]->cmd, '>') != 0
-			&& program->parser_input[*i][j]->key == 7)
-			go_redirect(program, run_output, '>', i, &j, 0);
+		z = 0;
+		while (program->parser_input[*i][j]->cmd[z])
+		{
+			quote_skip(program->parser_input[*i][j]->cmd, &z);
+			if (program->parser_input[*i][j]->cmd[z] == '<'
+				|| program->parser_input[*i][j]->cmd[z] == '>')
+			{
+				program->redi_type = program->parser_input[*i][j]->cmd[z];
+				if (program->parser_input[*i][j]->cmd[z] == '<'
+					&& (program->parser_input[*i][j]->cmd[z + 1]
+						&& program->parser_input[*i][j]->cmd[z + 1] == '<'))
+				{
+					z += 2;
+				}//"<<"gi <hi>abu">>"anam"dunnya">>gell gel"sene">">>a"<<susma > sutukca
+				if (program->parser_input[*i][j]->cmd[z] == '>'
+					&& (program->parser_input[*i][j]->cmd[z + 1]
+						&& program->parser_input[*i][j]->cmd[z + 1] == '>'))
+				{
+					z++;
+					load_redi(program, append_output, i, &j, &z);
+				}
+				if (program->parser_input[*i][j]->cmd[z] == '<'){
+					printf("inputum\n");
+					load_redi(program, run_input, i, &j, &z);
+				}
+				if (program->parser_input[*i][j]->cmd[z] == '>')
+					load_redi(program, run_output, i, &j, &z);
+			}
+			else if (program->parser_input[*i][j]->cmd[z]
+				&& program->parser_input[*i][j]->cmd[z] != '\''
+				&& program->parser_input[*i][j]->cmd[z] != '\"')
+				z++;
+		}
 		j++;
 	}
 }
+//gel"sene">">>a"<<susma

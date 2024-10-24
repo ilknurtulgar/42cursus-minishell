@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/07 16:50:25 by itulgar           #+#    #+#             */
-/*   Updated: 2024/10/16 18:48:20 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/10/20 13:06:00 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	main(int argc, char **argv, char **envp)
+int main(int argc, char **argv, char **envp)
 {
-	t_program	*program;
-	char		*tmp;
+	t_program *program;
+	char *tmp;
 
 	program = NULL;
 	(void)argv;
@@ -35,7 +35,7 @@ int	main(int argc, char **argv, char **envp)
 			add_history(program->input);
 			if (!ft_strncmp(program->input, "exit", 5))
 			{
-				break ;
+				break;
 			}
 		}
 		if (program->input == NULL)
@@ -45,8 +45,8 @@ int	main(int argc, char **argv, char **envp)
 			exit(1);
 		}
 		if (!ft_parser(program, program->input))
-			break ;
-		if(heredoc_count(program)>0)
+			break;
+		if (heredoc_count(program) > 0)
 			heredoc_run(program);
 		zi_exec(program);
 		// exec

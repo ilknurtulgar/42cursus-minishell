@@ -6,7 +6,7 @@
 /*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 17:45:46 by zayaz             #+#    #+#             */
-/*   Updated: 2024/10/16 19:41:50 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/10/19 17:53:00 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,15 @@ void	exec_builtin(t_program *program)
 				ft_strlen(program->cmd[0])) == 0))
 		env(program, program->cmd);
 }
+
+
 void	create_fork(t_program *program, int *i)
 {
 	pid_t	pid_fork;
 
 	pid_fork = 0;
+		// fill_cmd(program,i);
+		// exit(0);
 	pid_fork = fork();
 	if (pid_fork == -1)
 		return ;
@@ -53,7 +57,7 @@ void	create_fork(t_program *program, int *i)
 	{
 		if (redirect_c(program, i))
 			redirect(program, i);
-		// program->cmd;
+
 		// redirect tırnağını temizlemeyi unutmayın
 		// exec_builtin(program);
 		// exec_command(program);

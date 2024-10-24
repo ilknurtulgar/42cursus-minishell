@@ -6,17 +6,17 @@
 /*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 18:20:33 by zayaz             #+#    #+#             */
-/*   Updated: 2024/10/16 19:27:10 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/10/23 19:55:16 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	heredoc_count(t_program *program)
+int heredoc_count(t_program *program)
 {
-	int	i;
-	int	j;
-	int	hd;
+	int i;
+	int j;
+	int hd;
 
 	i = 0;
 	j = 0;
@@ -26,8 +26,7 @@ int	heredoc_count(t_program *program)
 		j = 0;
 		while (program->parser_input[i][j])
 		{
-			if (zi_redirectchr(program->parser_input[i][j]->cmd, '<') != 0
-				&& program->parser_input[i][j]->key == 7)
+			if (zi_redirectchr(program->parser_input[i][j]->cmd, '<') != 0 && program->parser_input[i][j]->key == 7)
 				hd++;
 			j++;
 		}
@@ -36,52 +35,63 @@ int	heredoc_count(t_program *program)
 	return (hd);
 }
 
-int	zi_strcmp(const char *s1, const char *s2)
+int zi_strcmp(const char *s1, const char *s2)
 {
-	size_t	i;
+	size_t i;
 
 	i = 0;
 	while (s1[i] == s2[i] && s1[i] && s2[i])
 		i++;
 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
-static void	parent_heredoc(t_process hd_process)
+static void parent_heredoc(t_process hd_process)
 {
 	global_signal = IN_PARENT;
+	waitpid(hd_process.pid, NULL, 0);
+	close(hd_process.fd[0]);
 	close(hd_process.fd[1]);
 }
-void	heredoc(char *s)
+void heredoc(char *s)
 {
-	pid_t		pid_fork;
-	char		*line;
-	t_process	hd_process;
+	char *line;
+	t_process hd_process;
+	char *dst;
+	char *st;
 
+	dst = NULL;
+	st = NULL;
 	if (pipe(hd_process.fd) == -1)
 	{
 		perror("pipe creation failed");
 		exit(1);
 	}
-	close(hd_process.fd[0]);
-	pid_fork = fork();
-	if (pid_fork == -1)
-		return ;
-	if (pid_fork == 0)
+	hd_process.pid = fork();
+	if (hd_process.pid == -1)
+		return;
+	if (hd_process.pid == 0)
 	{
+		st = del_quote(dst, s, ft_strlen(s));
+		close(hd_process.fd[0]);
 		global_signal = IN_HERADOC;
 		while (1)
 		{
 			line = readline(">");
-			ft_putstr_fd(line, hd_process.fd[1]);
-			ft_putchar_fd("\n", hd_process.fd[1]);
 			if (!line)
-				break ;
-			if (zi_strcmp(s, line) == 0)
+				break;
+	
+			if (zi_strcmp(st, line) == 0)
 			{
+				
+				close(hd_process.fd[1]);
 				free(line);
-				break ;
+				break;
 			}
+			ft_putstr_fd(line, hd_process.fd[1]);
+			ft_putchar_fd('\n', hd_process.fd[1]);
 			free(line);
 		}
+		free(st);
+		free(dst);
 		close(hd_process.fd[1]);
 		exit(0);
 	}
@@ -91,19 +101,40 @@ void	heredoc(char *s)
 
 void	heredoc_run(t_program *program)
 {
-	int	i;
 	int	j;
+	int	z;
+	int	i;
 
 	i = 0;
+	program->redi_type = '\0';
 	j = 0;
+	z = 0;
 	while (program->parser_input[i])
 	{
 		j = 0;
-		while (program->parser_input[i][j])
+		while (program->parser_input[i][j] != NULL
+			&& program->parser_input[i][j]->cmd)
 		{
-			if (zi_redirectchr(program->parser_input[i][j]->cmd, '<') != 0
-				&& program->parser_input[i][j]->key == 7)
-				go_redirect(program, heredoc, '<', &i, &j, 1);
+			z = 0;
+			while (program->parser_input[i][j]->cmd[z])
+			{
+				quote_skip(program->parser_input[i][j]->cmd, &z);
+				if (program->parser_input[i][j]->cmd[z] == '<')
+				{
+					program->redi_type = program->parser_input[i][j]->cmd[z];
+					if (program->parser_input[i][j]->cmd[z] == '<'
+						&& (program->parser_input[i][j]->cmd[z + 1]
+							&& program->parser_input[i][j]->cmd[z + 1] == '<'))
+					{
+						z++;
+						load_redi(program, heredoc, &i, &j, &z);
+					}
+				}
+				if (program->parser_input[i][j]->cmd[z]
+					&& program->parser_input[i][j]->cmd[z] != '\''
+					&& program->parser_input[i][j]->cmd[z] != '\"')
+					z++;
+			}
 			j++;
 		}
 		i++;

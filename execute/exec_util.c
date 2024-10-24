@@ -6,7 +6,7 @@
 /*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 13:40:25 by zayaz             #+#    #+#             */
-/*   Updated: 2024/10/13 18:25:37 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/10/23 19:07:15 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,11 @@ int	pipe_count(t_program *program)
 	return (i);
 }
 
-char	*zi_sec_strlcpy(char *dst, const char *src, size_t dstsize)
+char	*del_quote(char *dst, const char *src, size_t dstsize)
 {
-	size_t	i;
-	char	q_type;
-	int		j;
+	size_t i;
+	char q_type;
+	int j;
 
 	dst = (char *)malloc(dstsize * sizeof(char) + 1);
 	i = 0;
@@ -50,17 +50,32 @@ char	*zi_sec_strlcpy(char *dst, const char *src, size_t dstsize)
 	while (src[i] && i <= (dstsize - 1))
 	{
 		if (src[i] == '\'' || src[i] == '\"')
+		{
 			q_type = src[i];
-		i++;
-		while (src[i] && q_type != src[i])
-		{
-			dst[j] = src[i];
 			i++;
-			j++;
+
+			while (src[i] && q_type != src[i])
+			{
+				dst[j] = src[i];
+				i++;
+				j++;
+			}
+			if (q_type == src[i])
+			{
+				i++;
+				while (src[i] != '\0' && (src[i] != '\'' && src[i] != '\"'))
+				{
+					dst[j] = src[i];
+					if (src[i])
+					{
+						i++;
+						j++;
+					}
+				}
+			}
 		}
-		if (q_type == src[i])
+		else
 		{
-			i++;
 			while (src[i] && (src[i] != '\'' && src[i] != '\"'))
 			{
 				dst[j] = src[i];

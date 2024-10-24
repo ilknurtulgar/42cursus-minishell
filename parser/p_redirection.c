@@ -12,15 +12,18 @@
 
 #include "../minishell.h"
 
-static char	*skip_quote(char *input)
+static char *skip_quote(char *input)
 {
-	while (*input && !(*input == '\'' || *input == '\"'))
+
+	char type;
+	type = *input;
+	input++;
+	while (*input && *input != type)
 		input++;
-	if (*input)
+	if (*input == type)
 		input++;
 	return (input);
 }
-
 static int	count_redirect(char *input)
 {
 	int	i;
@@ -38,27 +41,33 @@ static int	count_redirect(char *input)
 	return (1);
 }
 
-int	p_redirection(t_program *program, char *input)
+int p_redirection(t_program *program, char *input)
 {
 	(void)program;
 	while ( *input)
 	{
-		if (*input == '\'' || *input == '\"')
-			input = skip_quote(input + 1);
+		//"<<"gı <hı>abu">>"anam"dünya">>gel gel"sene">">>>"<<susma > sustukca
+		if (*input && (*input == '\'' || *input == '\"'))
+		{
+			input = skip_quote(input);
+			if (*input == '\0')
+				break;
+		}
 		if (!count_redirect(input))
-			return (error_message("syntax error to redirection"));
+			return (error_message("syntax error to redirection2"));
+
 		if ((*input == '<' || *input == '>'))
 		{
-			if ((*input == '<' && *(input + 1) == '>') || (*input == '>'
-					&& *(input + 1) == '<'))
-					return (error_message("syntax error to redirection1"));
+			if ((*input == '<' && *(input + 1) == '>') || (*input == '>' && *(input + 1) == '<'))
+			{
+				return (error_message("syntax error to redirection1"));
+			}
 			while (*input == 32)
 				input++;
-			if (*input == '\0' || ((*(input) == '<' || *(input) == '>')
-					&& *(input + 1) == '\0'))
-				return (error_message("syntax error to redirection2"));
+			if (*input == '\0' || ((*(input) == '<' || *(input) == '>') && *(input + 1) == '\0'))
+				return (error_message("syntax error to redirection3"));
 		}
-		if (*input != '\0')
+		if (*input && *input != '\'' && *input != '\"')
 			input++;
 	}
 	return (1);

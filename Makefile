@@ -26,6 +26,8 @@ SRCS= main.c\
 	  execute/redirect.c\
 	  execute/exec_util.c\
 	  execute/heredoc.c\
+	  execute/cmd.c\
+	  execute/run_redirect.c\
 
 OBJS= $(SRCS:.c=.o)
 CC= gcc
