@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_redirection.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 20:19:08 by zayaz             #+#    #+#             */
-/*   Updated: 2024/10/16 18:45:21 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/10/26 19:42:42 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,8 @@ static int	count_redirect(char *input)
 int p_redirection(t_program *program, char *input)
 {
 	(void)program;
-	while ( *input)
+	while (*input)
 	{
-		//"<<"gı <hı>abu">>"anam"dünya">>gel gel"sene">">>>"<<susma > sustukca
 		if (*input && (*input == '\'' || *input == '\"'))
 		{
 			input = skip_quote(input);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_util.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 13:40:25 by zayaz             #+#    #+#             */
-/*   Updated: 2024/10/23 19:07:15 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/10/26 19:56:38 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	pipe_count(t_program *program)
 	i = 0;
 	while (program->parser_input[i] != NULL)
 		i++;
-	return (i);
+	return (i -1);
 }
 
 char	*del_quote(char *dst, const char *src, size_t dstsize)

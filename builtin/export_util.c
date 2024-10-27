@@ -39,6 +39,6 @@ void equal_in_export(t_program *program, char **cmd, int *i)
     key = ft_substr(cmd[*i], 0, k - 1);
     equals(cmd[*i], &k);
     content = ft_substr(cmd[*i], equal, k);
-    search_set_env(program, key, content);
+    search_set_env(program, key, content,program->export_list);
     export_add_list(program, key, content);
 }

@@ -49,7 +49,6 @@ int main(int argc, char **argv, char **envp)
 		if (heredoc_count(program) > 0)
 			heredoc_run(program);
 		zi_exec(program);
-		// exec
 		free_parser_input(program);
 		free(tmp);
 	}

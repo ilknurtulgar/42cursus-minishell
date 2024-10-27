@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:53:16 by zayaz             #+#    #+#             */
-/*   Updated: 2024/10/23 20:00:17 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/10/27 19:54:42 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int zi_redirectchr(const char *s, char c)
+int	zi_redirectchr(const char *s, char c)
 {
-	char type;
+	char	type;
 
 	while (*s)
 	{
@@ -24,7 +24,8 @@ int zi_redirectchr(const char *s, char c)
 			s++;
 			while (*s && *s != type)
 				s++;
-			s++;
+			if (*s == type)
+				s++;
 		}
 		if (*s == c && *(s + 1) == c)
 			return (1);
@@ -33,7 +34,6 @@ int zi_redirectchr(const char *s, char c)
 	}
 	return (0);
 }
-
 
 void	quote_skip(char *cmd, int *z)
 {
@@ -61,8 +61,8 @@ void	find_loc(char *cmd, int *z)
 	}
 }
 
-void	load_redi(t_program *program, void run_redirect(char *), int *i, int *j,
-		int *z)
+void	load_redi(t_program *program, void run_redirect(t_program *, char *),
+		int *i, int *j, int *z)
 {
 	int		start;
 	int		size;
@@ -90,14 +90,13 @@ void	load_redi(t_program *program, void run_redirect(char *), int *i, int *j,
 	if (doc != NULL)
 	{
 		clean_doc = del_quote(clean_doc, doc, ft_strlen(doc));
-		printf("clean_doc:%s\n",clean_doc);
-		run_redirect(clean_doc);
-		free(doc);
+		// printf("clean_doc:%s\n", clean_doc);
+		run_redirect(program, clean_doc);
 		free(clean_doc);
+		free(doc);
 	}
 }
-//<here>>ben>sen<<yo (abort)
-//input yoksa devam etme
+// input yoksa devam etme eksik.
 void	redirect(t_program *program, int *i)
 {
 	int	j;
@@ -122,7 +121,7 @@ void	redirect(t_program *program, int *i)
 						&& program->parser_input[*i][j]->cmd[z + 1] == '<'))
 				{
 					z += 2;
-				}//"<<"gi <hi>abu">>"anam"dunnya">>gell gel"sene">">>a"<<susma > sutukca
+				}
 				if (program->parser_input[*i][j]->cmd[z] == '>'
 					&& (program->parser_input[*i][j]->cmd[z + 1]
 						&& program->parser_input[*i][j]->cmd[z + 1] == '>'))
@@ -130,11 +129,13 @@ void	redirect(t_program *program, int *i)
 					z++;
 					load_redi(program, append_output, i, &j, &z);
 				}
-				if (program->parser_input[*i][j]->cmd[z] == '<'){
-					printf("inputum\n");
+				if (program->parser_input[*i][j]->cmd[z] == '<')
+				{
 					load_redi(program, run_input, i, &j, &z);
 				}
-				if (program->parser_input[*i][j]->cmd[z] == '>')
+				if ((program->parser_input[*i][j]->cmd[z] == '>'
+						&& ft_strncmp(program->parser_input[*i][j]->cmd + z,
+							">>", 2) != 0))
 					load_redi(program, run_output, i, &j, &z);
 			}
 			else if (program->parser_input[*i][j]->cmd[z]
@@ -145,4 +146,3 @@ void	redirect(t_program *program, int *i)
 		j++;
 	}
 }
-//gel"sene">">>a"<<susma

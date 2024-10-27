@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/07 16:50:28 by itulgar           #+#    #+#             */
-/*   Updated: 2024/10/23 19:06:35 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/10/27 20:34:24 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <fcntl.h>
 # include <signal.h>
 # include <stdlib.h>
+# include <sys/stat.h>
 # include <unistd.h>
 
 enum			set_meta
@@ -62,8 +63,10 @@ typedef struct s_program
 	t_process	*process;
 	int			p_count;
 	char		redi_type;
-
+	char		**env_cmd;
+	char		**sep_path;
 	char		**cmd;
+	int			fd;
 }				t_program;
 
 int				error_message(char *str);
@@ -96,7 +99,8 @@ void			cd(t_program *program, char **cmd);
 void			env(t_program *program, char **cmd);
 void			export(t_program *program, char **cmd);
 void			zi_unset(t_program *program, char **cmd);
-void			search_set_env(t_program *program, char *key, char *content);
+void			search_set_env(t_program *program, char *key, char *content,
+					t_list *envpx_list);
 int				check_identifier(char *parser_input);
 void			zi_exec(t_program *program);
 void			redirect(t_program *program, int *i);
@@ -112,15 +116,23 @@ int				zi_redirectchr(const char *s, char c);
 int				heredoc_count(t_program *program);
 void			equal_in_export(t_program *program, char **cmd, int *i);
 int				zi_strcmp(const char *s1, const char *s2);
-void			fill_cmd(t_program *program, int *i);
+void			exec_cmd(t_program *program, int *i);
 int				zi_strchr(const char *s, int c, char type);
 
-void			run_input(char *s);
-void			run_output(char *s);
-void			append_output(char *s);
+void			run_input(t_program *program, char *s);
+void			run_output(t_program *program, char *s);
+void			append_output(t_program *program, char *s);
 void			load_redi(t_program *program, void run_redirect(char *), int *i,
 					int *j, int *z);
 void			find_loc(char *cmd, int *z);
 void			quote_skip(char *cmd, int *z);
-
+int				pwd_cmp(t_program *program);
+void			find_path(t_program *program);
+void			fill_env_cmd(t_program *program);
+char			*search_env(char *key, t_list *envpx_lst);
+void			exec_command(t_program *program);
+void			relative_path(t_program *program);
+void			create_fork(t_program *program, int *i);
+void			exec_error(t_program *program, char *s, int exit_code);
+void			pipe_dup(t_program *program, int *i);
 #endif
