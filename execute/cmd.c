@@ -6,7 +6,7 @@
 /*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 12:45:31 by itulgar           #+#    #+#             */
-/*   Updated: 2024/10/26 14:19:32 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/10/29 19:42:14 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,9 +91,6 @@ int	cmd_counter(t_program *program, int *i)
 	}
 	return (count);
 }
-// gel"sene">">>a"<<susma
-//>echo a> r.txt >b.txt
-//<"<<"gi <<abu">"a"p""da">el">>" gel<"se">">>m"<<k >>s "<<"
 
 void	fill_cmd(t_program *program, int *i)
 {
@@ -128,10 +125,9 @@ void	fill_cmd(t_program *program, int *i)
 void	exec_cmd(t_program *program, int *i)
 {
 	int	cmd_len;
-	int	k;
+
 
 	cmd_len = cmd_counter(program, i);
-	//printf("cmd_len:%d  ", cmd_len);
 	program->cmd = malloc(sizeof(char **) * (cmd_len + 1));
 	if (!program->cmd)
 	{
@@ -139,13 +135,4 @@ void	exec_cmd(t_program *program, int *i)
 		exit(1);
 	}
 	fill_cmd(program, i);
-	k = 0;
-	// if (!program->cmd[k])
-	// 	printf("NULLIM\n");
-	// while (program->cmd[k])
-	// {
-	// 	printf("cmd:%s--- ", program->cmd[k]);
-	// 	k++;
-	// }
-	// 	printf("\n");
 }

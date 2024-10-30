@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 18:32:15 by itulgar           #+#    #+#             */
-/*   Updated: 2024/10/16 18:06:24 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/10/29 19:16:10 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,11 @@ void	ft_init_program(t_program *program, char **envp)
 	program->input = NULL;
 	program->envp_list = set_env(envp);
 	program->export_list = set_env(envp);
-
 	global_signal = 0;
 	program->check_quote = 1;
+	program->p_count=0;
+	program->fd_input=0;
+	program->fd_output=0;
 	program->control_q_split = 0;
 	program->control_p_split = 0;
 	init_signal();

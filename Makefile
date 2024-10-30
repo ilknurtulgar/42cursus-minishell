@@ -22,6 +22,7 @@ SRCS= main.c\
 	  builtin/export_util.c\
 	  builtin/export.c\
 	  builtin/zi_unset.c\
+	  builtin/builtin.c\
 	  execute/exec.c\
 	  execute/redirect.c\
 	  execute/exec_util.c\

@@ -6,7 +6,7 @@
 /*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 17:36:01 by itulgar           #+#    #+#             */
-/*   Updated: 2024/10/27 17:51:12 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/10/29 18:16:17 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,5 +55,4 @@ void	echo(char **cmd)
 	}
 	if (!flag)
 		printf("\n");
-	//exit(0);
 }

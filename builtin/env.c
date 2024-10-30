@@ -6,7 +6,7 @@
 /*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 15:46:48 by zayaz             #+#    #+#             */
-/*   Updated: 2024/10/26 16:14:56 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/10/29 18:16:00 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,4 +34,6 @@ void	env(t_program *program, char **cmd)
 	}
 	else
 		printf("env: %s No such file or directory\n", cmd[i]);
+			
+			
 }
