@@ -135,6 +135,7 @@ void	zi_exec(t_program *program)
 	i = 0;
 	while (i < program->p_count + 1)
 	{
+		program->rdr_error=0;
 		program->status = 0;
 		if (program->redi_flag == 1)
 			program->redi_flag = 0;

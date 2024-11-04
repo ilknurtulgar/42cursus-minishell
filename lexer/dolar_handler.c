@@ -38,10 +38,9 @@ static char *before_dolar_assign(t_program *program, t_lexer *parser_input,
 {
     char    *env_str;
     char    *after_dolar;
-    char    *key;
+  
     char    *tmp;
     tmp = NULL;
-    key = NULL;
     env_str = NULL;
     env_str = expand_dollar_variables(program, i, parser_input);
     after_dolar = ft_substr(parser_input->cmd, *i, (ft_strlen(parser_input->cmd)
