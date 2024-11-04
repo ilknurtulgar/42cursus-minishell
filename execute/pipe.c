@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
+/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/27 17:02:45 by itulgar           #+#    #+#             */
-/*   Updated: 2024/10/29 19:52:29 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/11/03 19:47:04 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,34 +25,33 @@ int	is_mu_builtin(t_program *program)
 
 void	pipe_dup(t_program *program, int *i)
 {
-	printf("birim\n");
-	if (*i == 0)
+	if (*i < program->p_count)
 	{
-		if (!redirect_c(program, i)){
-			printf("yaptım\n");
-			dup2(program->process[*i].fd[1], STDOUT_FILENO);
+		dup2(program->process[*i].fd[1], STDOUT_FILENO);
+		close(program->process[*i].fd[0]);
+	}
+	if (*i != 0)
+		dup2(program->process[*i - 1].fd[0], STDIN_FILENO);
+	close_pipe(program);
+	if (program->here_fd[0] >= 0 && *program->hd_flag == 1
+		&& *program->hd_flag != 2)
+	{
+		dup2(program->here_fd[0], STDIN_FILENO);
+		*program->hd_flag = 2;
+		close(program->here_fd[0]);
+	}
+	else if (program->redi_flag == 1)
+	{
+		if (program->fd_output >= 2)
+		{
+			dup2(program->fd_output, STDOUT_FILENO);
+			close(program->fd_output);
+		}
+		else if (program->fd_input >= 2)
+		{
+			dup2(program->fd_input, STDIN_FILENO);
+			close(program->fd_input);
 		}
 	}
-	else if (*i == program->p_count)
-		dup2(program->process[(*i) - 1].fd[0], STDIN_FILENO);
-	else
-	{
-		printf("ay\n");
-		dup2(program->process[*i - 1].fd[0], STDIN_FILENO);
-		dup2(program->process[*i].fd[1], STDOUT_FILENO);
-	}
-	if (redirect_c(program, i) && program->fd_output >= 2){
-		printf("yaptım\n");
-		dup2(program->fd_output, STDOUT_FILENO);
-	}
-	if (redirect_c(program, i) && program->fd_input >= 2)
-		dup2(program->fd_input, STDIN_FILENO);
-
-	int a = 0;
-	while (a < program->p_count)
-	{
-		close(program->process[a].fd[0]);
-		close(program->process[a].fd[1]);
-		a++;
-	}
+	
 }

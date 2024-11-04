@@ -3,14 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   exec_util.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
+/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 13:40:25 by zayaz             #+#    #+#             */
-/*   Updated: 2024/10/26 19:56:38 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/11/03 19:39:32 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+void	exit_code_handler(t_program *program)
+{
+	int	staus_check;
+	int	i;
+
+	staus_check = 0;
+	i = 0;
+	staus_check = 0;
+	while (i <= program->p_count)
+	{
+		waitpid(program->process[i].pid, &staus_check, 0);
+		if (!(is_builtin(program)) && (program->rdr_error != 1
+				&& program->rdr_error != 2))
+		{
+			if (WIFSIGNALED(staus_check) && WTERMSIG(staus_check) == SIGINT)
+				program->status = 130;
+			program->status = staus_check / 256;
+		}
+		i++;
+	}
+	program->rdr_error = 0;
+}
 
 int	redirect_c(t_program *program, int *i)
 {
@@ -33,56 +56,47 @@ int	pipe_count(t_program *program)
 	i = 0;
 	while (program->parser_input[i] != NULL)
 		i++;
-	return (i -1);
+	return (i - 1);
 }
 
-char	*del_quote(char *dst, const char *src, size_t dstsize)
+int	is_close_quote(char *str, int i, char q_type)
 {
-	size_t i;
-	char q_type;
-	int j;
+	i++;
+	while (str[i] && str[i] != q_type)
+		i++;
+	if (str[i] == q_type)
+		return (1);
+	return (0);
+}
+char	*del_quote(char *dst, char *src, size_t dstsize)
+{
+	size_t	i;
+	char	q_type;
+	size_t	j;
 
 	dst = (char *)malloc(dstsize * sizeof(char) + 1);
 	i = 0;
 	j = 0;
-	if (!src || !dstsize)
+	if (!src || dstsize == 0)
 		return (dst);
-	while (src[i] && i <= (dstsize - 1))
+	while (src[i] && j < dstsize)
 	{
-		if (src[i] == '\'' || src[i] == '\"')
+		if (src[i] && (src[i] == '\'' || src[i] == '\"'))
 		{
 			q_type = src[i];
-			i++;
-
-			while (src[i] && q_type != src[i])
-			{
-				dst[j] = src[i];
-				i++;
-				j++;
-			}
-			if (q_type == src[i])
+			if (is_close_quote(src, i, q_type))
 			{
 				i++;
-				while (src[i] != '\0' && (src[i] != '\'' && src[i] != '\"'))
-				{
-					dst[j] = src[i];
-					if (src[i])
-					{
-						i++;
-						j++;
-					}
-				}
+				while (src[i] && q_type != src[i])
+					dst[j++] = src[i++];
+				if (q_type == src[i])
+					i++;
 			}
+			else
+				dst[j++] = src[i++];
 		}
 		else
-		{
-			while (src[i] && (src[i] != '\'' && src[i] != '\"'))
-			{
-				dst[j] = src[i];
-				i++;
-				j++;
-			}
-		}
+			dst[j++] = src[i++];
 	}
 	dst[j] = '\0';
 	return (dst);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   run_redirect.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
+/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 19:04:12 by zayaz             #+#    #+#             */
-/*   Updated: 2024/10/29 19:33:27 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/11/03 18:44:37 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,10 @@ void	run_output(t_program *program, char *s)
 	if (program->fd_output == -1)
 	{
 		perror("Error opening file");
-		exit(1);
+		program->rdr_error = 2;
+		// program->status = 1;
+		return ;
 	}
-	// if (dup2(fd, STDOUT_FILENO) == -1)
-	// {
-	// 	perror("Error opening file");
-	// 	close(fd);
-	// 	exit(1);
-	// }
-	// close_pipe(program);
 }
 
 void	run_input(t_program *program, char *s)
@@ -34,18 +29,12 @@ void	run_input(t_program *program, char *s)
 	program->fd_input = open(s, O_RDONLY);
 	if (program->fd_input == -1)
 	{
-		write(0, "minishell: ", 14);
+		write(2, "minishell: ", 12);
 		perror(s);
+		program->rdr_error = 1;
+		// program->status = 1;
 		return ;
 	}
-	// if (dup2(fd, STDIN_FILENO) == -1)
-	// {
-	// 	perror("Error opening file");
-	// 	close(fd);
-	// 	return ;
-	// }
-	// close(fd);
-	// close_pipe(program);
 }
 
 void	append_output(t_program *program, char *s)
@@ -54,14 +43,8 @@ void	append_output(t_program *program, char *s)
 	if (program->fd_output == -1)
 	{
 		perror("Error opening file");
+		program->rdr_error = 2;
+		//program->status = 1;
 		return ;
 	}
-	// if (dup2(fd, STDOUT_FILENO) == -1)
-	// {
-	// 	perror("Error opening file");
-	// 	close(fd);
-	// 	return ;
-	// }
-	// close(fd);
-	// close_pipe(program);
 }

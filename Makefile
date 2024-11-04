@@ -4,6 +4,7 @@ SRCS= main.c\
 	  free.c\
 	  lexer_free.c\
 	  init.c\
+	  signal.c\
 	  parser/parser.c\
 	  parser/p_quote.c\
 	  parser/p_pipe.c\
@@ -13,7 +14,8 @@ SRCS= main.c\
 	  lexer/lexer.c\
 	  lexer/set_meta.c\
 	  lexer/dolar_handler.c\
-	  lexer/dolar_handler_2.c\
+	  lexer/dolar_handler2.c\
+	  lexer/dolar_handler3.c\
 	  utils/lexer_util.c\
 	  builtin/echo.c\
 	  builtin/cd.c\
@@ -23,6 +25,7 @@ SRCS= main.c\
 	  builtin/export.c\
 	  builtin/zi_unset.c\
 	  builtin/builtin.c\
+	  builtin/exit.c\
 	  execute/exec.c\
 	  execute/redirect.c\
 	  execute/exec_util.c\

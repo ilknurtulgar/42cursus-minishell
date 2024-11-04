@@ -6,25 +6,39 @@
 /*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 12:45:31 by itulgar           #+#    #+#             */
-/*   Updated: 2024/10/29 19:42:14 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/11/01 15:30:22 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	fillable_cmd(t_program *program, char *cmd, int *z, int *start, int *k)
+void	fillable_cmd(t_program *program, t_lexer *input, int *z, int *start,
+		int *k)
 {
+	char	*clean_cmd;
+
+	clean_cmd = NULL;
 	*start = *z;
-	while (cmd[*z] && (cmd[*z] != '<' && cmd[*z] != '>'))
+	while (input->cmd[*z] && (input->cmd[*z] != '<' && input->cmd[*z] != '>'))
 	{
-		if (cmd[*z] != '\'' && cmd[*z] != '\"')
+		if (input->cmd[*z] != '\'' && input->cmd[*z] != '\"')
 			(*z)++;
 		else
-			quote_skip(cmd, z);
+			quote_skip(input->cmd, z);
 	}
-	if (cmd[*z] == '\0' || (cmd[*z] == '<' || cmd[*z] == '>'))
+	if (input->cmd[*z] == '\0' || (input->cmd[*z] == '<'
+			|| input->cmd[*z] == '>'))
 	{
-		program->cmd[*k] = ft_substr(cmd, *start, (*z - *start));
+		if (input->key == 8 || input->key == 5 || input->key == 6)
+		{
+			clean_cmd = del_quote(clean_cmd, input->cmd, ft_strlen(input->cmd));
+			program->cmd[*k] = ft_substr(clean_cmd, *start, (*z - *start));
+			free(clean_cmd);
+		}
+		else
+		{
+			program->cmd[*k] = ft_substr(input->cmd, *start, (*z - *start));
+		}
 		(*k)++;
 	}
 }
@@ -45,10 +59,14 @@ void	redi_skip(t_lexer **parser_input, int *z, int *j)
 {
 	char	redi_type;
 
-	redi_type = parser_input[*j]->cmd[*z];
-	(*z)++;
-	if (parser_input[*j]->cmd[*z] == redi_type)
+	if (parser_input[*j]->cmd[*z] && parser_input[*j]->cmd[*z] != '\''
+		&& parser_input[*j]->cmd[*z] != '\"')
+	{
+		redi_type = parser_input[*j]->cmd[*z];
 		(*z)++;
+		if (parser_input[*j]->cmd[*z] == redi_type)
+			(*z)++;
+	}
 	if (parser_input[*j]->cmd[*z] == '\0')
 	{
 		(*j)++;
@@ -57,13 +75,14 @@ void	redi_skip(t_lexer **parser_input, int *z, int *j)
 	while (parser_input[*j]->cmd[*z] && (parser_input[*j]->cmd[*z] != '<'
 			&& parser_input[*j]->cmd[*z] != '>'))
 	{
-		if (parser_input[*j]->cmd[*z] != '\''
+		if (parser_input[*j]->cmd[*z] && parser_input[*j]->cmd[*z] != '\''
 			&& parser_input[*j]->cmd[*z] != '\"')
 			(*z)++;
 		else
 			quote_skip(parser_input[*j]->cmd, z);
 	}
 }
+
 int	cmd_counter(t_program *program, int *i)
 {
 	int	j;
@@ -83,9 +102,7 @@ int	cmd_counter(t_program *program, int *i)
 				&& program->parser_input[*i][j]->cmd[z] != '>')
 				fillable_count(program->parser_input[*i][j]->cmd, &z, &count);
 			else
-			
 				redi_skip(program->parser_input[*i], &z, &j);
-			
 		}
 		j++;
 	}
@@ -112,8 +129,8 @@ void	fill_cmd(t_program *program, int *i)
 		{
 			if (program->parser_input[*i][j]->cmd[z] != '<'
 				&& program->parser_input[*i][j]->cmd[z] != '>')
-				fillable_cmd(program, program->parser_input[*i][j]->cmd, &z,
-					&start, &k);
+				fillable_cmd(program, program->parser_input[*i][j], &z, &start,
+					&k);
 			else
 				redi_skip(program->parser_input[*i], &z, &j);
 		}
@@ -122,11 +139,17 @@ void	fill_cmd(t_program *program, int *i)
 	program->cmd[k] = NULL;
 }
 
+// minishell 🐥>echo $a
+
+// minishell 🐥>echo "$a"
+// '
+// minishell 🐥>echo '$a'
+// $a
+// minishell 🐥>echo $a"nkj"$a
+// "nkj"$a
 void	exec_cmd(t_program *program, int *i)
 {
-	int	cmd_len;
-
-
+	int cmd_len;
 	cmd_len = cmd_counter(program, i);
 	program->cmd = malloc(sizeof(char **) * (cmd_len + 1));
 	if (!program->cmd)

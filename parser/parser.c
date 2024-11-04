@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
+/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:57:38 by itulgar           #+#    #+#             */
-/*   Updated: 2024/10/26 17:18:53 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/11/03 16:32:55 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,13 +83,12 @@ int	ft_parser(t_program *program, char *input)
 {
 	if (!p_quote(program, input))
 		return (0);
-	if (!p_redirection(program, program->input))
-		return (0);
 	if (!p_pipe(program, input))
+		return (0);
+	if (!p_redirection(program, program->input))
 		return (0);
 	if (!clean_input(program, input))
 		return (0);
 	quote_clean(program);
-	
 	return (1);
 }

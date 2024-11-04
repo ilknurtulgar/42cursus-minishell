@@ -6,7 +6,7 @@
 /*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:53:16 by zayaz             #+#    #+#             */
-/*   Updated: 2024/10/29 19:34:58 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/11/03 17:29:16 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,10 @@ void	load_redi(t_program *program, void run_redirect(t_program *, char *),
 	char	*doc;
 	char	*clean_doc;
 
-	// int		size;
 	clean_doc = NULL;
 	start = 0;
-	// size = 0;
 	doc = NULL;
+	program->redi_flag = 1;
 	if (program->parser_input[*i][*j]->cmd[*z])
 	{
 		(*z)++;
@@ -94,17 +93,23 @@ void	load_redi(t_program *program, void run_redirect(t_program *, char *),
 			close(program->fd_input);
 		if (program->fd_output > 2)
 			close(program->fd_output);
-		run_redirect(program, clean_doc);
+		if (program->status != 1)
+			run_redirect(program, clean_doc);
 		free(clean_doc);
 		free(doc);
 	}
 }
-// input yoksa devam etme eksik.
+
 void	redirect(t_program *program, int *i)
 {
 	int	j;
 	int	z;
 
+	if (*program->hd_flag == 0 && heredoc_count(program))
+	{
+		heredoc_run(program);
+		*program->hd_flag = 1;
+	}
 	program->redi_type = '\0';
 	j = 0;
 	z = 0;

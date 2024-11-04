@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_redirection.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
+/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 20:19:08 by zayaz             #+#    #+#             */
-/*   Updated: 2024/10/26 19:42:42 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/11/03 16:44:44 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,18 +53,18 @@ int p_redirection(t_program *program, char *input)
 				break;
 		}
 		if (!count_redirect(input))
-			return (error_message("syntax error to redirection2"));
+			return (p_error(program, "syntax error to redirection"));
 
 		if ((*input == '<' || *input == '>'))
 		{
 			if ((*input == '<' && *(input + 1) == '>') || (*input == '>' && *(input + 1) == '<'))
 			{
-				return (error_message("syntax error to redirection1"));
+				return (p_error(program, "syntax error to redirection"));
 			}
 			while (*input == 32)
 				input++;
 			if (*input == '\0' || ((*(input) == '<' || *(input) == '>') && *(input + 1) == '\0'))
-				return (error_message("syntax error to redirection3"));
+				return (p_error(program, "syntax error to redirection"));
 		}
 		if (*input && *input != '\'' && *input != '\"')
 			input++;

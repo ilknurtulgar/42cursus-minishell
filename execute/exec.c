@@ -3,18 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
+/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 17:45:46 by zayaz             #+#    #+#             */
-/*   Updated: 2024/10/29 19:52:42 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/11/03 19:40:41 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-// bash-3.2$ / yanlış çalışıyor
-// bash: /: is a directory
-void	exec_command(t_program *program)
+static void	exec_command(t_program *program)
 {
 	int		i;
 	char	*tmp_path;
@@ -22,53 +20,89 @@ void	exec_command(t_program *program)
 	fill_env_cmd(program);
 	find_path(program);
 	i = 0;
-	if (program->cmd[0][0] == '.') /*|| ft_strchr(program->cmd[0], 47*/
+	if (search_env("PATH", program->envp_list) == NULL)
+	{
+		printf("minishell: %s: No such file or directory\n", program->cmd[i]);
+		program->status = 127;
+		return ;
+	}
+	if (program->cmd[0][0] == '.' || program->cmd[0][0] == '/')
 		relative_path(program);
-	while (program->sep_path[i])
+	while (program->sep_path && program->sep_path[i])
 	{
 		tmp_path = ft_strjoin(program->sep_path[i], program->cmd[0]);
 		if (access(tmp_path, F_OK) != -1)
-		{
 			execve(tmp_path, program->cmd, program->env_cmd);
-			exec_error(program, "Command not found", 127);
-			exit(0);
-		}
 		i++;
 		free(tmp_path);
 	}
+	exec_error(program, " command not found", 127);
 }
-void	create_fork(t_program *program, int *i)
+void	run_one_cmd(t_program *program, int *i)
+{
+	int	stdout_backup;
+	int	stdin_backup;
+
+	if (redirect_c(program, i))
+	{
+		stdout_backup = dup(STDOUT_FILENO);
+		stdin_backup = dup(STDIN_FILENO);
+		if (program->fd_output >= 2)
+			dup2(program->fd_output, STDOUT_FILENO);
+		if (program->fd_input >= 2)
+			dup2(program->fd_input, STDIN_FILENO);
+	}
+	main_builtin(program);
+	if (redirect_c(program, i))
+	{
+		if (program->fd_input >= 2)
+			dup2(stdin_backup, STDIN_FILENO);
+		if (program->fd_output >= 2)
+			dup2(stdout_backup, STDOUT_FILENO);
+		close(stdin_backup);
+		close(stdout_backup);
+	}
+}
+
+static void	create_fork(t_program *program, int *i)
 {
 	pid_t	pid_fork;
 
+	pid_fork = 1;
 	exec_cmd(program, i);
-	if (!program->cmd[0])
-		return ;
-	if (redirect_c(program, i))
+	if (redirect_c(program, i) || heredoc_count(program) > 0)
+	{
 		redirect(program, i);
-	printf("fdfork:%d\n", program->fd_output);
-	if (is_builtin(program) && program->p_count == 0)
-	{
-		printf("girdim\n");
-		main_builtin(program);
-		return ;
-	}
-	else
-	{
-		pid_fork = fork();
-		if (pid_fork == -1)
-			return ;
-		if (pid_fork == 0)
+		if (program->rdr_error == 1 || program->rdr_error == 2)
 		{
-			pipe_dup(program, i);
-			if (is_builtin(program) && program->p_count > 0)
-				child_builtin(program);
-			exec_command(program);
-			exit(127);
+			file_error(program);
+			return ;
 		}
 	}
-	// if (pid_fork == 0)
-	// 	program->process[*i].pid = pid_fork;
+	if (!program->cmd[0])
+		return ;
+	if (program->cmd[0] && program->cmd)
+	{
+		if (is_builtin(program) && program->p_count == 0)
+			run_one_cmd(program, i);
+		else
+		{
+			g_global_signal = 1;
+			pid_fork = fork();
+			if (pid_fork == -1)
+				return ;
+			if (pid_fork == 0)
+			{
+				pipe_dup(program, i);
+				if (is_builtin(program) && program->p_count > 0)
+					child_builtin(program);
+				exec_command(program);
+				// program->status = 127;
+				exit(127);
+			}
+		}
+	}
+	program->process[*i].pid = pid_fork;
 }
 
 void	close_pipe(t_program *program)
@@ -88,23 +122,23 @@ void	zi_exec(t_program *program)
 	int	i;
 
 	i = 0;
-	// process pipe için
-	// fork komut sayısı kadar
 	program->p_count = pipe_count(program);
 	program->process = malloc(sizeof(t_process) * (program->p_count + 1));
+	program->here_fd = ft_calloc((program->p_count + 1), sizeof(int));
+	*program->hd_flag = 0;
+	program->redi_flag = 0;
 	while (i < program->p_count)
 	{
 		pipe(program->process[i].fd);
 		i++;
 	}
-	// cd execute/ > ala olmadı
 	i = 0;
 	while (i < program->p_count + 1)
 	{
+		program->status = 0;
 		create_fork(program, &i);
 		i++;
 	}
 	close_pipe(program);
-		while (waitpid(-1,NULL, 0) > 0)
-		;
+	exit_code_handler(program);
 }

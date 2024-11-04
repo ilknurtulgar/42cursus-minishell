@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
+/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 15:23:50 by zayaz             #+#    #+#             */
-/*   Updated: 2024/10/29 17:48:33 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/11/03 19:21:50 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,10 @@ static void	cd_path(t_program *program, char *cmd)
 		}
 	}
 	else
+	{
 		printf("cd: %s No such file or directory\n", path);
+		program->status = 1;
+	}
 }
 
 void	cd(t_program *program, char **cmd)
@@ -116,4 +119,5 @@ void	cd(t_program *program, char **cmd)
 		return ;
 	}
 	update_env(program, cwd);
+	program->status = 0;
 }

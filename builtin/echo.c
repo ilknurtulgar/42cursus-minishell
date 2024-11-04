@@ -3,56 +3,47 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
+/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 17:36:01 by itulgar           #+#    #+#             */
-/*   Updated: 2024/10/29 18:16:17 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/11/03 19:21:53 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static int	flag_control(char **cmd, int *j)
+static int flag_control(char **cmd, int *i)
 {
-	int	i;
-
-	i = 0;
 	if (cmd[1][0] == '-' && cmd[1][1] == 'n' && cmd[1][2] == '\0')
 	{
-		while (cmd[i] != NULL && ft_strncmp(cmd[i], "-n", ft_strlen("-n")) == 0
-			&& cmd[i][*j] == '\0')
+		while (cmd[*i] && zi_strcmp(cmd[*i], "-n") == 0)
 		{
-			if (cmd[i][*j])
-				(*j)++;
+			if (cmd[*i])
+				(*i)++;
 		}
 		return (1);
 	}
 	return (0);
 }
 
-void	echo(char **cmd)
+void echo(t_program *program, char **cmd)
 {
-	int	flag;
-	int	i;
-	int	j;
+	int flag;
+	int i;
 
 	i = 1;
-	j = 0;
 	if (cmd[i])
-		flag = flag_control(cmd, &j);
+		flag = flag_control(cmd, &i);
 	else
-		flag=0;
+		flag = 0;
 	while (cmd[i])
 	{
 		printf("%s", cmd[i]);
-		if (cmd[i] && cmd[i] && cmd[i])
-		{
+		i++;
+		if (cmd[i])
 			printf(" ");
-			i++;
-		}
-		if (!cmd[i])
-			break ;
 	}
 	if (!flag)
 		printf("\n");
+	program->status = 0;
 }

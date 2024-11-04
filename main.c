@@ -2,14 +2,11 @@
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+
-	+:+     */
-/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+
-	+#+        */
-/*                                                +#+#+#+#+#+
-	+#+           */
-/*   Created: 2024/09/07 16:50:25 by itulgar           #+#    #+#             */
-/*   Updated: 2024/10/20 13:06:00 by itulgar          ###   ########.fr       */
+/*                                                    +:+ +:+         +:+     */
+/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/03 17:54:04 by zayaz             #+#    #+#             */
+/*   Updated: 2024/11/03 17:54:04 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,36 +21,32 @@ int	main(int argc, char **argv, char **envp)
 	program = NULL;
 	(void)argv;
 	if (argc != 1)
+	{
 		error_message("Unvalid argument");
+		exit(0);
+	}
 	program = malloc(sizeof(t_program));
+	if (!program)
+		return (0);
 	ft_init_program(program, envp);
 	while (1)
 	{
-		global_signal = 0;
+		g_global_signal = 0;
 		program->input = readline("minishell 🐥>");
+		if (g_global_signal == 13)
+		{
+			program->status = 1;
+			g_global_signal = 0;
+		}
 		tmp = ft_strtrim(program->input, " ");
 		free(program->input);
 		program->input = tmp;
 		if (program->input)
-		{
 			add_history(program->input);
-			if (!ft_strncmp(program->input, "exit", 5))
-			{
-				break ;
-			}
-		}
 		if (program->input == NULL)
-		{
-			printf("exit\n");
-			// exit codelarına bak
 			exit(1);
-		}
 		if (!ft_parser(program, program->input))
-			break ;
-		if (heredoc_count(program) > 0)
-			heredoc_run(program);
-
-		// exit(0);
+			continue ;
 		zi_exec(program);
 		free_parser_input(program);
 		free(tmp);

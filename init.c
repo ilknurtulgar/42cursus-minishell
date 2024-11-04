@@ -3,23 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
+/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 18:32:15 by itulgar           #+#    #+#             */
-/*   Updated: 2024/10/29 19:16:10 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/11/03 19:26:46 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	print_list(t_list *list)
-{
-	while (list != NULL)
-	{
-		printf("%s=%s\n", (char *)list->key, (char *)list->content);
-		list = list->next;
-	}
-}
 
 static t_list	*set_env(char **envp)
 {
@@ -40,41 +31,20 @@ static t_list	*set_env(char **envp)
 	return (tmp_list);
 }
 
-void	signal_handler(int sig)
-{
-	(void)sig;
-		 if (global_signal == 0)
-		{
-			printf("\n");
-			rl_on_new_line();
-			rl_replace_line("", 0);
-			rl_redisplay();
-		}
-		else if (global_signal == IN_HERADOC)
-		{
-			exit(0);
-		}
-	
-	global_signal = 0;
-}
-
-static void	init_signal(void)
-{
-	signal(SIGINT, signal_handler);
-	signal(SIGQUIT, SIG_IGN);
-}
-
 void	ft_init_program(t_program *program, char **envp)
 {
 	program->input = NULL;
 	program->envp_list = set_env(envp);
 	program->export_list = set_env(envp);
-	global_signal = 0;
 	program->check_quote = 1;
-	program->p_count=0;
-	program->fd_input=0;
-	program->fd_output=0;
+	program->p_count = 0;
+	program->fd_input = 0;
+	program->fd_output = 0;
 	program->control_q_split = 0;
 	program->control_p_split = 0;
-	init_signal();
+	program->status = 0;
+	program->hd_flag = malloc(sizeof(int));
+	*program->hd_flag = 0;
+	program->rdr_error = 0;
+	signal_init();
 }

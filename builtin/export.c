@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
+/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 15:47:05 by zayaz             #+#    #+#             */
-/*   Updated: 2024/10/29 20:38:38 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/11/03 19:22:03 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,14 +69,19 @@ static void	export_run(t_program *program, char **cmd, int i)
 		{
 			printf("export: `%s':not a valid identifier\n", cmd[i]);
 			free(equ_key);
+			program->status = 1;
 			return ;
 		}
 		else if (ft_strchr(cmd[i], 61) != 0)
+		{
 			equal_in_export(program, cmd, &i);
+			program->status = 0;
+		}
 		else
 		{
 			node = ft_lstnew("(null)", cmd[i]);
 			ft_lstadd_back(&program->export_list, node);
+			program->status = 0;
 		}
 		free(equ_key);
 		i++;

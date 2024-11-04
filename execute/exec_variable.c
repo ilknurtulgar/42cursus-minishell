@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_variable.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
+/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/27 12:33:29 by itulgar           #+#    #+#             */
-/*   Updated: 2024/10/28 12:15:36 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/11/03 19:21:30 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,17 +46,22 @@ void	find_path(t_program *program)
 	if (content == NULL)
 		program->sep_path = NULL;
 	program->sep_path = ft_split(content, ':');
-	while (program->sep_path[i])
+	while (program->sep_path && program->sep_path[i])
 	{
 		program->sep_path[i] = ft_strjoin(program->sep_path[i], "/");
 		i++;
 	}
 }
 
-void	exec_error(t_program *program, char *s, int exit_code)
+void	exec_error(t_program *program, char *s, int exit_codes)
 {
-	printf("minishell: %s: %s\n", program->cmd[0], s);
-	exit(exit_code);
+	write(2, "minishell: ", ft_strlen("minishell: "));
+	write(2, program->cmd[0], ft_strlen(program->cmd[0]));
+	write(2, ":", 1);
+	write(2, s, ft_strlen(s));
+	write(2, "\n", 1);
+	program->status = exit_codes;
+	exit(exit_codes);
 }
 
 void	relative_path(t_program *program)
@@ -78,9 +83,9 @@ void	relative_path(t_program *program)
 		else if (zi_strcmp(program->cmd[0], ".") == 0)
 			exec_error(program, "filename argument required", 2);
 		else if (zi_strcmp(program->cmd[0], "..") == 0)
-			exec_error(program, "Command not found", 127);
-		else
-			exec_error(program, "is a directory", 126);
+			exec_error(program, "command not found", 127);
+		else 
+			exec_error(program, "is a directorye", 126);
 	}
 	else
 	{
