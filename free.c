@@ -51,7 +51,9 @@ void	free_parser_input(t_program *program)
 	{
 		j = 0;
 		while (program->parser_input[i][j])
-		{
+		{	
+			if (program->parser_input[i][j]->cmd)
+				free(program->parser_input[i][j]->cmd);
 			if (program->parser_input[i][j])
 				free(program->parser_input[i][j]);
 			j++;
@@ -68,6 +70,8 @@ void	free_program(t_program *program)
 		return ;
 	if (program->input)
 		free(program->input);
+	if(program->parser_input)
+		free_parser_input(program);
 	if (program->envp_list)
 		free_envp_list(program->envp_list);
 	free(program);

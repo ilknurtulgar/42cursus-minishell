@@ -25,6 +25,7 @@
 # include <signal.h>
 # include <stdlib.h>
 # include <sys/stat.h>
+#include <sys/wait.h>
 # include <unistd.h>
 
 # define IN_CAT 1

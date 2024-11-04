@@ -54,10 +54,10 @@ void f(t_lexer *parser_inputiz)
 				i++;
 		}
 		tmp[j] = '\0';
-		parser_inputiz->cmd = zi_strlcpy(parser_inputiz->cmd, tmp,
-										 ft_strlen(parser_inputiz->cmd));
-	}
+		  free(parser_inputiz->cmd);
+		parser_inputiz->cmd = ft_strdup( tmp);
 	free(tmp);
+	}
 }
 
 void quote_clean(t_program *program)

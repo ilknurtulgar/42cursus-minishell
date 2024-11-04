@@ -26,12 +26,15 @@ char    *before_dolar(t_lexer *parser_input, int *i, int is_in)
 static char *after_quote(t_lexer *parser_input, char *before_cmd, int *i)
 {
     char    *se_dolar;
+    char *before_tmp;
     se_dolar = before_dolar(parser_input, i, 0);
-    if (se_dolar)
-        before_cmd = ft_strjoin(before_cmd, se_dolar);
+    if (se_dolar){
+        before_tmp = ft_strjoin(before_cmd, se_dolar);
+        free(se_dolar);
+    }
     while (parser_input->cmd[*i] && parser_input->cmd[*i] != 36)
-        (*i)++;
-    return (before_cmd);
+        (*i)++; 
+    return (before_tmp);
 }
 static char *before_dolar_assign(t_program *program, t_lexer *parser_input,
         char *before_cmd, int *i)
@@ -55,6 +58,7 @@ void    dq_dolar_env(t_program *program, t_lexer *parser_input, int *i,
     char    *tmp;
     if (parser_input->cmd[*i] == '\"')
         before_cmd = after_quote(parser_input, before_cmd, i);
+
     if (parser_input->cmd[*i] == 36)
     {
         tmp = before_dolar_assign(program, parser_input, before_cmd, i);
@@ -63,11 +67,12 @@ void    dq_dolar_env(t_program *program, t_lexer *parser_input, int *i,
             parser_input->cmd = ft_strdup("\0");
         else
             parser_input->cmd = ft_strdup(tmp);
-        if (before_cmd)
-            free(before_cmd);
-        if (tmp)
-            free(tmp);
+     if (before_cmd)
+        free(before_cmd);
+    if (tmp)
+        free(tmp);
     }
+
     return ;
 }
 void    dolar_handler(t_program *program, t_lexer *parser_input)
@@ -84,15 +89,20 @@ void    dolar_handler(t_program *program, t_lexer *parser_input)
         before_cmd = before_dolar(parser_input, &i, 1);
         if (parser_input->cmd[i] && (parser_input->cmd[i + 1] == '\0'))
             break ;
-        if (i >= len)
-            break ;
+        if (i >= len){
+            if (before_cmd)
+                free(before_cmd);
+            break;
+        }
         dq_dolar_env(program, parser_input, &i, before_cmd);
         if (!ft_strchr(parser_input->cmd + i, 36))
             break ;
+        
         else
         {
             len = ft_strlen(parser_input->cmd);
             i = 0;
         }
     }
+   
 }

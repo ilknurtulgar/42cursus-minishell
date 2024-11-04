@@ -36,6 +36,9 @@ static void	exec_command(t_program *program)
 		i++;
 		free(tmp_path);
 	}
+	//free_array(program->sep_path);
+	free_array(program->env_cmd);
+
 	exec_error(program, " command not found", 127);
 }
 void	run_one_cmd(t_program *program, int *i)

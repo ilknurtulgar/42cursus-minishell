@@ -47,6 +47,7 @@ char	*zi_strlcpy(char *dst, const char *src, size_t dstsize)
 	dst[i] = '\0';
 	return (dst);
 }
+
  int	zi_strchr(const char *s, int c, char type)
 {
 	while (*s && *s != (char)c && *s != type)

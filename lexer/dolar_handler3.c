@@ -32,6 +32,7 @@ char    *dollar_join(char *env_str, char *before_cmd, char *after_dolar,
             {
                 str = ft_strjoin(before_cmd, env_str);
                 tmp = ft_strjoin(str, after_dolar);
+                free(str);
             }
         }
         else
@@ -55,6 +56,7 @@ char    *set_expand_dollar_variables(t_lexer *parser_input, int *i, char *env_st
     {
         env_str = env_count_str(parser_input, i);
         key = dolar_env(program, env_str);
+        free(env_str);
         return (key);
     }
     else if (parser_input->cmd[(*i) + 1] == 32)
