@@ -12,9 +12,9 @@
 
 #include "../minishell.h"
 
-int	zi_redirectchr(const char *s, char c)
+int zi_redirectchr(const char *s, char c)
 {
-	char	type;
+	char type;
 
 	while (*s)
 	{
@@ -35,9 +35,9 @@ int	zi_redirectchr(const char *s, char c)
 	return (0);
 }
 
-void	quote_skip(char *cmd, int *z)
+void quote_skip(char *cmd, int *z)
 {
-	char	q_type;
+	char q_type;
 
 	if (cmd[*z] == '\'' || cmd[*z] == '\"')
 	{
@@ -50,23 +50,22 @@ void	quote_skip(char *cmd, int *z)
 	}
 }
 
-void	find_loc(char *cmd, int *z)
+void find_loc(char *cmd, int *z)
 {
 	while (cmd[*z] != '\0' && cmd[*z] != '>' && cmd[*z] != '<')
 	{
 		quote_skip(cmd, z);
-		if (cmd[*z] && (cmd[*z] != '\'' && cmd[*z] != '\"') && (cmd[*z] != '>'
-				&& cmd[*z] != '<'))
+		if (cmd[*z] && (cmd[*z] != '\'' && cmd[*z] != '\"') && (cmd[*z] != '>' && cmd[*z] != '<'))
 			(*z)++;
 	}
 }
 
-void	load_redi(t_program *program, void run_redirect(t_program *, char *),
-		int *i, int *j, int *z)
+void load_redi(t_program *program, void run_redirect(t_program *, char *),
+			   int *i, int *j, int *z)
 {
-	int		start;
-	char	*doc;
-	char	*clean_doc;
+	int start;
+	char *doc;
+	char *clean_doc;
 
 	clean_doc = NULL;
 	start = 0;
@@ -93,6 +92,8 @@ void	load_redi(t_program *program, void run_redirect(t_program *, char *),
 		// 	close(program->fd_input);
 		// if (program->fd_output > 2)
 		// 	close(program->fd_output);
+		if (program->rdr_error == 2 || program->rdr_error==1)
+			return;
 		if (program->status != 1)
 			run_redirect(program, clean_doc);
 		free(clean_doc);
@@ -100,10 +101,10 @@ void	load_redi(t_program *program, void run_redirect(t_program *, char *),
 	}
 }
 
-void	redirect(t_program *program, int *i)
+void redirect(t_program *program, int *i)
 {
-	int	j;
-	int	z;
+	int j;
+	int z;
 
 	if (*program->hd_flag == 0 && heredoc_count(program))
 	{
@@ -113,26 +114,20 @@ void	redirect(t_program *program, int *i)
 	program->redi_type = '\0';
 	j = 0;
 	z = 0;
-	while (program->parser_input[*i][j] != NULL
-		&& program->parser_input[*i][j]->cmd)
+	while (program->parser_input[*i][j] != NULL && program->parser_input[*i][j]->cmd)
 	{
 		z = 0;
 		while (program->parser_input[*i][j]->cmd[z])
 		{
 			quote_skip(program->parser_input[*i][j]->cmd, &z);
-			if (program->parser_input[*i][j]->cmd[z] == '<'
-				|| program->parser_input[*i][j]->cmd[z] == '>')
+			if (program->parser_input[*i][j]->cmd[z] == '<' || program->parser_input[*i][j]->cmd[z] == '>')
 			{
 				program->redi_type = program->parser_input[*i][j]->cmd[z];
-				if (program->parser_input[*i][j]->cmd[z] == '<'
-					&& (program->parser_input[*i][j]->cmd[z + 1]
-						&& program->parser_input[*i][j]->cmd[z + 1] == '<'))
+				if (program->parser_input[*i][j]->cmd[z] == '<' && (program->parser_input[*i][j]->cmd[z + 1] && program->parser_input[*i][j]->cmd[z + 1] == '<'))
 				{
 					z += 2;
 				}
-				if (program->parser_input[*i][j]->cmd[z] == '>'
-					&& (program->parser_input[*i][j]->cmd[z + 1]
-						&& program->parser_input[*i][j]->cmd[z + 1] == '>'))
+				if (program->parser_input[*i][j]->cmd[z] == '>' && (program->parser_input[*i][j]->cmd[z + 1] && program->parser_input[*i][j]->cmd[z + 1] == '>'))
 				{
 					z++;
 					load_redi(program, append_output, i, &j, &z);
@@ -141,14 +136,11 @@ void	redirect(t_program *program, int *i)
 				{
 					load_redi(program, run_input, i, &j, &z);
 				}
-				if ((program->parser_input[*i][j]->cmd[z] == '>'
-						&& ft_strncmp(program->parser_input[*i][j]->cmd + z,
-							">>", 2) != 0))
+				if ((program->parser_input[*i][j]->cmd[z] == '>' && ft_strncmp(program->parser_input[*i][j]->cmd + z,
+																			   ">>", 2) != 0))
 					load_redi(program, run_output, i, &j, &z);
 			}
-			else if (program->parser_input[*i][j]->cmd[z]
-				&& program->parser_input[*i][j]->cmd[z] != '\''
-				&& program->parser_input[*i][j]->cmd[z] != '\"')
+			else if (program->parser_input[*i][j]->cmd[z] && program->parser_input[*i][j]->cmd[z] != '\'' && program->parser_input[*i][j]->cmd[z] != '\"')
 				z++;
 		}
 		j++;
