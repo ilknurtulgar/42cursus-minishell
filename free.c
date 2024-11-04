@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 17:47:51 by itulgar           #+#    #+#             */
-/*   Updated: 2024/10/02 16:35:42 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/03 20:46:06 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,4 +71,14 @@ void	free_program(t_program *program)
 	if (program->envp_list)
 		free_envp_list(program->envp_list);
 	free(program);
+}
+
+void	dolar_free(char *env_str, char *after_dolar)
+{
+	if (env_str != NULL && env_str[0] != '\0')
+
+		free(env_str);
+
+	if (after_dolar)
+		free(after_dolar);
 }

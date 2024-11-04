@@ -3,50 +3,46 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 12:03:58 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/03 19:22:00 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/03 20:51:29 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-long ft_atol(const char *str) {
-    long num = 0;
-    int sign = 1;
-    int i = 0;
-
-    while ((str[i] >= 9 && str[i] <= 13) || str[i] == 32)
-        i++;
-    if (str[i] == '+' || str[i] == '-') {
-        if (str[i] == '-')
-            sign = -1;
-        i++;
-    }
-    while (str[i] >= '0' && str[i] <= '9') {
-        num = num * 10 + (str[i] - '0');
-        i++;
-    }
-    return num * sign;
-}
-
-void	exit_error(char *cmd, char *s, char *message)
+static long	ft_atol(const char *str)
 {
-	write(2, "minishell: ", ft_strlen("minishell: "));
-	write(2, cmd, ft_strlen(cmd));
-	write(2, ":", 1);
-	write(2, " ", 1);
-	if (s[0] != '\0')
-		write(2, s, ft_strlen(s));
-	write(2, message, ft_strlen(message));
-	write(2, "\n", 1);
+	long	num;
+	int		sign;
+	int		i;
+
+	num = 0;
+	sign = 1;
+	i = 0;
+	while ((str[i] >= 9 && str[i] <= 13) || str[i] == 32)
+		i++;
+	if (str[i] == '+' || str[i] == '-')
+	{
+		if (str[i] == '-')
+			sign = -1;
+		i++;
+	}
+	while (str[i] >= '0' && str[i] <= '9')
+	{
+		num = num * 10 + (str[i] - '0');
+		i++;
+	}
+	return (num * sign);
 }
 
 static int	ft_isnumeric(char *str)
 {
-	int	i;
-	long num = ft_atol(str);
+	int		i;
+	long	num;
+
+	num = ft_atol(str);
 	i = 0;
 	if (!str || !str[i])
 		return (0);
@@ -55,7 +51,7 @@ static int	ft_isnumeric(char *str)
 	if (!ft_isdigit(str[i]))
 		return (0);
 	if (num < INT_MIN || num > INT_MAX)
-        return (0);
+		return (0);
 	while (str[i])
 	{
 		if (!ft_isdigit(str[i]))
@@ -65,7 +61,7 @@ static int	ft_isnumeric(char *str)
 	return (1);
 }
 
-void	ft_exit_error(char *str, int status)
+static void	ft_exit_error(char *str, int status)
 {
 	if (str && str[0] != '\0')
 		write(2, str, ft_strlen(str));

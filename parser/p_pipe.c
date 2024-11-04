@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_pipe.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 18:11:08 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/03 16:43:56 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/03 20:49:07 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ static char	*pipe_in_ridect(char *input)
 }
 int	p_pipe(t_program *program, char *input)
 {
-	(void)program;
 	if (*input == '|')
 		return (p_error(program, "syntax error to pipe"));
 	while (*input)

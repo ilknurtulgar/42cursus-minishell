@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 17:45:46 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/03 19:40:41 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/03 20:59:48 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,8 @@ void	zi_exec(t_program *program)
 	while (i < program->p_count + 1)
 	{
 		program->status = 0;
+		if (program->redi_flag == 1)
+			program->redi_flag = 0;
 		create_fork(program, &i);
 		i++;
 	}

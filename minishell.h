@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 16:54:01 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/03 19:22:51 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/03 20:57:58 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,4 +151,12 @@ void			free_parser_input(t_program *program);
 int				p_error(t_program *program, char *str);
 int				rdr_take_status(t_program *program, int pid);
 void			file_error(t_program *program);
+void	dolar_free(char *env_str, char *after_dolar);
+void	find_dollar_in_quotes(char *s,char q_type,int *i);
+void	handle_unset_identifier(t_program *program, char **cmd, int *i);
+ int	zi_strchr(const char *s, int c, char type);
+void	build_error(t_program *program, char *cmd, char *message);
+void	identifier_error(t_program *program, char *cmd, char *s, char *message);
+ void	search_del_env(t_program *program, char *key, t_list **lst);
+void	exit_error(char *cmd, char *s, char *message);
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   zi_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 12:38:58 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/03 19:22:07 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/03 20:57:27 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static t_list	*zi_lstdelone(t_list **lst, t_list *node, void (*del)(void *,
 	return (*lst);
 }
 
-static void	search_del_env(t_program *program, char *key, t_list **lst)
+ void	search_del_env(t_program *program, char *key, t_list **lst)
 {
 	t_list	*current;
 
@@ -64,16 +64,6 @@ static void	search_del_env(t_program *program, char *key, t_list **lst)
 			break ;
 		current = current->next;
 	}
-}
-void	identifier_error(char *cmd, char *s, char *message)
-{
-	write(2, cmd, ft_strlen(cmd));
-	write(2, ":", 1);
-	write(2, "`", 1);
-	write(2, s, ft_strlen(s));
-	write(2, "'", 1);
-	write(2, message, ft_strlen(message));
-	write(2, "\n", 1);
 }
 
 int	check_identifier(char *cmd)
@@ -99,10 +89,8 @@ int	check_identifier(char *cmd)
 
 void	zi_unset(t_program *program, char **cmd)
 {
-	int	i;
-	int	error_flag;
+	int i;
 
-	error_flag = 0;
 	i = 1;
 	if (!cmd[1])
 		return ;
@@ -110,21 +98,7 @@ void	zi_unset(t_program *program, char **cmd)
 	{
 		while (cmd[i])
 		{
-			if (!check_identifier(cmd[i]))
-			{
-				identifier_error("unset", cmd[i], " :not a valid identifier");
-				program->status = 1;
-				error_flag = 1;
-			}
-			else
-			{
-				search_del_env(program, cmd[i], &program->envp_list);
-				search_del_env(program, cmd[i], &program->export_list);
-				if (program->unset_flag == 0 && error_flag == 1)
-					program->status = 1;
-				else
-					program->status = 0;
-			}
+			handle_unset_identifier(program, cmd, &i);
 			i++;
 		}
 	}

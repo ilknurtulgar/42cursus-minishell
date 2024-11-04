@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_util.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 19:25:00 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/03 16:51:54 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/03 20:55:13 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ char	*zi_strlcpy(char *dst, const char *src, size_t dstsize)
 	dst[i] = '\0';
 	return (dst);
 }
-static int	zi_strchr(const char *s, int c, char type)
+ int	zi_strchr(const char *s, int c, char type)
 {
 	while (*s && *s != (char)c && *s != type)
 		s++;
@@ -57,7 +57,7 @@ static int	zi_strchr(const char *s, int c, char type)
 }
 size_t	zi_strlen(char *s, char c, int dhand)
 {
-	size_t	i;
+	int	i;
 	char	q_type;
 
 	i = 0;
@@ -67,22 +67,7 @@ size_t	zi_strlen(char *s, char c, int dhand)
 		{
 			q_type = s[i];
 			if (is_close_quote(s, i, q_type))
-			{
-				if (q_type == '\"')
-				{
-					if (zi_strchr(s + i + 1, 36, q_type) != 0)
-						return (i);
-					i++;
-					while (s[i] && s[i] != q_type)
-						i++;
-				}
-				else
-				{
-					i++;
-					while (s[i] && s[i] != q_type)
-						i++;
-				}
-			}
+				find_dollar_in_quotes(s, q_type, &i);
 			else
 				i++;
 		}

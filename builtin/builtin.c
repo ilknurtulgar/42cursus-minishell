@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 14:58:07 by itulgar           #+#    #+#             */
-/*   Updated: 2024/11/03 13:47:24 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/03 20:50:17 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,4 +64,26 @@ int	is_builtin(t_program *program)
 		return (1);
 
 	return (0);
+}
+
+
+void	handle_unset_identifier(t_program *program, char **cmd, int *i)
+{
+	int	error_flag;
+
+	error_flag = 0;
+	if (!check_identifier(cmd[*i]))
+	{
+		identifier_error(program, "unset", cmd[*i], " :not a valid identifier");
+		error_flag = 1;
+	}
+	else
+	{
+		search_del_env(program, cmd[*i], &program->envp_list);
+		search_del_env(program, cmd[*i], &program->export_list);
+		if (program->unset_flag == 0 && error_flag == 1)
+			program->status = 1;
+		else
+			program->status = 0;
+	}
 }

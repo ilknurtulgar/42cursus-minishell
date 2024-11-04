@@ -6,7 +6,7 @@
 /*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:53:16 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/03 17:29:16 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/11/03 20:59:10 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,10 +89,10 @@ void	load_redi(t_program *program, void run_redirect(t_program *, char *),
 	if (doc != NULL)
 	{
 		clean_doc = del_quote(clean_doc, doc, ft_strlen(doc));
-		if (program->fd_input > 2)
-			close(program->fd_input);
-		if (program->fd_output > 2)
-			close(program->fd_output);
+		// if (program->fd_input > 2)
+		// 	close(program->fd_input);
+		// if (program->fd_output > 2)
+		// 	close(program->fd_output);
 		if (program->status != 1)
 			run_redirect(program, clean_doc);
 		free(clean_doc);

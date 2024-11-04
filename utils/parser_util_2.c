@@ -6,7 +6,7 @@
 /*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 18:54:27 by itulgar           #+#    #+#             */
-/*   Updated: 2024/10/19 13:08:37 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/11/03 20:47:33 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,4 +72,22 @@ char	*walk_string(t_program *program, char *s, char c)
 	}
 
 	return (s);
+}
+
+void	find_dollar_in_quotes(char *s,char q_type,int *i)
+{
+	if (q_type == '\"')
+	{
+		if (zi_strchr(s + (*i) + 1, 36, q_type) != 0)
+			return;
+		(*i)++;
+		while (s[*i] && s[*i] != q_type)
+			(*i)++;
+	}
+	else
+	{
+		(*i)++;
+		while (s[*i] && s[*i] != q_type)
+			(*i)++;
+	}
 }

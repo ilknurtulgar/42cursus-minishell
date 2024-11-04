@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 15:47:05 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/03 19:22:03 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/03 20:52:02 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,13 +66,9 @@ static void	export_run(t_program *program, char **cmd, int i)
 	{
 		equ_key = equals_key(cmd[i]);
 		if (!check_identifier(equ_key))
-		{
-			printf("export: `%s':not a valid identifier\n", cmd[i]);
-			free(equ_key);
-			program->status = 1;
-			return ;
-		}
-		else if (ft_strchr(cmd[i], 61) != 0)
+			identifier_error(program, "export", cmd[i],
+				":not a valid identifier");
+		else  if (ft_strchr(cmd[i], 61) != 0)
 		{
 			equal_in_export(program, cmd, &i);
 			program->status = 0;
@@ -83,7 +79,8 @@ static void	export_run(t_program *program, char **cmd, int i)
 			ft_lstadd_back(&program->export_list, node);
 			program->status = 0;
 		}
-		free(equ_key);
+		if (equ_key)
+			free(equ_key);
 		i++;
 	}
 }

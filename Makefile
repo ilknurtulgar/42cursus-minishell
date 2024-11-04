@@ -2,7 +2,6 @@ NAME= minishell
 SRCS= main.c\
 	  error.c\
 	  free.c\
-	  lexer_free.c\
 	  init.c\
 	  signal.c\
 	  parser/parser.c\
