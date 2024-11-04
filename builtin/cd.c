@@ -41,8 +41,8 @@ void	search_set_env(t_program *program, char *key, char *content,
 		if (zi_strcmp(current->key, key) == 0)
 		{
 			program->export_flag = 1;
-			current->content = zi_strlcpy(current->content, content,
-					ft_strlen(content));
+			free(current.content);
+			current->content = ft_strdup(content);
 			return ;
 		}
 		if (!current->next)
