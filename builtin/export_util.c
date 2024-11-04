@@ -41,6 +41,4 @@ void	equal_in_export(t_program *program, char **cmd, int *i)
 	content = ft_substr(cmd[*i], equal, k);
 	search_set_env(program, key, content, program->export_list);
 	export_add_list(program, key, content);
-	free(key);
-	free(content);
 }

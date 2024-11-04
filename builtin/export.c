@@ -12,7 +12,7 @@
 
 #include "../minishell.h"
 
-int	*check_key(char *key, t_list *envpx_lst)
+int	check_key(char *key, t_list *envpx_lst)
 {
 	t_list	*current;
 
@@ -20,7 +20,7 @@ int	*check_key(char *key, t_list *envpx_lst)
 	while (current && current->key)
 	{
 		if (zi_strcmp(current->key, key) == 0)
-			return(1);
+			return (1);
 		current = current->next;
 	}
 	return (0);
@@ -89,7 +89,7 @@ static void	export_run(t_program *program, char **cmd, int i)
 		}
 		else
 		{
-			if(check_key(cmd[i],program.export_list))
+			if(!check_key(cmd[i],program->export_list))
 			{
 			node = ft_lstnew("(null)", cmd[i]);
 			ft_lstadd_back(&program->export_list, node);
