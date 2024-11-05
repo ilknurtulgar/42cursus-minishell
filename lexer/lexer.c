@@ -6,7 +6,7 @@
 /*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 12:42:31 by itulgar           #+#    #+#             */
-/*   Updated: 2024/11/03 16:40:43 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/05 16:22:58 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,8 @@ void quote_clean(t_program *program)
 		{
 			if (ft_strchr(program->parser_input[i][j]->cmd, 36))
 				dolar_handler(program, program->parser_input[i][j]);
-			if (program->parser_input[i][j]->key != 7 && program->parser_input[i][j]->key != 8 && program->parser_input[i][j]->key != 5 && program->parser_input[i][j]->key != 6)
-				zi_striteri(program->parser_input[i][j], f);
+			// if (program->parser_input[i][j]->key != 7 && program->parser_input[i][j]->key != 8 && program->parser_input[i][j]->key != 5 && program->parser_input[i][j]->key != 6)
+			// 	zi_striteri(program->parser_input[i][j], f);
 			j++;
 		}
 		i++;

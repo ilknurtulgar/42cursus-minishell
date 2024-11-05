@@ -6,7 +6,7 @@
 /*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 18:10:17 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/03 17:10:56 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/05 16:13:43 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,11 @@ int	p_quote(t_program *program, char *input)
 	while (*input)
 	{
 		if (*input == '\'' || *input == '\"')
+		{
 			input = quote_handler(program, input, *input);
-		if (program->check_quote == 0)
-			return (p_error(program, "syntax error to quote"), 0);
+			if (program->check_quote == 0)
+				return (p_error(program, "syntax error to quote"), 0);
+		}
 		if (!*input)
 			break ;
 		input++;

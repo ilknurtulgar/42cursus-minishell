@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
+/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 12:45:31 by itulgar           #+#    #+#             */
-/*   Updated: 2024/11/01 15:30:22 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/11/05 16:27:44 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,15 +29,11 @@ void	fillable_cmd(t_program *program, t_lexer *input, int *z, int *start,
 	if (input->cmd[*z] == '\0' || (input->cmd[*z] == '<'
 			|| input->cmd[*z] == '>'))
 	{
-		if (input->key == 8 || input->key == 5 || input->key == 6)
+		if (input->key !=7)
 		{
 			clean_cmd = del_quote(clean_cmd, input->cmd, ft_strlen(input->cmd));
 			program->cmd[*k] = ft_substr(clean_cmd, *start, (*z - *start));
 			free(clean_cmd);
-		}
-		else
-		{
-			program->cmd[*k] = ft_substr(input->cmd, *start, (*z - *start));
 		}
 		(*k)++;
 	}

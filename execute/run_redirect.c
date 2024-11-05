@@ -6,7 +6,7 @@
 /*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 19:04:12 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/03 18:44:37 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/05 16:28:20 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void	run_output(t_program *program, char *s)
 	{
 		perror("Error opening file");
 		program->rdr_error = 2;
-		// program->status = 1;
 		return ;
 	}
 }
@@ -32,7 +31,6 @@ void	run_input(t_program *program, char *s)
 		write(2, "minishell: ", 12);
 		perror(s);
 		program->rdr_error = 1;
-		// program->status = 1;
 		return ;
 	}
 }
@@ -44,7 +42,8 @@ void	append_output(t_program *program, char *s)
 	{
 		perror("Error opening file");
 		program->rdr_error = 2;
-		//program->status = 1;
 		return ;
 	}
 }
+
+//"$USER$USERasd$PWD" 

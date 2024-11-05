@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
+/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 16:54:01 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/03 20:57:58 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/11/05 16:22:39 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ typedef struct s_program
 	int			*here_fd;
 	int			redi_flag;
 	int			rdr_error;
+	int			here_error;
 }				t_program;
 void			ft_init_program(t_program *program, char **envp);
 int				ft_parser(t_program *program, char *input);

@@ -6,7 +6,7 @@
 /*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 19:24:51 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/03 19:23:50 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/05 16:17:42 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ char    *dolar_env(t_program *program, char *parser_input)
 {
     t_list  *current;
     current = program->envp_list;
+
     while (current)
     {
         if (!zi_strcmp(current->key, parser_input))

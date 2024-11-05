@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void	signal_handler(int signo)
+void signal_handler(int signo)
 {
 	(void)signo;
 	if (g_global_signal == 0 || g_global_signal == 23)
@@ -35,13 +35,13 @@ void	signal_handler(int signo)
 	}
 }
 
-void	signal_init(void)
+void signal_init(void)
 {
 	signal(SIGINT, signal_handler);
 	signal(SIGQUIT, SIG_IGN);
 }
 
-int	rdr_take_status(t_program *program, int pid)
+int rdr_take_status(t_program *program, int pid)
 
 {
 	int status;
@@ -51,7 +51,11 @@ int	rdr_take_status(t_program *program, int pid)
 	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
 		program->status = 1;
 	else
+	{
 		program->status = WEXITSTATUS(status);
+		program->status = 1;
+		return 1;
+	}
 	if (program->status != 0)
 		return (3);
 	else

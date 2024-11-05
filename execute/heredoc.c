@@ -6,7 +6,7 @@
 /*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 18:20:33 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/03 18:45:34 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/05 16:20:11 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int	heredoc_count(t_program *program)
 int	zi_strcmp(const char *s1, const char *s2)
 {
 	size_t	i;
+
 
 	if (!s1 || !s2)
 		return (-1);
