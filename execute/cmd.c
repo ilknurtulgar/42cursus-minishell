@@ -135,14 +135,6 @@ void	fill_cmd(t_program *program, int *i)
 	program->cmd[k] = NULL;
 }
 
-// minishell 🐥>echo $a
-
-// minishell 🐥>echo "$a"
-// '
-// minishell 🐥>echo '$a'
-// $a
-// minishell 🐥>echo $a"nkj"$a
-// "nkj"$a
 void	exec_cmd(t_program *program, int *i)
 {
 	int cmd_len;

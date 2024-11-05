@@ -36,9 +36,8 @@ static void	exec_command(t_program *program)
 		i++;
 		free(tmp_path);
 	}
-	//free_array(program->sep_path);
+	free_array(program->sep_path);
 	free_array(program->env_cmd);
-
 	exec_error(program, " command not found", 127);
 }
 void	run_one_cmd(t_program *program, int *i)
@@ -86,8 +85,10 @@ static void	create_fork(t_program *program, int *i)
 		return ;
 	if (program->cmd[0] && program->cmd)
 	{
-		if (is_builtin(program) && program->p_count == 0)
+		if (is_builtin(program) && program->p_count == 0){
 			run_one_cmd(program, i);
+			return;
+		}
 		else
 		{
 			g_global_signal = 1;
@@ -100,12 +101,12 @@ static void	create_fork(t_program *program, int *i)
 				if (is_builtin(program) && program->p_count > 0)
 					child_builtin(program);
 				exec_command(program);
-				// program->status = 127;
 				exit(127);
 			}
 		}
 	}
 	program->process[*i].pid = pid_fork;
+
 }
 
 void	close_pipe(t_program *program)
@@ -143,8 +144,11 @@ void	zi_exec(t_program *program)
 		if (program->redi_flag == 1)
 			program->redi_flag = 0;
 		create_fork(program, &i);
+		if(program->cmd || program->cmd[0])
+			free_array(program->cmd);
 		i++;
 	}
 	close_pipe(program);
 	exit_code_handler(program);
+
 }

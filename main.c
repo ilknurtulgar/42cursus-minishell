@@ -50,6 +50,7 @@ int	main(int argc, char **argv, char **envp)
 		zi_exec(program);
 		free_parser_input(program);
 		free(tmp);
+		free(program->here_fd);
 		free(program->process);
 	}
 	free_program(program);

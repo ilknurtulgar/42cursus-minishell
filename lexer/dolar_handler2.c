@@ -16,7 +16,6 @@ char    *dolar_env(t_program *program, char *parser_input)
 {
     t_list  *current;
     current = program->envp_list;
-
     while (current)
     {
         if (!zi_strcmp(current->key, parser_input))

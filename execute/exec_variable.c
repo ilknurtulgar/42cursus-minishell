@@ -40,7 +40,6 @@ void	find_path(t_program *program)
 {
 	int		i;
 	char	*content;
-
 	i = 0;
 	content = search_env("PATH", program->envp_list);
 	if (content == NULL)
@@ -48,7 +47,12 @@ void	find_path(t_program *program)
 	program->sep_path = ft_split(content, ':');
 	while (program->sep_path && program->sep_path[i])
 	{
-		program->sep_path[i] = ft_strjoin(program->sep_path[i], "/");
+		char *new_path;
+
+		new_path = ft_strjoin(program->sep_path[i], "/");
+		if(program->sep_path[i])
+			free(program->sep_path[i]);
+		program->sep_path[i] = new_path; 
 		i++;
 	}
 }
@@ -96,3 +100,4 @@ void	relative_path(t_program *program)
 			exec_error(program, "command not found", 127);
 	}
 }
+

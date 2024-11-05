@@ -69,8 +69,10 @@ static int	clean_input(t_program *program, char *input)
 	}
 	while (pipe_input[k])
 	{
-		if ((z = fill_pipe_input(program, pipe_input[k], k)) == -1)
+		if ((z = fill_pipe_input(program, pipe_input[k], k)) == -1){
+			free_array(pipe_input);
 			return (0);
+		}
 		program->parser_input[k][z] = NULL;
 		k++;
 	}

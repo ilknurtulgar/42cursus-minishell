@@ -50,12 +50,12 @@ $(READLINE):
 	cd readline-8.2 && ./configure --prefix=$(PWD)/$(READLINE_DIR)
 	cd readline-8.2 && make install
 	$(RM) readline-8.2 readline-8.2.tar.gz
-#-lncurses
+
 $(LIBFT):
 	make -C ./includes/libft -s
 	make bonus  -C ./includes/libft -s
 $(NAME): $(OBJS) $(LIBFT) $(READLINE)
-	$(CC) -o $(NAME) $(OBJS) $(CFLAGS) $(LIBFT) -L$(PWD)/$(READLINE_DIR)/lib -I$(PWD)/$(READLINE_DIR)/include -lreadline  
+	$(CC) -o $(NAME) $(OBJS) $(CFLAGS) $(LIBFT) -L$(PWD)/$(READLINE_DIR)/lib -I$(PWD)/$(READLINE_DIR)/include -lreadline   -lncurses
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@ -I$(PWD)/$(READLINE_DIR)/include/

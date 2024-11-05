@@ -66,7 +66,6 @@ void load_redi(t_program *program, void run_redirect(t_program *, char *),
 	int start;
 	char *doc;
 	char *clean_doc;
-
 	clean_doc = NULL;
 	start = 0;
 	doc = NULL;
@@ -97,8 +96,8 @@ void load_redi(t_program *program, void run_redirect(t_program *, char *),
 		if (program->status != 1)
 			run_redirect(program, clean_doc);
 		free(clean_doc);
-		free(doc);
 	}
+	free(doc);
 }
 
 void redirect(t_program *program, int *i)
