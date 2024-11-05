@@ -85,10 +85,8 @@ static void	create_fork(t_program *program, int *i)
 		return ;
 	if (program->cmd[0] && program->cmd)
 	{
-		if (is_builtin(program) && program->p_count == 0){
+		if (is_builtin(program) && program->p_count == 0)
 			run_one_cmd(program, i);
-			return;
-		}
 		else
 		{
 			g_global_signal = 1;
@@ -144,7 +142,7 @@ void	zi_exec(t_program *program)
 		if (program->redi_flag == 1)
 			program->redi_flag = 0;
 		create_fork(program, &i);
-		if(program->cmd || program->cmd[0])
+		if(program->cmd!=NULL)
 			free_array(program->cmd);
 		i++;
 	}

@@ -30,7 +30,8 @@ void	free_array(char **tmp)
 	int	i;
 
 	i = 0;
-	while (tmp[i])
+	
+	while (tmp && tmp[i])
 	{
 		free(tmp[i]);
 		i++;
@@ -54,8 +55,7 @@ void	free_parser_input(t_program *program)
 		{	
 			if (program->parser_input[i][j]->cmd)
 				free(program->parser_input[i][j]->cmd);
-			if (program->parser_input[i][j])
-				free(program->parser_input[i][j]);
+			free(program->parser_input[i][j]);
 			j++;
 		}
 		free(program->parser_input[i]);

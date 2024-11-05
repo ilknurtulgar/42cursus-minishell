@@ -41,10 +41,15 @@ static int	fill_pipe_input(t_program *program, char *pipe_input, int k)
 	}
 	j = 0;
 	z = 0;
+	// int a=0;
+	// while(split_space[a])
+	// 	printf("a:%s\n",split_space[a++]);
 	while (split_space[j])
 	{
 		program->parser_input[k][z] = (t_lexer *)malloc(sizeof(t_lexer));
+	//	printf("zon:%d\n",z);
 		z = space_cmd(program, program->parser_input[k][z], split_space[j], z);
+	//	printf("zsonra:%d\n",z);
 		j++;
 	}
 	free_array(split_space);

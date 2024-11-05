@@ -29,12 +29,9 @@ void	fillable_cmd(t_program *program, t_lexer *input, int *z, int *start,
 	if (input->cmd[*z] == '\0' || (input->cmd[*z] == '<'
 			|| input->cmd[*z] == '>'))
 	{
-		if (input->key !=7)
-		{
 			clean_cmd = del_quote(clean_cmd, input->cmd, ft_strlen(input->cmd));
 			program->cmd[*k] = ft_substr(clean_cmd, *start, (*z - *start));
 			free(clean_cmd);
-		}
 		(*k)++;
 	}
 }

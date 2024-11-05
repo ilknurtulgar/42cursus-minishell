@@ -53,8 +53,8 @@ int rdr_take_status(t_program *program, int pid)
 	else
 	{
 		program->status = WEXITSTATUS(status);
-		program->status = 1;
-		return 1;
+		// program->status = 1;
+		// return 1;
 	}
 	if (program->status != 0)
 		return (3);

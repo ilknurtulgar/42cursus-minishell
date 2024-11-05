@@ -86,18 +86,26 @@ void load_redi(t_program *program, void run_redirect(t_program *, char *),
 	doc = ft_substr(program->parser_input[*i][*j]->cmd, start, ((*z) - start));
 	if (doc != NULL)
 	{
+		// if(clean_doc!=NULL)
+		// 	free(clean_doc);
 		clean_doc = del_quote(clean_doc, doc, ft_strlen(doc));
+		free(doc);
+
 		// if (program->fd_input > 2)
 		// 	close(program->fd_input);
 		// if (program->fd_output > 2)
 		// 	close(program->fd_output);
-		if (program->rdr_error == 2 || program->rdr_error==1)
+
+		if (program->rdr_error == 2 || program->rdr_error==1){
+				free(clean_doc);
 			return;
+		}
 		if (program->status != 1)
 			run_redirect(program, clean_doc);
 		free(clean_doc);
+	
 	}
-	free(doc);
+
 }
 
 void redirect(t_program *program, int *i)

@@ -36,7 +36,7 @@ SRCS = main.c \
 
 OBJS = $(SRCS:.c=.o)
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address -fsanitize=leak -g
+CFLAGS = -Wall -Wextra -Werror -g #-fsanitize=address #-fsanitize=leak -g
 RM = rm -rf
 LIBFT = ./includes/libft/libft.a
 READLINE_DIR = readline
