@@ -76,7 +76,8 @@ typedef struct s_program
 	int			*here_fd;
 	int			redi_flag;
 	int			rdr_error;
-	int			here_error;
+	int			built_check;
+
 }				t_program;
 void			ft_init_program(t_program *program, char **envp);
 int				ft_parser(t_program *program, char *input);

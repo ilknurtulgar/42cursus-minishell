@@ -85,6 +85,7 @@ static void	create_fork(t_program *program, int *i)
 		return ;
 	if (program->cmd[0] && program->cmd)
 	{
+		program->built_check = is_builtin(program);
 		if (is_builtin(program) && program->p_count == 0)
 			run_one_cmd(program, i);
 		else

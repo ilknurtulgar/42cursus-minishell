@@ -46,5 +46,6 @@ void	ft_init_program(t_program *program, char **envp)
 	program->hd_flag = malloc(sizeof(int));
 	*program->hd_flag = 0;
 	program->rdr_error = 0;
+	program->built_check = 0;
 	signal_init();
 }

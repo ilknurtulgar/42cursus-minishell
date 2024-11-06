@@ -19,11 +19,10 @@ void	exit_code_handler(t_program *program)
 
 	staus_check = 0;
 	i = 0;
-	staus_check = 0;
 	while (i <= program->p_count)
 	{
 		waitpid(program->process[i].pid, &staus_check, 0);
-		if ((program->rdr_error != 1
+		if (program->built_check == 0 && (program->rdr_error != 1
 				&& program->rdr_error != 2))
 		{
 			if (WIFSIGNALED(staus_check) && WTERMSIG(staus_check) == SIGINT)
@@ -32,8 +31,6 @@ void	exit_code_handler(t_program *program)
 		}
 		i++;
 	}
-
-
 	program->rdr_error = 0;
 }
 
