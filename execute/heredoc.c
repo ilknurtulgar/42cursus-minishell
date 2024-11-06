@@ -139,20 +139,22 @@ void	heredoc_run(t_program *program)
 				if (program->parser_input[i][j]->cmd[z] == '<')
 				{
 					program->redi_type = program->parser_input[i][j]->cmd[z];
-					//printf("cmd:%s\n",program->parser_input[i][j]->cmd+z);
 					if (program->parser_input[i][j]->cmd[z] == '<'
 						&& (program->parser_input[i][j]->cmd[z + 1]
 							&& program->parser_input[i][j]->cmd[z + 1] == '<'))
 					{
 						z++;
 						load_redi(program, heredoc, &i, &j, &z);
-						//printf("buradayim\n");
 					}
 				}
-				if (program->parser_input[i][j]->cmd[z]
-					&& program->parser_input[i][j]->cmd[z] != '\''
-					&& program->parser_input[i][j]->cmd[z] != '\"')
-					z++;
+				if (program->parser_input[i][j]->cmd[z] == '<'
+                    && program->parser_input[i][j]->cmd[z + 1]
+                    && program->parser_input[i][j]->cmd[z + 1] == '<')
+                    continue ;
+                else if (program->parser_input[i][j]->cmd[z]
+                    && program->parser_input[i][j]->cmd[z] != '\''
+                    && program->parser_input[i][j]->cmd[z] != '\"')
+                    z++;
 			}
 			j++;
 		}

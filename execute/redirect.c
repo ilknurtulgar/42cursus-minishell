@@ -113,7 +113,6 @@ void	redirect(t_program *program, int *i)
 
 	if (*program->hd_flag == 0 && heredoc_count(program))
 	{
-		printf("girdim\n");
 		heredoc_run(program);
 		*program->hd_flag = 1;
 	}

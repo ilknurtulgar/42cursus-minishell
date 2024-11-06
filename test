@@ -12,7 +12,6 @@
 //cat <<here | ls
 //ls|ls|ls
 //echo "hi" | cat | cat | cat | cat | cat | cat | cat
-
-//cat <<here<< doc here'yi yapıp çıkıyor
-//cat <<here <<doc bu normal 
-//at <<here<<doc bu da bozuk
+//cat <<here<< doc 
+//cat <<here <<doc 
+//at <<here<<doc 
