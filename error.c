@@ -6,7 +6,7 @@
 /*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 14:42:00 by itulgar           #+#    #+#             */
-/*   Updated: 2024/11/05 15:25:36 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/06 17:36:58 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	p_error(t_program *program, char *str)
 	write(2, "<< Error: ", ft_strlen("<< Error: "));
 	write(2, str, ft_strlen(str));
 	write(2, " honey >>\n", ft_strlen(" honey >>\n"));
-	program->status = 2;
+	program->status = 258;
 	return (0);
 }
 void	file_error(t_program *program)

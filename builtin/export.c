@@ -3,27 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
+/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 15:47:05 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/03 20:52:02 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/11/06 14:13:43 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	check_key(char *key, t_list *envpx_lst)
+static void	simple_export(t_program *program, char *cmd_item)
 {
-	t_list	*current;
+	t_list	*node;
 
-	current = envpx_lst;
-	while (current && current->key)
+	if (!check_key(cmd_item, program->export_list))
 	{
-		if (zi_strcmp(current->key, key) == 0)
-			return (1);
-		current = current->next;
+		node = ft_lstnew("(null)", cmd_item);
+		ft_lstadd_back(&program->export_list, node);
 	}
-	return (0);
+	program->status = 0;
 }
 
 static void	export_env(t_program *program)
@@ -74,7 +72,6 @@ static char	*equals_key(char *cmd)
 static void	export_run(t_program *program, char **cmd, int i)
 {
 	char	*equ_key;
-	t_list	*node;
 
 	while (cmd[i])
 	{
@@ -82,22 +79,13 @@ static void	export_run(t_program *program, char **cmd, int i)
 		if (!check_identifier(equ_key))
 			identifier_error(program, "export", cmd[i],
 				":not a valid identifier");
-		else  if (ft_strchr(cmd[i], 61) != 0)
+		else if (ft_strchr(cmd[i], 61) != 0)
 		{
 			equal_in_export(program, cmd, &i);
 			program->status = 0;
 		}
 		else
-		{
-			if(!check_key(cmd[i],program->export_list))
-			{
-			node = ft_lstnew("(null)", cmd[i]);
-			ft_lstadd_back(&program->export_list, node);
-
-			}
-			program->status = 0;
-			
-		}
+			simple_export(program, cmd[i]);
 		if (equ_key)
 			free(equ_key);
 		i++;

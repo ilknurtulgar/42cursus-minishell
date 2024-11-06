@@ -6,7 +6,7 @@
 /*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 16:54:01 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/05 16:22:39 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/06 19:33:44 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 # include <signal.h>
 # include <stdlib.h>
 # include <sys/stat.h>
-#include <sys/wait.h>
+# include <sys/wait.h>
 # include <unistd.h>
 
 # define IN_CAT 1
@@ -77,6 +77,7 @@ typedef struct s_program
 	int			redi_flag;
 	int			rdr_error;
 	int			built_check;
+	int			finish_check;
 
 }				t_program;
 void			ft_init_program(t_program *program, char **envp);
@@ -100,7 +101,7 @@ void			dolar_handler(t_program *program, t_lexer *parser_input);
 char			*env_count_str(t_lexer *parser_input, int *i);
 char			*del_quote(char *dst, char *src, size_t dstsize);
 void			signal_init(void);
-void			heredoc_run(t_program *program);
+void			heredoc_main(t_program *program);
 int				zi_redirectchr(const char *s, char c);
 int				heredoc_count(t_program *program);
 void			equal_in_export(t_program *program, char **cmd, int *i);
@@ -113,9 +114,8 @@ void			run_input(t_program *program, char *s);
 void			run_output(t_program *program, char *s);
 void			append_output(t_program *program, char *s);
 void			relative_path(t_program *program);
-void			load_redi(t_program *program,
-					void run_redirect(t_program *program, char *), int *i,
-					int *j, int *z);
+void			handle_redirect(t_program *program,
+					void run_redirect(t_program *program, char *), char *doc);
 void			pipe_dup(t_program *program, int *i);
 void			find_path(t_program *program);
 void			fill_env_cmd(t_program *program);
@@ -138,7 +138,7 @@ void			close_pipe(t_program *program);
 int				is_builtin(t_program *program);
 void			ft_exit(t_program *program);
 void			exit_code_handler(t_program *program);
-int				is_close_quote(char *str, int i, char q_type);
+int				is_close_quote(char *str, size_t i, char q_type);
 char			*expand_dollar_variables(t_program *program, int *i,
 					t_lexer *parser_input);
 int				is_single_dollar(char *cmd);
@@ -154,12 +154,19 @@ void			free_parser_input(t_program *program);
 int				p_error(t_program *program, char *str);
 int				rdr_take_status(t_program *program, int pid);
 void			file_error(t_program *program);
-void	dolar_free(char *env_str, char *after_dolar);
-void	find_dollar_in_quotes(char *s,char q_type,int *i);
-void	handle_unset_identifier(t_program *program, char **cmd, int *i);
- int	zi_strchr(const char *s, int c, char type);
-void	build_error(t_program *program, char *cmd, char *message);
-void	identifier_error(t_program *program, char *cmd, char *s, char *message);
- void	search_del_env(t_program *program, char *key, t_list **lst);
-void	exit_error(char *cmd, char *s, char *message);
+void			dolar_free(char *env_str, char *after_dolar);
+void			find_dollar_in_quotes(char *s, char q_type, int *i);
+void			handle_unset_identifier(t_program *program, char **cmd, int *i);
+int				zi_strchr(const char *s, int c, char type);
+void			build_error(t_program *program, char *cmd, char *message);
+void			identifier_error(t_program *program, char *cmd, char *s,
+					char *message);
+void			search_del_env(t_program *program, char *key, t_list **lst);
+void			exit_error(char *cmd, char *s, char *message);
+int				check_key(char *key, t_list *envpx_lst);
+void			run_one_cmd(t_program *program, int *i);
+void			fillable_count(char *cmd, int *z, int *count);
+void			redi_skip(t_lexer **parser_input, int *z, int *j);
+void			exec_command(t_program *program);
+char			*take_redi_doc(t_program *program, int *i, int *j, int *z);
 #endif

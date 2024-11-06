@@ -6,7 +6,7 @@
 /*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 12:51:42 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/03 19:21:44 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/06 17:16:37 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,7 @@ int rdr_take_status(t_program *program, int pid)
 	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
 		program->status = 1;
 	else
-	{
 		program->status = WEXITSTATUS(status);
-	//	return (1);
-	}
 	if (program->status != 0)
 		return (3);
 	else

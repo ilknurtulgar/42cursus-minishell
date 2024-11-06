@@ -6,7 +6,7 @@
 /*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 15:23:50 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/03 19:21:50 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/06 13:43:26 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ char	*search_env(char *key, t_list *envpx_lst)
 	}
 	return (envpx);
 }
+
 void	search_set_env(t_program *program, char *key, char *content,
 		t_list *envpx_list)
 {

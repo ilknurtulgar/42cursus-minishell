@@ -6,7 +6,7 @@
 /*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 19:04:12 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/05 16:28:20 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/06 19:54:17 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,4 +46,4 @@ void	append_output(t_program *program, char *s)
 	}
 }
 
-//"$USER$USERasd$PWD" 
+//"$USER$USERasd$PWD"

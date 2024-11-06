@@ -3,76 +3,48 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
+/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 18:20:33 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/06 10:53:25 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/11/06 19:57:23 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	heredoc_count(t_program *program)
-{
-	int	i;
-	int	j;
-	int	hd;
-
-	i = 0;
-	j = 0;
-	hd = 0;
-	while (program->parser_input[i])
-	{
-		j = 0;
-		while (program->parser_input[i][j])
-		{
-			if (zi_redirectchr(program->parser_input[i][j]->cmd, '<') != 0
-				&& program->parser_input[i][j]->key == 7)
-				hd++;
-			j++;
-		}
-		i++;
-	}
-	return (hd);
-}
-
-int	zi_strcmp(const char *s1, const char *s2)
-{
-	size_t	i;
-
-
-	if (!s1 || !s2)
-		return (-1);
-	i = 0;
-	while (s1[i] && s2[i] && (s1[i] == s2[i]))
-		i++;
-	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
-}
-
-int	built_strcmp(const char *s1, const char *s2, size_t dest_size)
-{
-	size_t	i;
-
-	i = 0;
-	if (!s1[i] || !s2[i])
-		return (-1);
-	while (s1[i] == s2[i] && s1[i] && s2[i] && dest_size > i)
-		i++;
-	if (i == dest_size && (s2[i] == '\0' || s2[i] == ' '))
-		return (0);
-	return (-1);
-}
-
 static void	parent_heredoc(t_program *program, t_process hd_process)
 {
 	program->rdr_error = rdr_take_status(program, hd_process.pid);
+	program->finish_check = program->rdr_error;
 	close(hd_process.fd[1]);
 	program->here_fd[0] = hd_process.fd[0];
 }
 
-void	heredoc(t_program *program, char *s)
+static void	fork_with_heredoc(t_process hd_process, char *st)
 {
-	char		*line;
+	char	*line;
+
+	close(hd_process.fd[0]);
+	while (1)
+	{
+		line = readline(">");
+		if (!line)
+			break ;
+		if (zi_strcmp(st, line) == 0)
+		{
+			close(hd_process.fd[1]);
+			free(line);
+			break ;
+		}
+		ft_putstr_fd(line, hd_process.fd[1]);
+		ft_putchar_fd('\n', hd_process.fd[1]);
+		free(line);
+	}
+	free(st);
+}
+
+static void	handle_heredoc(t_program *program, char *s)
+{
 	t_process	hd_process;
 	char		*dst;
 	char		*st;
@@ -91,23 +63,7 @@ void	heredoc(t_program *program, char *s)
 	{
 		g_global_signal = IN_HERADOC;
 		st = del_quote(dst, s, ft_strlen(s));
-		close(hd_process.fd[0]);
-		while (1)
-		{
-			line = readline(">");
-			if (!line)
-				break ;
-			if (zi_strcmp(st, line) == 0)
-			{
-				close(hd_process.fd[1]);
-				free(line);
-				break ;
-			}
-			ft_putstr_fd(line, hd_process.fd[1]);
-			ft_putchar_fd('\n', hd_process.fd[1]);
-			free(line);
-		}
-		free(st);
+		fork_with_heredoc(hd_process, st);
 		free(dst);
 		close(hd_process.fd[1]);
 		exit(0);
@@ -116,7 +72,39 @@ void	heredoc(t_program *program, char *s)
 		parent_heredoc(program, hd_process);
 }
 
-void	heredoc_run(t_program *program)
+static void	find_heredoc_loc(t_program *program, int *i, int *j, int *z)
+{
+	char	*doc;
+
+	doc = NULL;
+	while (program->parser_input[*i][*j]->cmd[*z])
+	{
+		quote_skip(program->parser_input[*i][*j]->cmd, z);
+		if (program->parser_input[*i][*j]->cmd[*z] == '<')
+		{
+			program->redi_type = program->parser_input[*i][*j]->cmd[*z];
+			if (program->parser_input[*i][*j]->cmd[*z] == '<'
+				&& (program->parser_input[*i][*j]->cmd[*z + 1]
+					&& program->parser_input[*i][*j]->cmd[*z + 1] == '<')
+				&& program->finish_check != 3)
+			{
+				(*z)++;
+				doc = take_redi_doc(program, i, j, z);
+				handle_redirect(program, handle_heredoc, doc);
+			}
+		}
+		if (program->parser_input[*i][*j]->cmd[*z] == '<'
+			&& program->parser_input[*i][*j]->cmd[*z + 1]
+			&& program->parser_input[*i][*j]->cmd[*z + 1] == '<')
+			continue ;
+		else if (program->parser_input[*i][*j]->cmd[*z]
+			&& program->parser_input[*i][*j]->cmd[*z] != '\''
+			&& program->parser_input[*i][*j]->cmd[*z] != '\"')
+			(*z)++;
+	}
+}
+
+void	heredoc_main(t_program *program)
 {
 	int	j;
 	int	z;
@@ -133,29 +121,7 @@ void	heredoc_run(t_program *program)
 			&& program->parser_input[i][j]->cmd)
 		{
 			z = 0;
-			while (program->parser_input[i][j]->cmd[z])
-			{
-				quote_skip(program->parser_input[i][j]->cmd, &z);
-				if (program->parser_input[i][j]->cmd[z] == '<')
-				{
-					program->redi_type = program->parser_input[i][j]->cmd[z];
-					if (program->parser_input[i][j]->cmd[z] == '<'
-						&& (program->parser_input[i][j]->cmd[z + 1]
-							&& program->parser_input[i][j]->cmd[z + 1] == '<'))
-					{
-						z++;
-						load_redi(program, heredoc, &i, &j, &z);
-					}
-				}
-				if (program->parser_input[i][j]->cmd[z] == '<'
-                    && program->parser_input[i][j]->cmd[z + 1]
-                    && program->parser_input[i][j]->cmd[z + 1] == '<')
-                    continue ;
-                else if (program->parser_input[i][j]->cmd[z]
-                    && program->parser_input[i][j]->cmd[z] != '\''
-                    && program->parser_input[i][j]->cmd[z] != '\"')
-                    z++;
-			}
+			find_heredoc_loc(program, &i, &j, &z);
 			j++;
 		}
 		i++;

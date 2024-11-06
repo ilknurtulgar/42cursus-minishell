@@ -6,7 +6,7 @@
 /*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:25:29 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/05 17:25:33 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/06 17:12:37 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int	main(int argc, char **argv, char **envp)
 	ft_init_program(program, envp);
 	while (1)
 	{
+		program->finish_check = 0;
 		g_global_signal = 0;
 		program->input = readline("minishell 🐥>");
 		if (g_global_signal == 13)

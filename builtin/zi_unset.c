@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   zi_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
+/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 12:38:58 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/03 20:57:27 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/11/06 13:44:37 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static t_list	*zi_lstdelone(t_list **lst, t_list *node, void (*del)(void *,
 	return (*lst);
 }
 
- void	search_del_env(t_program *program, char *key, t_list **lst)
+void	search_del_env(t_program *program, char *key, t_list **lst)
 {
 	t_list	*current;
 
@@ -89,7 +89,7 @@ int	check_identifier(char *cmd)
 
 void	zi_unset(t_program *program, char **cmd)
 {
-	int i;
+	int	i;
 
 	i = 1;
 	if (!cmd[1])

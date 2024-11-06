@@ -6,7 +6,7 @@
 /*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 13:40:25 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/03 19:39:32 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/06 16:02:52 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,20 +34,6 @@ void	exit_code_handler(t_program *program)
 	program->rdr_error = 0;
 }
 
-int	redirect_c(t_program *program, int *i)
-{
-	int	j;
-
-	j = 0;
-	while (program->parser_input[*i] && program->parser_input[*i][j])
-	{
-		if (program->parser_input[*i][j]->key == 7)
-			return (1);
-		if (program->parser_input[*i][j]->key)
-			j++;
-	}
-	return (0);
-}
 int	pipe_count(t_program *program)
 {
 	int	i;
@@ -58,7 +44,7 @@ int	pipe_count(t_program *program)
 	return (i - 1);
 }
 
-int	is_close_quote(char *str, int i, char q_type)
+int	is_close_quote(char *str, size_t i, char q_type)
 {
 	i++;
 	while (str[i] && str[i] != q_type)
@@ -67,10 +53,25 @@ int	is_close_quote(char *str, int i, char q_type)
 		return (1);
 	return (0);
 }
+
+static void	process_quotes(char *dst, char *src, size_t *i, size_t *j)
+{
+	char	q_type;
+
+	q_type = src[*i];
+	if (is_close_quote(src, *i, q_type))
+	{
+		(*i)++;
+		while (src[*i] && q_type != src[*i])
+			dst[(*j)++] = src[(*i)++];
+		if (q_type == src[*i])
+			(*i)++;
+	}
+}
+
 char	*del_quote(char *dst, char *src, size_t dstsize)
 {
 	size_t	i;
-	char	q_type;
 	size_t	j;
 
 	dst = (char *)malloc(dstsize * sizeof(char) + 1);
@@ -81,19 +82,7 @@ char	*del_quote(char *dst, char *src, size_t dstsize)
 	while (src[i] && j < dstsize)
 	{
 		if (src[i] && (src[i] == '\'' || src[i] == '\"'))
-		{
-			q_type = src[i];
-			if (is_close_quote(src, i, q_type))
-			{
-				i++;
-				while (src[i] && q_type != src[i])
-					dst[j++] = src[i++];
-				if (q_type == src[i])
-					i++;
-			}
-			else
-				dst[j++] = src[i++];
-		}
+			process_quotes(dst, src, &i, &j);
 		else
 			dst[j++] = src[i++];
 	}

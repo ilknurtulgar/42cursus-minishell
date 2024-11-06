@@ -6,13 +6,13 @@
 /*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 12:45:31 by itulgar           #+#    #+#             */
-/*   Updated: 2024/11/05 16:27:44 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/06 15:07:47 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	fillable_cmd(t_program *program, t_lexer *input, int *z, int *start,
+static void	fillable_cmd(t_program *program, t_lexer *input, int *z, int *start,
 		int *k)
 {
 	char	*clean_cmd;
@@ -29,54 +29,14 @@ void	fillable_cmd(t_program *program, t_lexer *input, int *z, int *start,
 	if (input->cmd[*z] == '\0' || (input->cmd[*z] == '<'
 			|| input->cmd[*z] == '>'))
 	{
-			clean_cmd = del_quote(clean_cmd, input->cmd, ft_strlen(input->cmd));
-			program->cmd[*k] = ft_substr(clean_cmd, *start, (*z - *start));
-			free(clean_cmd);
+		clean_cmd = del_quote(clean_cmd, input->cmd, ft_strlen(input->cmd));
+		program->cmd[*k] = ft_substr(clean_cmd, *start, (*z - *start));
+		free(clean_cmd);
 		(*k)++;
 	}
 }
 
-void	fillable_count(char *cmd, int *z, int *count)
-{
-	while (cmd[*z] && (cmd[*z] != '<' && cmd[*z] != '>'))
-	{
-		if (cmd[*z] != '\'' && cmd[*z] != '\"')
-			(*z)++;
-		else
-			quote_skip(cmd, z);
-	}
-	if (cmd[*z] == '\0' || (cmd[*z] == '<' || cmd[*z] == '>'))
-		(*count)++;
-}
-void	redi_skip(t_lexer **parser_input, int *z, int *j)
-{
-	char	redi_type;
-
-	if (parser_input[*j]->cmd[*z] && parser_input[*j]->cmd[*z] != '\''
-		&& parser_input[*j]->cmd[*z] != '\"')
-	{
-		redi_type = parser_input[*j]->cmd[*z];
-		(*z)++;
-		if (parser_input[*j]->cmd[*z] == redi_type)
-			(*z)++;
-	}
-	if (parser_input[*j]->cmd[*z] == '\0')
-	{
-		(*j)++;
-		*z = 0;
-	}
-	while (parser_input[*j]->cmd[*z] && (parser_input[*j]->cmd[*z] != '<'
-			&& parser_input[*j]->cmd[*z] != '>'))
-	{
-		if (parser_input[*j]->cmd[*z] && parser_input[*j]->cmd[*z] != '\''
-			&& parser_input[*j]->cmd[*z] != '\"')
-			(*z)++;
-		else
-			quote_skip(parser_input[*j]->cmd, z);
-	}
-}
-
-int	cmd_counter(t_program *program, int *i)
+static int	cmd_counter(t_program *program, int *i)
 {
 	int	j;
 	int	count;
@@ -102,7 +62,7 @@ int	cmd_counter(t_program *program, int *i)
 	return (count);
 }
 
-void	fill_cmd(t_program *program, int *i)
+static void	fill_cmd(t_program *program, int *i)
 {
 	int	z;
 	int	k;
@@ -112,7 +72,6 @@ void	fill_cmd(t_program *program, int *i)
 	z = 0;
 	k = 0;
 	start = 0;
-	j = 0;
 	j = 0;
 	while (program->parser_input[*i] && program->parser_input[*i][j]
 		&& program->parser_input[*i][j]->cmd)
@@ -134,7 +93,9 @@ void	fill_cmd(t_program *program, int *i)
 
 void	exec_cmd(t_program *program, int *i)
 {
-	int cmd_len;
+	int	cmd_len;
+
+	cmd_len = 0;
 	cmd_len = cmd_counter(program, i);
 	program->cmd = malloc(sizeof(char **) * (cmd_len + 1));
 	if (!program->cmd)

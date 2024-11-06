@@ -28,7 +28,9 @@ SRCS = main.c \
 	   execute/exec.c \
 	   execute/redirect.c \
 	   execute/exec_util.c \
+	   execute/exec_util2.c \
 	   execute/heredoc.c \
+	   execute/redirect_util.c \
 	   execute/cmd.c \
 	   execute/run_redirect.c \
 	   execute/exec_variable.c \

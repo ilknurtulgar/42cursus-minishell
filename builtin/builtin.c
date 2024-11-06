@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
+/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 14:58:07 by itulgar           #+#    #+#             */
-/*   Updated: 2024/11/03 20:50:17 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/11/06 13:42:36 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,9 @@ int	is_builtin(t_program *program)
 		|| (zi_strcmp(program->cmd[0], "unset") == 0)
 		|| (zi_strcmp(program->cmd[0], "exit") == 0)
 		|| (zi_strcmp(program->cmd[0], "export") == 0))
-
 		return (1);
-
 	return (0);
 }
-
 
 void	handle_unset_identifier(t_program *program, char **cmd, int *i)
 {

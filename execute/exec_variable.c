@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/27 12:33:29 by itulgar           #+#    #+#             */
-/*   Updated: 2024/11/03 19:21:30 by zayaz            ###   ########.fr       */
+/*   Created: 2024/11/06 15:41:36 by zayaz             #+#    #+#             */
+/*   Updated: 2024/11/06 19:56:59 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ void	find_path(t_program *program)
 {
 	int		i;
 	char	*content;
+	char	*new_path;
+
 	i = 0;
 	content = search_env("PATH", program->envp_list);
 	if (content == NULL)
@@ -47,12 +49,10 @@ void	find_path(t_program *program)
 	program->sep_path = ft_split(content, ':');
 	while (program->sep_path && program->sep_path[i])
 	{
-		char *new_path;
-
 		new_path = ft_strjoin(program->sep_path[i], "/");
-		if(program->sep_path[i])
+		if (program->sep_path[i])
 			free(program->sep_path[i]);
-		program->sep_path[i] = new_path; 
+		program->sep_path[i] = new_path;
 		i++;
 	}
 }
@@ -66,6 +66,14 @@ void	exec_error(t_program *program, char *s, int exit_codes)
 	write(2, "\n", 1);
 	program->status = exit_codes;
 	exit(exit_codes);
+}
+
+static void	handle_path_error(t_program *program)
+{
+	if (access(program->cmd[0], F_OK) == -1 && ft_strchr(program->cmd[0], 47))
+		exec_error(program, "No such file or directory", 127);
+	else
+		exec_error(program, "command not found", 127);
 }
 
 void	relative_path(t_program *program)
@@ -88,16 +96,9 @@ void	relative_path(t_program *program)
 			exec_error(program, "filename argument required", 2);
 		else if (zi_strcmp(program->cmd[0], "..") == 0)
 			exec_error(program, "command not found", 127);
-		else 
+		else
 			exec_error(program, "is a directorye", 126);
 	}
 	else
-	{
-		if (access(program->cmd[0], F_OK) == -1 && ft_strchr(program->cmd[0],
-				47))
-			exec_error(program, "No such file or directory", 127);
-		else
-			exec_error(program, "command not found", 127);
-	}
+		handle_path_error(program);
 }
-

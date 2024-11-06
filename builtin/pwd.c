@@ -6,7 +6,7 @@
 /*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 15:37:45 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/03 19:22:05 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/06 13:45:08 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 void	pwd(t_program *program)
 {
-	char pwd[1024];
+	char	pwd[1024];
+
 	getcwd(pwd, 1024);
 	printf("%s\n", pwd);
 	program->status = 0;
