@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 18:20:33 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/05 16:20:11 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/06 10:53:25 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ int	built_strcmp(const char *s1, const char *s2, size_t dest_size)
 static void	parent_heredoc(t_program *program, t_process hd_process)
 {
 	program->rdr_error = rdr_take_status(program, hd_process.pid);
-	//waitpid(hd_process.pid, &program->status, 0);
 	close(hd_process.fd[1]);
 	program->here_fd[0] = hd_process.fd[0];
 }
@@ -140,12 +139,14 @@ void	heredoc_run(t_program *program)
 				if (program->parser_input[i][j]->cmd[z] == '<')
 				{
 					program->redi_type = program->parser_input[i][j]->cmd[z];
+					//printf("cmd:%s\n",program->parser_input[i][j]->cmd+z);
 					if (program->parser_input[i][j]->cmd[z] == '<'
 						&& (program->parser_input[i][j]->cmd[z + 1]
 							&& program->parser_input[i][j]->cmd[z + 1] == '<'))
 					{
 						z++;
 						load_redi(program, heredoc, &i, &j, &z);
+						//printf("buradayim\n");
 					}
 				}
 				if (program->parser_input[i][j]->cmd[z]

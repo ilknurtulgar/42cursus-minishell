@@ -1,0 +1,18 @@
+// cat <main.c | <<a | ls
+// cat <<here | ls
+//cat <main.c 
+//cat <main.c | <<a | ls
+// cat <main.c <<here <missing | ls
+//cat <main.c | <<a |ls
+//cat <<he
+//cat |cat |ls
+//cat < main.c | <<a
+//echo a > b | echo b >c
+//cat <main.c <<here <missing <<doc | echo oi
+//cat <<here | ls
+//ls|ls|ls
+//echo "hi" | cat | cat | cat | cat | cat | cat | cat
+
+//cat <<here<< doc here'yi yapıp çıkıyor
+//cat <<here <<doc bu normal 
+//at <<here<<doc bu da bozuk

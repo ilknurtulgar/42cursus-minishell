@@ -6,7 +6,7 @@
 /*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 17:45:46 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/03 20:59:48 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/11/06 09:58:28 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,12 +99,12 @@ static void	create_fork(t_program *program, int *i)
 				if (is_builtin(program) && program->p_count > 0)
 					child_builtin(program);
 				exec_command(program);
+		//close(program->process[*i].fd[1]);
 				exit(127);
 			}
 		}
 	}
 	program->process[*i].pid = pid_fork;
-
 }
 
 void	close_pipe(t_program *program)
@@ -137,16 +137,16 @@ void	zi_exec(t_program *program)
 	i = 0;
 	while (i < program->p_count + 1)
 	{
-		program->rdr_error=0;
+		program->rdr_error = 0;
 		program->status = 0;
 		if (program->redi_flag == 1)
 			program->redi_flag = 0;
 		create_fork(program, &i);
-		if(program->cmd!=NULL)
+		if (program->cmd != NULL)
 			free_array(program->cmd);
+
 		i++;
 	}
 	close_pipe(program);
 	exit_code_handler(program);
-
 }
