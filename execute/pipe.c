@@ -6,7 +6,7 @@
 /*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/27 17:02:45 by itulgar           #+#    #+#             */
-/*   Updated: 2024/11/06 10:53:01 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/11/06 12:18:45 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void    pipe_dup(t_program *program, int *i)
     {
         if (program->fd_output >= 2)
             dup2(program->fd_output, STDOUT_FILENO);
-        else if (program->fd_input >= 2)
+         if (program->fd_input >= 2)
             dup2(program->fd_input, STDIN_FILENO);
     }
     if (program->here_fd[0] >= 0 && *program->hd_flag == 1)

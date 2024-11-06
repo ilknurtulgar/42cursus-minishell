@@ -15,3 +15,4 @@
 //cat <<here<< doc 
 //cat <<here <<doc 
 //at <<here<<doc 
+//cat <"./c" >"./d"
