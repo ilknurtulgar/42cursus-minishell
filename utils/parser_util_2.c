@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_util_2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
+/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 18:54:27 by itulgar           #+#    #+#             */
-/*   Updated: 2024/11/03 20:47:33 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/11/06 21:19:00 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ static char	*walk_to_pipe(t_program *program, char *s, char c)
 	}
 	return (s);
 }
+
 char	*walk_string(t_program *program, char *s, char c)
 {
 	while (*s)
@@ -59,7 +60,6 @@ char	*walk_string(t_program *program, char *s, char c)
 		if (*s == '\'' || *s == '\"')
 		{
 			s = walk_to_quote_pipe(program, s, c);
-
 			if (program->control_q_split)
 				break ;
 		}
@@ -70,16 +70,15 @@ char	*walk_string(t_program *program, char *s, char c)
 				break ;
 		}
 	}
-
 	return (s);
 }
 
-void	find_dollar_in_quotes(char *s,char q_type,int *i)
+void	find_dollar_in_quotes(char *s, char q_type, int *i)
 {
 	if (q_type == '\"')
 	{
 		if (zi_strchr(s + (*i) + 1, 36, q_type) != 0)
-			return;
+			return ;
 		(*i)++;
 		while (s[*i] && s[*i] != q_type)
 			(*i)++;

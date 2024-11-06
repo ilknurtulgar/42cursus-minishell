@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
+/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 17:47:51 by itulgar           #+#    #+#             */
-/*   Updated: 2024/11/03 20:46:06 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/11/06 21:20:15 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,12 @@ static void	free_envp_list(t_list *envp_list)
 		envp_list = temp;
 	}
 }
+
 void	free_array(char **tmp)
 {
 	int	i;
 
 	i = 0;
-	
 	while (tmp && tmp[i])
 	{
 		free(tmp[i]);
@@ -39,6 +39,7 @@ void	free_array(char **tmp)
 	if (tmp)
 		free(tmp);
 }
+
 void	free_parser_input(t_program *program)
 {
 	int	i;
@@ -52,7 +53,7 @@ void	free_parser_input(t_program *program)
 	{
 		j = 0;
 		while (program->parser_input[i][j])
-		{	
+		{
 			if (program->parser_input[i][j]->cmd)
 				free(program->parser_input[i][j]->cmd);
 			free(program->parser_input[i][j]);
@@ -70,7 +71,7 @@ void	free_program(t_program *program)
 		return ;
 	if (program->input)
 		free(program->input);
-	if(program->parser_input)
+	if (program->parser_input)
 		free_parser_input(program);
 	if (program->envp_list)
 		free_envp_list(program->envp_list);
@@ -80,9 +81,7 @@ void	free_program(t_program *program)
 void	dolar_free(char *env_str, char *after_dolar)
 {
 	if (env_str != NULL && env_str[0] != '\0')
-
 		free(env_str);
-
 	if (after_dolar)
 		free(after_dolar);
 }

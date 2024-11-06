@@ -6,7 +6,7 @@
 /*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 16:54:01 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/06 19:33:44 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/06 21:17:19 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,5 +168,10 @@ void			run_one_cmd(t_program *program, int *i);
 void			fillable_count(char *cmd, int *z, int *count);
 void			redi_skip(t_lexer **parser_input, int *z, int *j);
 void			exec_command(t_program *program);
+void			find_loc(char *cmd, int *z);
 char			*take_redi_doc(t_program *program, int *i, int *j, int *z);
+void			parent_heredoc(t_program *program, t_process hd_process);
+void			handle_heredoc_redirect(t_program *program,
+					void run_redirect(t_program *, char *), char *doc);
+char			*before_dolar(t_lexer *parser_input, int *i, int is_in);
 #endif

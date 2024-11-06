@@ -1,6 +1,7 @@
 NAME = minishell
 SRCS = main.c \
 	   error.c \
+	   error2.c \
 	   free.c \
 	   init.c \
 	   signal.c \
@@ -30,6 +31,7 @@ SRCS = main.c \
 	   execute/exec_util.c \
 	   execute/exec_util2.c \
 	   execute/heredoc.c \
+	   execute/heredoc_util.c \
 	   execute/redirect_util.c \
 	   execute/cmd.c \
 	   execute/run_redirect.c \

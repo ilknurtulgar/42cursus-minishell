@@ -6,7 +6,7 @@
 /*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:53:16 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/06 20:00:06 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/06 20:53:05 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ void	handle_redirect(t_program *program, void run_redirect(t_program *,
 			run_redirect(program, clean_doc);
 		free(clean_doc);
 	}
+	program->redi_flag = 1;
 }
 
 static void	take_type_redi(t_program *program, int *i, int *j, int *z)
@@ -69,13 +70,11 @@ static void	take_type_redi(t_program *program, int *i, int *j, int *z)
 		(*z)++;
 		doc = take_redi_doc(program, i, j, z);
 		handle_redirect(program, append_output, doc);
-		program->redi_flag = 1;
 	}
 	if (program->parser_input[*i][*j]->cmd[*z] == '<')
 	{
 		doc = take_redi_doc(program, i, j, z);
 		handle_redirect(program, run_input, doc);
-		program->redi_flag = 1;
 	}
 	if ((program->parser_input[*i][*j]->cmd[*z] == '>'
 		&& ft_strncmp(program->parser_input[*i][*j]->cmd + *z, ">>",
@@ -83,7 +82,6 @@ static void	take_type_redi(t_program *program, int *i, int *j, int *z)
 	{
 		doc = take_redi_doc(program, i, j, z);
 		handle_redirect(program, run_output, doc);
-		program->redi_flag = 1;
 	}
 }
 

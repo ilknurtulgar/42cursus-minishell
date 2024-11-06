@@ -6,7 +6,7 @@
 /*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 18:04:18 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/06 19:52:10 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/06 20:40:50 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,30 +60,6 @@ int	zi_strcmp(const char *s1, const char *s2)
 	while (s1[i] && s2[i] && (s1[i] == s2[i]))
 		i++;
 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
-}
-
-int	heredoc_count(t_program *program)
-{
-	int	i;
-	int	j;
-	int	hd;
-
-	i = 0;
-	j = 0;
-	hd = 0;
-	while (program->parser_input[i])
-	{
-		j = 0;
-		while (program->parser_input[i][j])
-		{
-			if (zi_redirectchr(program->parser_input[i][j]->cmd, '<') != 0
-				&& program->parser_input[i][j]->key == 7)
-				hd++;
-			j++;
-		}
-		i++;
-	}
-	return (hd);
 }
 
 void	find_loc(char *cmd, int *z)

@@ -6,13 +6,13 @@
 /*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 12:51:42 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/06 17:16:37 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/06 21:22:21 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void signal_handler(int signo)
+void	signal_handler(int signo)
 {
 	(void)signo;
 	if (g_global_signal == 0 || g_global_signal == 23)
@@ -35,16 +35,16 @@ void signal_handler(int signo)
 	}
 }
 
-void signal_init(void)
+void	signal_init(void)
 {
 	signal(SIGINT, signal_handler);
 	signal(SIGQUIT, SIG_IGN);
 }
 
-int rdr_take_status(t_program *program, int pid)
+int	rdr_take_status(t_program *program, int pid)
 
 {
-	int status;
+	int	status;
 
 	g_global_signal = IN_PARENT;
 	waitpid(pid, &status, 0);

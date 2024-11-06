@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_util.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
+/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 19:25:00 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/03 20:55:13 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/11/06 21:18:53 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int	zi_strrchr(const char *s, int c, int i)
 	}
 	return (0);
 }
+
 char	*zi_strlcpy(char *dst, const char *src, size_t dstsize)
 {
 	size_t	i;
@@ -48,7 +49,7 @@ char	*zi_strlcpy(char *dst, const char *src, size_t dstsize)
 	return (dst);
 }
 
- int	zi_strchr(const char *s, int c, char type)
+int	zi_strchr(const char *s, int c, char type)
 {
 	while (*s && *s != (char)c && *s != type)
 		s++;
@@ -56,9 +57,10 @@ char	*zi_strlcpy(char *dst, const char *src, size_t dstsize)
 		return (1);
 	return (0);
 }
+
 size_t	zi_strlen(char *s, char c, int dhand)
 {
-	int	i;
+	int		i;
 	char	q_type;
 
 	i = 0;

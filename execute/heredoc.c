@@ -6,19 +6,11 @@
 /*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 18:20:33 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/06 19:57:23 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/06 20:47:16 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-static void	parent_heredoc(t_program *program, t_process hd_process)
-{
-	program->rdr_error = rdr_take_status(program, hd_process.pid);
-	program->finish_check = program->rdr_error;
-	close(hd_process.fd[1]);
-	program->here_fd[0] = hd_process.fd[0];
-}
 
 static void	fork_with_heredoc(t_process hd_process, char *st)
 {
@@ -72,27 +64,30 @@ static void	handle_heredoc(t_program *program, char *s)
 		parent_heredoc(program, hd_process);
 }
 
-static void	find_heredoc_loc(t_program *program, int *i, int *j, int *z)
+void	doc_name_heredoc(t_program *program, int *i, int *j, int *z)
 {
 	char	*doc;
 
 	doc = NULL;
+	program->redi_type = program->parser_input[*i][*j]->cmd[*z];
+	if (program->parser_input[*i][*j]->cmd[*z] == '<'
+		&& (program->parser_input[*i][*j]->cmd[*z + 1]
+			&& program->parser_input[*i][*j]->cmd[*z + 1] == '<')
+		&& program->finish_check != 3)
+	{
+		(*z)++;
+		doc = take_redi_doc(program, i, j, z);
+		handle_heredoc_redirect(program, handle_heredoc, doc);
+	}
+}
+
+static void	find_heredoc_loc(t_program *program, int *i, int *j, int *z)
+{
 	while (program->parser_input[*i][*j]->cmd[*z])
 	{
 		quote_skip(program->parser_input[*i][*j]->cmd, z);
 		if (program->parser_input[*i][*j]->cmd[*z] == '<')
-		{
-			program->redi_type = program->parser_input[*i][*j]->cmd[*z];
-			if (program->parser_input[*i][*j]->cmd[*z] == '<'
-				&& (program->parser_input[*i][*j]->cmd[*z + 1]
-					&& program->parser_input[*i][*j]->cmd[*z + 1] == '<')
-				&& program->finish_check != 3)
-			{
-				(*z)++;
-				doc = take_redi_doc(program, i, j, z);
-				handle_redirect(program, handle_heredoc, doc);
-			}
-		}
+			doc_name_heredoc(program, i, j, z);
 		if (program->parser_input[*i][*j]->cmd[*z] == '<'
 			&& program->parser_input[*i][*j]->cmd[*z + 1]
 			&& program->parser_input[*i][*j]->cmd[*z + 1] == '<')
