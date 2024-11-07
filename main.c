@@ -6,7 +6,7 @@
 /*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:25:29 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/06 21:50:00 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/07 15:27:45 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ char	*get_user_input(t_program *program)
 
 static void	free_main_program(t_program *program, char *tmp)
 {
+	zi_exec(program);
 	free_parser_input(program);
 	free(tmp);
 	free(program->process);
@@ -62,8 +63,10 @@ int	main(int argc, char **argv, char **envp)
 	{
 		tmp = get_user_input(program);
 		if (!ft_parser(program, program->input))
+		{
+			free(tmp);
 			continue ;
-		zi_exec(program);
+		}
 		free_main_program(program, tmp);
 	}
 	free_program(program);

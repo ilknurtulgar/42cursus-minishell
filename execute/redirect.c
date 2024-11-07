@@ -6,7 +6,7 @@
 /*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:53:16 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/06 20:53:05 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/07 15:29:00 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char	*take_redi_doc(t_program *program, int *i, int *j, int *z)
 	return (doc);
 }
 
-void	handle_redirect(t_program *program, void run_redirect(t_program *,
+static void	handle_redirect(t_program *program, void run_redirect(t_program *,
 			char *), char *doc)
 {
 	char	*clean_doc;

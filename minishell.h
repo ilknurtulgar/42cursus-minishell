@@ -6,7 +6,7 @@
 /*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 16:54:01 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/07 14:33:59 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/07 15:35:26 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@
 # define INT_MAX 2147483647
 
 # include <stdio.h>
+# include "includes/libft/libft.h"
 # include "readline/include/readline/history.h"
 # include "readline/include/readline/readline.h"
-# include "includes/libft/libft.h"
 # include <fcntl.h>
 # include <signal.h>
 # include <stdlib.h>
@@ -32,16 +32,15 @@
 # define IN_HERADOC 2
 # define IN_PARENT 3
 
+int				g_global_signal;
+
 typedef enum set_meta
 {
 	Tilde = 4,
 	Dolar = 5,
 	S_Dolar = 6,
 	Redirect = 7,
-	Q_Redirect = 8,
 }				t_set_meta;
-
-int				g_global_signal;
 
 typedef struct s_lexer
 {
@@ -94,7 +93,6 @@ int				set_meta(t_program *program, char *meta);
 int				zi_strrchr(const char *s, int c, int i);
 void			quote_clean(t_program *program);
 char			*zi_strlcpy(char *dst, const char *src, size_t dstsize);
-void			zi_striteri(t_lexer *s, void f(t_lexer *));
 char			*in_quote_string(char *s, char c);
 size_t			zi_strlen(char *s, char c, int dhand);
 char			*dolar_env(t_program *program, char *parser_input);
@@ -116,8 +114,6 @@ void			run_input(t_program *program, char *s);
 void			run_output(t_program *program, char *s);
 void			append_output(t_program *program, char *s);
 void			relative_path(t_program *program);
-void			handle_redirect(t_program *program,
-					void run_redirect(t_program *program, char *), char *doc);
 void			pipe_dup(t_program *program, int *i);
 void			find_path(t_program *program);
 void			fill_env_cmd(t_program *program);
@@ -155,7 +151,6 @@ void			free_parser_input(t_program *program);
 int				p_error(t_program *program, char *str);
 int				rdr_take_status(t_program *program, int pid);
 void			file_error(t_program *program);
-void			dolar_free(char *env_str, char *after_dolar);
 void			find_dollar_in_quotes(char *s, char q_type, int *i);
 void			handle_unset_identifier(t_program *program, char **cmd, int *i);
 int				zi_strchr(const char *s, int c, char type);
