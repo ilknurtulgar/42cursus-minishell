@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_pipe.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
+/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 18:11:08 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/03 20:49:07 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/11/07 14:06:28 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ static char	*pipe_in_ridect(char *input)
 		input++;
 	return (input);
 }
+
 int	p_pipe(t_program *program, char *input)
 {
 	if (*input == '|')

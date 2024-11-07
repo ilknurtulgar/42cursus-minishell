@@ -6,7 +6,7 @@
 /*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 12:42:31 by itulgar           #+#    #+#             */
-/*   Updated: 2024/11/06 21:16:17 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/07 12:46:04 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ static char	*pass_quote_cmd(t_lexer *parser_input, char *tmp, int *j, int *i)
 	}
 	return (tmp);
 }
+
 void	f(t_lexer *parser_inputiz)
 {
 	int		i;

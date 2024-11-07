@@ -6,7 +6,7 @@
 /*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 18:32:15 by itulgar           #+#    #+#             */
-/*   Updated: 2024/11/06 21:19:55 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/07 13:28:20 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static t_list	*set_env(char **envp)
 	{
 		tmp = ft_split(envp[i], '=');
 		if (tmp[0] && tmp[1])
-			ft_lstadd_back(&tmp_list, ft_lstnew(tmp[1], tmp[0]));
+			ft_lstadd_back(&tmp_list, zi_lstnew(tmp[1], tmp[0]));
 		free_array(tmp);
 		i++;
 	}
@@ -47,5 +47,6 @@ void	ft_init_program(t_program *program, char **envp)
 	*program->hd_flag = 0;
 	program->rdr_error = 0;
 	program->built_check = 0;
+	program->start_cmd = 0;
 	signal_init();
 }

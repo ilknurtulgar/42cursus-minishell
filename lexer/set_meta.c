@@ -6,7 +6,7 @@
 /*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 19:24:42 by zayaz             #+#    #+#             */
-/*   Updated: 2024/10/08 17:45:08 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/07 12:48:52 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,23 +54,29 @@ static int	set_dolar(char *meta)
 	return (S_Dolar);
 }
 
-static int	set_redirect(char *meta)
+static void	set_quote_redi(char *meta, int *i)
 {
-	int		i;
 	char	q_type;
 
 	q_type = '\0';
+	q_type = meta[*i];
+	(*i)++;
+	while (meta[*i] && meta[*i] != q_type)
+		(*i)++;
+	if (meta[*i])
+		(*i)++;
+}
+
+static int	set_redirect(char *meta)
+{
+	int	i;
+
 	i = 0;
 	while (meta[i])
 	{
 		if (meta[i] && (meta[i] == '\"' || meta[i] == '\''))
 		{
-			q_type = meta[i];
-			i++;
-			while (meta[i] && meta[i] != q_type)
-				i++;
-			if (meta[i])
-				i++;
+			set_quote_redi(meta, &i);
 			continue ;
 		}
 		if (meta[i] != '\0' && (meta[i] == '<' || meta[i] == '>'

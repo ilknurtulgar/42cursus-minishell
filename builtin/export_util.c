@@ -6,11 +6,24 @@
 /*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 13:46:05 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/06 13:51:51 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/07 13:28:42 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+t_list	*zi_lstnew(void *content, char *key)
+{
+	t_list	*lst;
+
+	lst = (t_list *)malloc(sizeof(t_list));
+	if (!lst)
+		return (NULL);
+	lst->content = ft_strdup(content);
+	lst->key = ft_strdup(key);
+	lst->next = NULL;
+	return (lst);
+}
 
 int	check_key(char *key, t_list *envpx_lst)
 {
@@ -33,8 +46,8 @@ static void	export_add_list(t_program *program, char *key, char *content)
 
 	if (program->export_flag == 0)
 	{
-		node = ft_lstnew(content, key);
-		node2 = ft_lstnew(content, key);
+		node = zi_lstnew(content, key);
+		node2 = zi_lstnew(content, key);
 		ft_lstadd_back(&program->envp_list, node);
 		ft_lstadd_back(&program->export_list, node2);
 	}

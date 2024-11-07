@@ -6,7 +6,7 @@
 /*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 19:24:51 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/06 21:13:57 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/07 13:17:32 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,7 @@ char	*expand_dollar_variables(t_program *program, int *i,
 	env_str = NULL;
 	key = set_dolar_question(program, parser_input->cmd, i, key);
 	if (key == NULL)
-		return (set_expand_dollar_variables(parser_input, i, env_str, key,
-				program));
+		return (set_expand_dollar_variables(program, parser_input, i, env_str));
 	else
 	{
 		(*i)++;

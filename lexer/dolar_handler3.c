@@ -6,7 +6,7 @@
 /*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 16:05:55 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/06 21:36:53 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/07 13:17:15 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,30 +47,37 @@ char	*dollar_join(char *env_str, char *before_cmd, char *after_dolar,
 	return (tmp);
 }
 
-char	*set_expand_dollar_variables(t_lexer *parser_input, int *i,
-		char *env_str, char *key, t_program *program)
+static char	*expand_dollar_helper(t_program *program, t_lexer *parser_input,
+		int *i, char *env_str)
+{
+	char	*key;
+
+	key = NULL;
+	if (ft_isdigit(parser_input->cmd[(*i) + 1]))
+	{
+		env_str = ft_strdup(&parser_input->cmd[(*i) + 1]);
+		(*i) += 2;
+	}
+	else
+		env_str = env_count_str(parser_input, i);
+	key = dolar_env(program, env_str);
+	if (env_str)
+		free(env_str);
+	return (key);
+}
+
+char	*set_expand_dollar_variables(t_program *program, t_lexer *parser_input,
+		int *i, char *env_str)
 {
 	if ((parser_input->cmd[(*i) + 1] == '@' || parser_input->cmd[(*i)
-			+ 1] == '*') || parser_input->cmd[(*i) + 1] == '#')
+				+ 1] == '*') || parser_input->cmd[(*i) + 1] == '#')
 	{
 		(*i) += 2;
 		return (NULL);
 	}
 	if ((parser_input->cmd[(*i) + 1] != 32 || ft_isalpha(parser_input->cmd[(*i)
-				+ 1])))
-	{
-		if (ft_isdigit(parser_input->cmd[(*i) + 1]))
-		{
-			env_str = ft_strdup(&parser_input->cmd[(*i) + 1]);
-			(*i) += 2;
-		}
-		else
-			env_str = env_count_str(parser_input, i);
-		key = dolar_env(program, env_str);
-		if (env_str)
-			free(env_str);
-		return (key);
-	}
+					+ 1])))
+		return (expand_dollar_helper(program, parser_input, i, env_str));
 	else if (parser_input->cmd[(*i)] == 36 && parser_input->cmd[(*i) + 1] == 32)
 	{
 		env_str = ft_strdup("$");

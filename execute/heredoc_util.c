@@ -6,7 +6,7 @@
 /*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 20:40:03 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/06 20:47:36 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/07 11:30:57 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	heredoc_count(t_program *program)
 void	handle_heredoc_redirect(t_program *program,
 		void run_redirect(t_program *, char *), char *doc)
 {
-	char *clean_doc;
+	char	*clean_doc;
 
 	clean_doc = NULL;
 	if (doc != NULL)

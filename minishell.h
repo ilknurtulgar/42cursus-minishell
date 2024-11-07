@@ -6,7 +6,7 @@
 /*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 16:54:01 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/06 21:17:19 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/07 14:04:34 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@
 # define INT_MAX 2147483647
 
 # include <stdio.h>
-# include "includes/libft/libft.h"
 # include "readline/include/readline/history.h"
 # include "readline/include/readline/readline.h"
+# include "includes/libft/libft.h"
 # include <fcntl.h>
 # include <signal.h>
 # include <stdlib.h>
@@ -42,6 +42,7 @@ typedef enum set_meta
 }				t_set_meta;
 
 int				g_global_signal;
+
 typedef struct s_lexer
 {
 	char		*cmd;
@@ -78,6 +79,7 @@ typedef struct s_program
 	int			rdr_error;
 	int			built_check;
 	int			finish_check;
+	int			start_cmd;
 
 }				t_program;
 void			ft_init_program(t_program *program, char **envp);
@@ -85,8 +87,8 @@ int				ft_parser(t_program *program, char *input);
 int				p_quote(t_program *program, char *input);
 int				p_pipe(t_program *program, char *input);
 int				p_redirection(t_program *program, char *input);
-char			**zi_split(t_program *program, char *s, char c);
-char			*walk_string(t_program *program, char *s, char c);
+char			**zi_split(t_program *program, char *s, char c, int is_space);
+char			*walk_string(t_program *program, char *s, char c, int is_space);
 int				zi_count_string(char *s, char c);
 int				set_meta(t_program *program, char *meta);
 int				zi_strrchr(const char *s, int c, int i);
@@ -135,7 +137,6 @@ int				pipe_count(t_program *program);
 void			main_builtin(t_program *program);
 void			child_builtin(t_program *program);
 void			close_pipe(t_program *program);
-int				is_builtin(t_program *program);
 void			ft_exit(t_program *program);
 void			exit_code_handler(t_program *program);
 int				is_close_quote(char *str, size_t i, char q_type);
@@ -144,8 +145,8 @@ char			*expand_dollar_variables(t_program *program, int *i,
 int				is_single_dollar(char *cmd);
 char			*dollar_join(char *env_str, char *before_cmd, char *after_dolar,
 					char *tmp);
-char			*set_expand_dollar_variables(t_lexer *parser_input, int *i,
-					char *env_str, char *key, t_program *program);
+char			*set_expand_dollar_variables(t_program *program,
+					t_lexer *parser_input, int *i, char *env_str);
 int				error_message(char *str);
 void			exec_error(t_program *program, char *s, int exit_code);
 void			free_array(char **tmp);
@@ -174,4 +175,5 @@ void			parent_heredoc(t_program *program, t_process hd_process);
 void			handle_heredoc_redirect(t_program *program,
 					void run_redirect(t_program *, char *), char *doc);
 char			*before_dolar(t_lexer *parser_input, int *i, int is_in);
+t_list			*zi_lstnew(void *content, char *key);
 #endif

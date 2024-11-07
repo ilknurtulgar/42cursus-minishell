@@ -6,7 +6,7 @@
 /*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 15:47:05 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/06 14:13:43 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/07 13:45:51 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void	simple_export(t_program *program, char *cmd_item)
 
 	if (!check_key(cmd_item, program->export_list))
 	{
-		node = ft_lstnew("(null)", cmd_item);
+		node = zi_lstnew("(null)", cmd_item);
 		ft_lstadd_back(&program->export_list, node);
 	}
 	program->status = 0;

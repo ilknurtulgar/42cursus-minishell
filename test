@@ -16,8 +16,3 @@
 //cat <<here <<doc 
 //at <<here<<doc 
 //cat <"./c" >"./d"
-
-
-
-//norm****
-//cmd.c --> more than 4 arguments

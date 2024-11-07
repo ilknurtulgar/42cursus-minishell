@@ -6,17 +6,17 @@
 /*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 10:33:15 by zayaz             #+#    #+#             */
-/*   Updated: 2024/10/19 15:30:51 by zayaz            ###   ########.fr       */
+/*   Updated: 2023/12/21 12:53:58 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+
 char	*ft_substr(const char *s, unsigned int start, size_t len)
 {
 	size_t	count;
 	size_t	size;
 	char	*str;
-
 
 	if (!s)
 		return (NULL);

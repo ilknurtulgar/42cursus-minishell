@@ -39,7 +39,7 @@ SRCS = main.c \
 	   execute/pipe.c
 
 OBJS = $(SRCS:.c=.o)
-CC = gcc
+CC = cc
 CFLAGS = -Wall -Wextra -Werror -g #-fsanitize=address #-fsanitize=leak -g
 RM = rm -rf
 LIBFT = ./includes/libft/libft.a
@@ -59,7 +59,8 @@ $(LIBFT):
 	make -C ./includes/libft -s
 	make bonus  -C ./includes/libft -s
 $(NAME): $(OBJS) $(LIBFT) $(READLINE)
-	$(CC) -o $(NAME) $(OBJS) $(CFLAGS) $(LIBFT) -L$(PWD)/$(READLINE_DIR)/lib -I$(PWD)/$(READLINE_DIR)/include -lreadline   -lncurses
+	$(CC) -o $(NAME) $(OBJS) $(CFLAGS) $(LIBFT) -L$(PWD)/$(READLINE_DIR)/lib -I$(PWD)/$(READLINE_DIR)/include -lreadline  
+#-lncurses
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@ -I$(PWD)/$(READLINE_DIR)/include/
