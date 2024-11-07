@@ -6,7 +6,7 @@
 /*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 16:54:01 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/07 14:30:46 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/07 14:33:59 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,8 @@ int				ft_parser(t_program *program, char *input);
 int				p_quote(t_program *program, char *input);
 int				p_pipe(t_program *program, char *input);
 int				p_redirection(t_program *program, char *input);
-char			**zi_split(t_program *program, char *s, char c,int is_space);
-char			*walk_string(t_program *program, char *s, char c,int is_space);
+char			**zi_split(t_program *program, char *s, char c, int is_space);
+char			*walk_string(t_program *program, char *s, char c, int is_space);
 int				zi_count_string(char *s, char c);
 int				set_meta(t_program *program, char *meta);
 int				zi_strrchr(const char *s, int c, int i);
