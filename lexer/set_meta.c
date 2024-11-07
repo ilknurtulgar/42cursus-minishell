@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   set_meta.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 19:24:42 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/07 12:48:52 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/07 17:52:57 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,9 +90,8 @@ static int	set_redirect(char *meta)
 	return (8);
 }
 
-int	set_meta(t_program *program, char *meta)
+int	set_meta( char *meta)
 {
-	(void)program;
 	if ((ft_strchr(meta, 34) == 0) && (ft_strchr(meta, 39) == 0))
 	{
 		if (!ft_strncmp(meta, "~", ft_strlen(meta)))

@@ -3,21 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_util.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 19:25:00 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/06 21:18:53 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/07 19:18:58 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-void	zi_striteri(t_lexer *s, void f(t_lexer *))
-{
-	if (!s || !f)
-		return ;
-	f(s);
-}
 
 int	zi_strrchr(const char *s, int c, int i)
 {

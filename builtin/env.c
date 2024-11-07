@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 15:46:48 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/06 13:43:49 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/07 21:45:46 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	env(t_program *program, char **cmd)
 {
-	t_list	*current;
+	t_mlist	*current;
 	int		i;
 
 	i = 0;
@@ -26,6 +26,7 @@ void	env(t_program *program, char **cmd)
 		if (search_env("PATH", program->envp_list) == NULL)
 		{
 			build_error(program, cmd[0], " No such file or directory");
+			program->status=127;
 			return ;
 		}
 		current = program->envp_list;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_variable.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 15:41:36 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/07 17:23:26 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/07 19:15:44 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@ void	fill_env_cmd(t_program *program)
 	char	*tmp;
 	int		env_size;
 	int		i;
-	t_list	*list;
+	t_mlist	*list;
 
 	list = program->envp_list;
 	i = 0;
-	env_size = ft_lstsize(program->envp_list);
+	env_size = zi_lstsize(program->envp_list);
 	program->env_cmd = malloc(sizeof(char *) * (env_size + 1));
 	if (!program->env_cmd)
 		return ;

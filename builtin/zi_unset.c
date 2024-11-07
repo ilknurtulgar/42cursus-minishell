@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   zi_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 12:38:58 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/06 13:44:37 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/07 19:02:03 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ static void	del(void *content, void *key)
 	free(key);
 }
 
-static t_list	*zi_lstdelone(t_list **lst, t_list *node, void (*del)(void *,
+static t_mlist	*zi_lstdelone(t_mlist **lst, t_mlist *node, void (*del)(void *,
 			void *))
 {
-	t_list	*tmp;
+	t_mlist	*tmp;
 
 	if (!lst)
 		return (*lst);
@@ -45,9 +45,9 @@ static t_list	*zi_lstdelone(t_list **lst, t_list *node, void (*del)(void *,
 	return (*lst);
 }
 
-void	search_del_env(t_program *program, char *key, t_list **lst)
+void	search_del_env(t_program *program, char *key, t_mlist **lst)
 {
-	t_list	*current;
+	t_mlist	*current;
 
 	current = *lst;
 	while (current)

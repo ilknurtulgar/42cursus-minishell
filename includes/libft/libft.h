@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 13:38:11 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/07 14:05:07 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/07 19:06:21 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@ typedef struct s_list
 {
 	void			*content;
 	struct s_list	*next;
-	void			*key;
-
 }					t_list;
 
 int					ft_isalnum(int c);

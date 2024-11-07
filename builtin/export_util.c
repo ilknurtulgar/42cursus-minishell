@@ -3,31 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   export_util.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 13:46:05 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/07 13:28:42 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/07 22:01:27 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-t_list	*zi_lstnew(void *content, char *key)
+int	check_key(char *key, t_mlist *envpx_lst)
 {
-	t_list	*lst;
-
-	lst = (t_list *)malloc(sizeof(t_list));
-	if (!lst)
-		return (NULL);
-	lst->content = ft_strdup(content);
-	lst->key = ft_strdup(key);
-	lst->next = NULL;
-	return (lst);
-}
-
-int	check_key(char *key, t_list *envpx_lst)
-{
-	t_list	*current;
+	t_mlist	*current;
 
 	current = envpx_lst;
 	while (current && current->key)
@@ -41,15 +28,14 @@ int	check_key(char *key, t_list *envpx_lst)
 
 static void	export_add_list(t_program *program, char *key, char *content)
 {
-	t_list	*node;
-	t_list	*node2;
-
+	t_mlist	*node_env;
+	t_mlist	*node_export;
 	if (program->export_flag == 0)
 	{
-		node = zi_lstnew(content, key);
-		node2 = zi_lstnew(content, key);
-		ft_lstadd_back(&program->envp_list, node);
-		ft_lstadd_back(&program->export_list, node2);
+		node_env = zi_lstnew(content, key);
+		node_export = zi_lstnew(content, key);
+		zi_lstadd_back(&program->envp_list, node_env);
+		zi_lstadd_back(&program->export_list, node_export);
 	}
 	free(key);
 	free(content);
@@ -78,5 +64,6 @@ void	equal_in_export(t_program *program, char **cmd, int *i)
 	equals(cmd[*i], &k);
 	content = ft_substr(cmd[*i], equal, k);
 	search_set_env(program, key, content, program->export_list);
+	search_set_env(program, key, content, program->envp_list);
 	export_add_list(program, key, content);
 }

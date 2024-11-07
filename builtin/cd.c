@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 15:23:50 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/06 13:43:26 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/07 22:01:07 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*search_env(char *key, t_list *envpx_lst)
+char	*search_env(char *key, t_mlist *envpx_lst)
 {
-	t_list	*current;
+	t_mlist	*current;
 	char	*envpx;
 
 	envpx = NULL;
@@ -32,9 +32,9 @@ char	*search_env(char *key, t_list *envpx_lst)
 }
 
 void	search_set_env(t_program *program, char *key, char *content,
-		t_list *envpx_list)
+		t_mlist *envpx_list)
 {
-	t_list	*current;
+	t_mlist	*current;
 
 	current = envpx_list;
 	while (current)
@@ -74,23 +74,44 @@ static void	update_env(t_program *program, char *cwd)
 	}
 }
 
+static void	cd_add_list(t_program *program, char *key, char *content)
+{
+	t_mlist	*node_env;
+	t_mlist	*node_export;
+
+	node_env = zi_lstnew(content, key);
+	node_export = zi_lstnew(content, key);
+	zi_lstadd_back(&program->envp_list, node_env);
+	zi_lstadd_back(&program->export_list, node_export);
+}
+
 static void	cd_path(t_program *program, char *cmd)
 {
-	char	*path;
-	char	cwd[1024];
+	char		*path;
+	char		cwd[1024];
+	struct stat	path_stat;
 
 	path = cmd;
 	if (access(path, F_OK) == 0)
 	{
-		if (chdir(path) == 0)
+		stat(path, &path_stat);
+		if (S_ISDIR(path_stat.st_mode))
 		{
-			if (getcwd(cwd, sizeof(cwd)) != NULL)
-				update_env(program, cwd);
+			if (chdir(path) == 0)
+			{
+				if (getcwd(cwd, sizeof(cwd)) != NULL)
+					update_env(program, cwd);
+			}
+		}
+		else
+		{
+			printf("cd: %s: Not a directory\n", path);
+			program->status = 1;
 		}
 	}
 	else
 	{
-		printf("cd: %s No such file or directory\n", path);
+		printf("cd: %s: No such file or directory\n", path);
 		program->status = 1;
 	}
 }
@@ -99,7 +120,13 @@ void	cd(t_program *program, char **cmd)
 {
 	char	*home;
 	char	cwd[1024];
+	char	path_cwd[1024];
 
+	if (search_env("PWD", program->envp_list) == NULL)
+	{
+		getcwd(path_cwd, sizeof(path_cwd));
+		cd_add_list(program,"PWD",path_cwd);
+	}
 	if (cmd[1] == NULL || (zi_strcmp(cmd[1], "~") == 0))
 	{
 		home = search_env("HOME", program->envp_list);
@@ -122,3 +149,4 @@ void	cd(t_program *program, char **cmd)
 	update_env(program, cwd);
 	program->status = 0;
 }
+

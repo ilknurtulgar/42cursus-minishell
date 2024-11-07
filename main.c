@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:25:29 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/07 17:22:24 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/07 22:01:18 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	*get_user_input(t_program *program)
 
 	program->finish_check = 0;
 	g_global_signal = 0;
-	program->input = readline("minishell 🐥>");
+	program->input = readline("minishell 🐥 ");
 	if (g_global_signal == 13)
 	{
 		program->status = 1;
@@ -36,16 +36,31 @@ char	*get_user_input(t_program *program)
 
 static void	free_main_program(t_program *program, char *tmp)
 {
-	zi_exec(program);
 	free_parser_input(program);
 	free(tmp);
 	free(program->process);
 }
 
+static void	run_minishell(t_program *program)
+{
+	char	*tmp;
+
+	while (1)
+	{
+		tmp = get_user_input(program);
+		if (!ft_parser(program, program->input))
+		{
+			free(tmp);
+			continue ;
+		}
+		zi_exec(program);
+		free_main_program(program, tmp);
+	}
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_program	*program;
-	char		*tmp;
 
 	program = NULL;
 	(void)argv;
@@ -58,15 +73,9 @@ int	main(int argc, char **argv, char **envp)
 	if (!program)
 		return (0);
 	ft_init_program(program, envp);
-	while (1)
-	{
-		tmp = get_user_input(program);
-		if (!ft_parser(program, program->input))
-		{
-			free(tmp);
-			continue ;
-		}
-		free_main_program(program, tmp);
-	}
+	run_minishell(program);
 	free_program(program);
 }
+
+// pwd silme
+// a="'" --> echo $a

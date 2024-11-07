@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 15:47:05 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/07 13:45:51 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/07 22:00:49 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,19 @@
 
 static void	simple_export(t_program *program, char *cmd_item)
 {
-	t_list	*node;
+	t_mlist	*node;
 
 	if (!check_key(cmd_item, program->export_list))
 	{
 		node = zi_lstnew("(null)", cmd_item);
-		ft_lstadd_back(&program->export_list, node);
+		zi_lstadd_back(&program->export_list, node);
 	}
 	program->status = 0;
 }
 
 static void	export_env(t_program *program)
 {
-	t_list	*list;
+	t_mlist	*list;
 
 	list = program->export_list;
 	while (list != NULL)
@@ -51,7 +51,7 @@ static char	*equals_key(char *cmd)
 
 	equ_key = NULL;
 	len = ft_strlen(cmd);
-	equ_key = malloc(sizeof(char *) * (len + 1));
+	equ_key = malloc(sizeof(char ) * (len + 1));
 	if (equ_key == NULL)
 		return (NULL);
 	i = 0;

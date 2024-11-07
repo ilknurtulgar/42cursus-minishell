@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dolar_handler2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 19:24:51 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/07 13:17:32 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/07 18:59:52 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 char	*dolar_env(t_program *program, char *parser_input)
 {
-	t_list	*current;
+	t_mlist	*current;
 
 	current = program->envp_list;
 	while (current)

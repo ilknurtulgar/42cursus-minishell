@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_util.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 13:40:25 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/06 16:02:52 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/07 19:19:25 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	exit_code_handler(t_program *program)
 	{
 		waitpid(program->process[i].pid, &staus_check, 0);
 		if (program->built_check == 0 && (program->rdr_error != 1
-				&& program->rdr_error != 2))
+				&& program->rdr_error != 2 && program->finish_check != 3))
 		{
 			if (WIFSIGNALED(staus_check) && WTERMSIG(staus_check) == SIGINT)
 				program->status = 130;

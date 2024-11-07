@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 18:32:15 by itulgar           #+#    #+#             */
-/*   Updated: 2024/11/07 13:28:20 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/07 19:09:49 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static t_list	*set_env(char **envp)
+static t_mlist	*set_env(char **envp)
 {
 	int		i;
-	t_list	*tmp_list;
+	t_mlist	*tmp_list;
 	char	**tmp;
 
 	tmp_list = NULL;
@@ -24,7 +24,7 @@ static t_list	*set_env(char **envp)
 	{
 		tmp = ft_split(envp[i], '=');
 		if (tmp[0] && tmp[1])
-			ft_lstadd_back(&tmp_list, zi_lstnew(tmp[1], tmp[0]));
+			zi_lstadd_back(&tmp_list, zi_lstnew(tmp[1], tmp[0]));
 		free_array(tmp);
 		i++;
 	}

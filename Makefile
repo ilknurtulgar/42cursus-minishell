@@ -10,6 +10,7 @@ SRCS = main.c \
 	   parser/p_pipe.c \
 	   parser/p_redirection.c \
 	   utils/parser_util.c \
+	   utils/lst_util.c \
 	   utils/parser_util_2.c \
 	   lexer/lexer.c \
 	   lexer/set_meta.c \

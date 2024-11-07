@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 12:51:42 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/06 21:22:21 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/07 17:58:16 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	signal_handler(int signo)
 {
 	(void)signo;
-	if (g_global_signal == 0 || g_global_signal == 23)
+	if (g_global_signal == 0 || g_global_signal == 13)
 	{
 		write(1, "\n", 1);
 		rl_on_new_line();

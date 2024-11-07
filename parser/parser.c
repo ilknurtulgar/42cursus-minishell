@@ -3,20 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:57:38 by itulgar           #+#    #+#             */
-/*   Updated: 2024/11/07 14:49:11 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/07 19:19:09 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static int	space_cmd(t_program *program, t_lexer *parser_input,
-		char *split_space, int z)
+static int	space_cmd(t_lexer *parser_input, char *split_space, int z)
 {
 	parser_input->cmd = ft_strdup(split_space);
-	parser_input->key = set_meta(program, split_space);
+	parser_input->key = set_meta(split_space);
 	z++;
 	return (z);
 }
@@ -42,7 +41,7 @@ static int	fill_pipe_input(t_program *program, char *pipe_input, int *k)
 	while (split_space[j])
 	{
 		program->parser_input[*k][z] = (t_lexer *)malloc(sizeof(t_lexer));
-		z = space_cmd(program, program->parser_input[*k][z], split_space[j], z);
+		z = space_cmd(program->parser_input[*k][z], split_space[j], z);
 		j++;
 	}
 	free_array(split_space);
@@ -103,7 +102,7 @@ int	ft_parser(t_program *program, char *input)
 		return (0);
 	if (!clean_input(program, input))
 		return (0);
-	quote_clean(program);
+	run_dolar(program);
 	if (program->fd_output > 2)
 		close(program->fd_output);
 	if (program->fd_input > 2)

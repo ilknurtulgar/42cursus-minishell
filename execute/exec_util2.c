@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_util2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 15:00:15 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/06 18:32:26 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/07 21:15:10 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	exec_command(t_program *program)
 	fill_env_cmd(program);
 	find_path(program);
 	i = 0;
-	if (search_env("PATH", program->envp_list) == NULL)
+	if (search_env("PATH", program->envp_list) == NULL && program->cmd[0][0] != '/')
 	{
 		printf("minishell: %s: No such file or directory\n", program->cmd[i]);
 		program->status = 127;
