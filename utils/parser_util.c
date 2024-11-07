@@ -6,7 +6,7 @@
 /*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 19:25:09 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/07 14:09:28 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/07 14:31:57 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,14 +92,10 @@ static int	zi_count_char(char *s, char c)
 
 char	**zi_split(t_program *program, char *s, char c, int is_space)
 {
-	int		word;
-	int		i;
-	int		x;
-	char	**s1;
-
-	x = 0;
-	word = 0;
-	i = 0;
+	int word = 0;
+	int i = 0;
+	int x = 0;
+	char **s1;
 	if (!s)
 		return (NULL);
 	word = zi_count_string(s, c);
@@ -109,6 +105,7 @@ char	**zi_split(t_program *program, char *s, char c, int is_space)
 	while (*s)
 	{
 		i = zi_count_char(s, c);
+
 		s1[x++] = ft_substr(s, 0, i);
 		s = walk_string(program, s, c, is_space);
 	}

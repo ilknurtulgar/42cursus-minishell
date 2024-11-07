@@ -6,7 +6,7 @@
 /*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 18:54:27 by itulgar           #+#    #+#             */
-/*   Updated: 2024/11/07 14:09:41 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/07 14:31:38 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,11 @@ static char	*walk_to_quote_pipe(t_program *program, char *s, char c)
 	return (s);
 }
 
+<<<<<<< HEAD
 static char	*walk_to_pipe(t_program *program, char *s, char c, int is_space)
+=======
+static char	*walk_to_pipe(t_program *program, char *s, char c, int is_space)
+>>>>>>> 6704081b1dc867f39329f6140555dc18e6c18bd8
 {
 	program->control_p_split = 0;
 	while (*s && *s != c && (*s != '\'' && *s != '\"'))
