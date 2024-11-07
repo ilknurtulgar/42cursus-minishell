@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 18:20:33 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/06 20:47:16 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/07 16:40:43 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,8 @@ void	heredoc_main(t_program *program)
 		{
 			z = 0;
 			find_heredoc_loc(program, &i, &j, &z);
+			if (program->finish_check == 3)
+				return ;
 			j++;
 		}
 		i++;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 17:45:46 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/06 19:56:42 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/07 16:40:07 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,9 @@ static void	create_fork(t_program *program, int *i)
 	{
 		redirect(program, i);
 		if (program->finish_check == 3)
+		{
 			return ;
+		}
 		if (program->rdr_error == 1 || program->rdr_error == 2)
 		{
 			file_error(program);
