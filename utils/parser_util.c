@@ -42,9 +42,9 @@ int	zi_count_string(char *s, char c)
 		}
 		if (*s == c || *s == '\0')
 		{
-			count++;
 			if (*s)
 				s++;
+			count++;
 		}
 	}
 	return (count);
@@ -66,16 +66,21 @@ static int	in_quote_char(char *s, int i)
 static int	zi_count_char(char *s, char c)
 {
 	int	i;
+	int	f;
 
 	i = 0;
 	while (s[i])
 	{
 		if (s[i] == '\'' || s[i] == '\"')
-		{
 			i = in_quote_char(s, i);
-		}
 		else
 		{
+			if (i == 0)
+			{
+				f = i;
+				while (s[f] && s[f] == c)
+					f++;
+			}
 			while (s[i] && s[i] != c && s[i] != '\'' && s[i] != '\"')
 				i++;
 			if (s[i] == c || s[i] == '\0')
@@ -85,26 +90,24 @@ static int	zi_count_char(char *s, char c)
 	return (i);
 }
 
-char	**zi_split(t_program *program, char *s, char c)
+char	**zi_split(t_program *program, char *s, char c,int is_space)
 {
-	int		word;
-	int		i;
-	int		x;
-	char	**s1;
-
-	i = 0;
-	x = 0;
+	int word = 0;
+	int i = 0;
+	int x = 0;
+	char **s1;
 	if (!s)
 		return (NULL);
 	word = zi_count_string(s, c);
-	s1 = ft_calloc(word + 1, sizeof(char *));
+	s1 = ft_calloc(word+1, sizeof(char *));
 	if (!s1)
 		return (NULL);
 	while (*s)
 	{
 		i = zi_count_char(s, c);
+		
 		s1[x++] = ft_substr(s, 0, i);
-		s = walk_string(program, s, c);
+		s = walk_string(program, s, c,is_space);
 	}
 	s1[x] = NULL;
 	return (s1);

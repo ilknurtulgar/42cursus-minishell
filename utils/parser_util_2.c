@@ -36,24 +36,25 @@ static char	*walk_to_quote_pipe(t_program *program, char *s, char c)
 	return (s);
 }
 
-static char	*walk_to_pipe(t_program *program, char *s, char c)
+static char	*walk_to_pipe(t_program *program, char *s, char c,int is_space)
 {
 	program->control_p_split = 0;
 	while (*s && *s != c && (*s != '\'' && *s != '\"'))
 		s++;
 	if (*s == c || *s == '\0')
 	{
-		if (*s)
-		{
+		if (is_space)
+			while (*s && *s == c)
+				s++;
+		else if (*s)
 			s++;
-			program->control_p_split = 1;
-			return (s);
-		}
+		program->control_p_split = 1;
+		return (s);
 	}
 	return (s);
 }
 
-char	*walk_string(t_program *program, char *s, char c)
+char	*walk_string(t_program *program, char *s, char c,int is_space)
 {
 	while (*s)
 	{
@@ -65,7 +66,7 @@ char	*walk_string(t_program *program, char *s, char c)
 		}
 		else
 		{
-			s = walk_to_pipe(program, s, c);
+			s = walk_to_pipe(program, s, c,is_space);
 			if (program->control_p_split)
 				break ;
 		}
