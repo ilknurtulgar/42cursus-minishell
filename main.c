@@ -6,13 +6,12 @@
 /*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:25:29 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/07 15:27:45 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/07 17:22:24 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// patlıyor echo "$USER$USERasd$PWD"
 char	*get_user_input(t_program *program)
 {
 	char	*tmp;

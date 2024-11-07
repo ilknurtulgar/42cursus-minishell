@@ -6,7 +6,7 @@
 /*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 15:41:36 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/06 19:56:59 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/07 17:23:26 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void	relative_path(t_program *program)
 		else if (zi_strcmp(program->cmd[0], "..") == 0)
 			exec_error(program, "command not found", 127);
 		else
-			exec_error(program, "is a directorye", 126);
+			exec_error(program, "is a directory", 126);
 	}
 	else
 		handle_path_error(program);

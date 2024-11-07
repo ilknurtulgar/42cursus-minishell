@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
+/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:53:16 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/07 16:34:48 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/11/07 17:21:42 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,8 @@ static void	take_type_redi(t_program *program, int *i, int *j, int *z)
 		handle_redirect(program, run_input, doc);
 	}
 	if ((program->parser_input[*i][*j]->cmd[*z] == '>'
-			&& ft_strncmp(program->parser_input[*i][*j]->cmd + *z, ">>",
-				2) != 0))
+		&& ft_strncmp(program->parser_input[*i][*j]->cmd + *z, ">>",
+		2) != 0))
 	{
 		doc = take_redi_doc(program, i, j, z);
 		handle_redirect(program, run_output, doc);

@@ -40,7 +40,7 @@ SRCS = main.c \
 
 OBJS = $(SRCS:.c=.o)
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g #-fsanitize=address #-fsanitize=leak -g
+CFLAGS = -Wall -Wextra -Werror -g
 
 RM = rm -rf
 LIBFT = ./includes/libft/libft.a
@@ -61,7 +61,6 @@ $(LIBFT):
 	make bonus  -C ./includes/libft -s
 $(NAME): $(OBJS) $(LIBFT) $(READLINE)
 	$(CC) -o $(NAME) $(OBJS) $(CFLAGS) $(LIBFT) -L$(PWD)/$(READLINE_DIR)/lib -I$(PWD)/$(READLINE_DIR)/include -lreadline  
-#-lncurses
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@ -I$(PWD)/$(READLINE_DIR)/include/
