@@ -20,6 +20,7 @@ SRCS = main.c \
 	   utils/lexer_util.c \
 	   builtin/echo.c \
 	   builtin/cd.c \
+	   builtin/cd_util.c \
 	   builtin/pwd.c \
 	   builtin/env.c \
 	   builtin/export_util.c \
@@ -41,7 +42,7 @@ SRCS = main.c \
 
 OBJS = $(SRCS:.c=.o)
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror
 
 RM = rm -rf
 LIBFT = ./includes/libft/libft.a

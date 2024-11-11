@@ -6,7 +6,7 @@
 /*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 12:38:58 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/07 19:02:03 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/11/08 16:29:21 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ void	zi_unset(t_program *program, char **cmd)
 {
 	int	i;
 
+	program->flag_identifier = 0;
 	i = 1;
 	if (!cmd[1])
 		return ;

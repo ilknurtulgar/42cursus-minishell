@@ -6,7 +6,7 @@
 /*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 13:40:25 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/07 19:19:25 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/11/08 16:57:33 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,9 @@ static void	process_quotes(char *dst, char *src, size_t *i, size_t *j)
 		if (q_type == src[*i])
 			(*i)++;
 	}
+	else if (is_close_quote(src, *i, src[*i]) == 0 && (src[*i] == '\"'
+			|| src[*i] == '\''))
+		dst[(*j)++] = src[(*i)++];
 }
 
 char	*del_quote(char *dst, char *src, size_t dstsize)
@@ -82,7 +85,11 @@ char	*del_quote(char *dst, char *src, size_t dstsize)
 	while (src[i] && j < dstsize)
 	{
 		if (src[i] && (src[i] == '\'' || src[i] == '\"'))
+		{
 			process_quotes(dst, src, &i, &j);
+			if (i == 0)
+				dst[j++] = src[i++];
+		}
 		else
 			dst[j++] = src[i++];
 	}

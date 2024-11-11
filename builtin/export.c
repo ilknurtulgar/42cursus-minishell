@@ -6,7 +6,7 @@
 /*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 15:47:05 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/07 22:00:49 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/11/08 16:30:40 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ static void	simple_export(t_program *program, char *cmd_item)
 		node = zi_lstnew("(null)", cmd_item);
 		zi_lstadd_back(&program->export_list, node);
 	}
-	program->status = 0;
+	if (program->flag_identifier != 1)
+		program->status = 0;
 }
 
 static void	export_env(t_program *program)
@@ -51,7 +52,7 @@ static char	*equals_key(char *cmd)
 
 	equ_key = NULL;
 	len = ft_strlen(cmd);
-	equ_key = malloc(sizeof(char ) * (len + 1));
+	equ_key = malloc(sizeof(char) * (len + 1));
 	if (equ_key == NULL)
 		return (NULL);
 	i = 0;
@@ -82,7 +83,8 @@ static void	export_run(t_program *program, char **cmd, int i)
 		else if (ft_strchr(cmd[i], 61) != 0)
 		{
 			equal_in_export(program, cmd, &i);
-			program->status = 0;
+			if (program->flag_identifier != 1)
+				program->status = 0;
 		}
 		else
 			simple_export(program, cmd[i]);
@@ -96,6 +98,7 @@ void	export(t_program *program, char **cmd)
 {
 	int	i;
 
+	program->flag_identifier = 0;
 	i = 1;
 	if (!cmd[i])
 		export_env(program);

@@ -6,7 +6,7 @@
 /*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 13:46:05 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/07 22:01:27 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/11/08 17:50:21 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ static void	export_add_list(t_program *program, char *key, char *content)
 {
 	t_mlist	*node_env;
 	t_mlist	*node_export;
+
 	if (program->export_flag == 0)
 	{
 		node_env = zi_lstnew(content, key);
@@ -41,7 +42,7 @@ static void	export_add_list(t_program *program, char *key, char *content)
 	free(content);
 }
 
-void	equals(char *cmd, int *k)
+static void	equals(char *cmd, int *k)
 {
 	while (cmd[*k] != '\0' && cmd[*k] != 61)
 		(*k)++;

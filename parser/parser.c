@@ -6,7 +6,7 @@
 /*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 16:57:38 by itulgar           #+#    #+#             */
-/*   Updated: 2024/11/07 19:19:09 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/11/08 15:52:12 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,8 +104,14 @@ int	ft_parser(t_program *program, char *input)
 		return (0);
 	run_dolar(program);
 	if (program->fd_output > 2)
+	{
 		close(program->fd_output);
+		program->fd_output = -1;
+	}
 	if (program->fd_input > 2)
+	{
 		close(program->fd_input);
+		program->fd_input = -1;
+	}
 	return (1);
 }

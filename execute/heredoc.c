@@ -6,7 +6,7 @@
 /*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 18:20:33 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/07 16:40:43 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/11/08 14:36:07 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static void	handle_heredoc(t_program *program, char *s)
 	st = NULL;
 	if (pipe(hd_process.fd) == -1)
 	{
-		perror("pipe creation failed");
+		perror("minishell: pipe creation failed");
 		exit(1);
 	}
 	hd_process.pid = fork();

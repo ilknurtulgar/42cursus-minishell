@@ -6,13 +6,13 @@
 /*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 17:25:29 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/07 22:01:18 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/11/08 17:27:51 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*get_user_input(t_program *program)
+static char	*get_user_input(t_program *program)
 {
 	char	*tmp;
 
@@ -76,6 +76,3 @@ int	main(int argc, char **argv, char **envp)
 	run_minishell(program);
 	free_program(program);
 }
-
-// pwd silme
-// a="'" --> echo $a

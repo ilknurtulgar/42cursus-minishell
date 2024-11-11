@@ -6,7 +6,7 @@
 /*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 19:24:51 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/07 18:59:52 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/11/08 17:58:37 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,9 @@ char	*env_count_str(t_lexer *parser_input, int *i)
 	env_len = 0;
 	(*i)++;
 	start_env = *i;
-	while (parser_input->cmd[*i] && (ft_isdigit(parser_input->cmd[*i])
-			|| ft_isalpha(parser_input->cmd[*i])))
+	while (parser_input->cmd[*i] && parser_input->cmd[*i] != 36
+		&& parser_input->cmd[*i] != 32 && parser_input->cmd[*i] != '\''
+		&& parser_input->cmd[*i] != '\"')
 	{
 		env_len++;
 		(*i)++;
@@ -48,7 +49,8 @@ char	*env_count_str(t_lexer *parser_input, int *i)
 	return (env_str);
 }
 
-char	*set_dolar_question(t_program *program, char *cmd, int *i, char *key)
+static char	*set_dolar_question(t_program *program, char *cmd, int *i,
+		char *key)
 {
 	if (cmd[(*i) + 1] && cmd[(*i) + 1] == '?')
 	{

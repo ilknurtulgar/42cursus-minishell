@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 14:58:07 by itulgar           #+#    #+#             */
-/*   Updated: 2024/11/06 13:42:36 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/08 17:00:05 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	handle_unset_identifier(t_program *program, char **cmd, int *i)
 		search_del_env(program, cmd[*i], &program->export_list);
 		if (program->unset_flag == 0 && error_flag == 1)
 			program->status = 1;
-		else
+		else if (program->flag_identifier != 1)
 			program->status = 0;
 	}
 }

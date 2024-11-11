@@ -6,52 +6,11 @@
 /*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 15:23:50 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/07 22:01:07 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/11/08 17:21:07 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-char	*search_env(char *key, t_mlist *envpx_lst)
-{
-	t_mlist	*current;
-	char	*envpx;
-
-	envpx = NULL;
-	current = envpx_lst;
-	while (current && current->key)
-	{
-		if (zi_strcmp(current->key, key) == 0)
-		{
-			envpx = current->content;
-			break ;
-		}
-		current = current->next;
-	}
-	return (envpx);
-}
-
-void	search_set_env(t_program *program, char *key, char *content,
-		t_mlist *envpx_list)
-{
-	t_mlist	*current;
-
-	current = envpx_list;
-	while (current)
-	{
-		if (zi_strcmp(current->key, key) == 0)
-		{
-			program->export_flag = 1;
-			free(current->content);
-			current->content = ft_strdup(content);
-			return ;
-		}
-		if (!current->next)
-			break ;
-		current = current->next;
-	}
-	program->export_flag = 0;
-}
 
 static void	update_env(t_program *program, char *cwd)
 {
@@ -74,7 +33,7 @@ static void	update_env(t_program *program, char *cwd)
 	}
 }
 
-static void	cd_add_list(t_program *program, char *key, char *content)
+void	cd_add_list(t_program *program, char *key, char *content)
 {
 	t_mlist	*node_env;
 	t_mlist	*node_export;
@@ -85,10 +44,20 @@ static void	cd_add_list(t_program *program, char *key, char *content)
 	zi_lstadd_back(&program->export_list, node_export);
 }
 
+static void	cd_path_helper(t_program *program, char *path)
+{
+	char	cwd[1024];
+
+	if (chdir(path) == 0)
+	{
+		if (getcwd(cwd, sizeof(cwd)) != NULL)
+			update_env(program, cwd);
+	}
+}
+
 static void	cd_path(t_program *program, char *cmd)
 {
 	char		*path;
-	char		cwd[1024];
 	struct stat	path_stat;
 
 	path = cmd;
@@ -96,16 +65,10 @@ static void	cd_path(t_program *program, char *cmd)
 	{
 		stat(path, &path_stat);
 		if (S_ISDIR(path_stat.st_mode))
-		{
-			if (chdir(path) == 0)
-			{
-				if (getcwd(cwd, sizeof(cwd)) != NULL)
-					update_env(program, cwd);
-			}
-		}
+			cd_path_helper(program, path);
 		else
 		{
-			printf("cd: %s: Not a directory\n", path);
+			printf("minishell: cd: %s: Not a directory\n", path);
 			program->status = 1;
 		}
 	}
@@ -120,13 +83,8 @@ void	cd(t_program *program, char **cmd)
 {
 	char	*home;
 	char	cwd[1024];
-	char	path_cwd[1024];
 
-	if (search_env("PWD", program->envp_list) == NULL)
-	{
-		getcwd(path_cwd, sizeof(path_cwd));
-		cd_add_list(program,"PWD",path_cwd);
-	}
+	cd_helper(program);
 	if (cmd[1] == NULL || (zi_strcmp(cmd[1], "~") == 0))
 	{
 		home = search_env("HOME", program->envp_list);
@@ -149,4 +107,3 @@ void	cd(t_program *program, char **cmd)
 	update_env(program, cwd);
 	program->status = 0;
 }
-

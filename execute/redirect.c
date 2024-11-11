@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:53:16 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/07 17:21:42 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/08 15:44:18 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,8 @@ static void	handle_redirect(t_program *program, void run_redirect(t_program *,
 		if (program->status != 1)
 			run_redirect(program, clean_doc);
 		free(clean_doc);
+		program->redi_flag = 1;
 	}
-	program->redi_flag = 1;
 }
 
 static void	take_type_redi(t_program *program, int *i, int *j, int *z)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/27 17:02:45 by itulgar           #+#    #+#             */
-/*   Updated: 2024/11/06 17:45:40 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/08 15:52:45 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ void	pipe_dup(t_program *program, int *i)
 	}
 	if (redirect_c(program, i) && program->redi_flag == 1)
 	{
-		if (program->fd_output >= 2)
+		if (program->fd_output > 2)
 			dup2(program->fd_output, STDOUT_FILENO);
-		if (program->fd_input >= 2)
+		if (program->fd_input > 2)
 			dup2(program->fd_input, STDIN_FILENO);
 	}
 	if (program->here_fd[0] >= 0 && *program->hd_flag == 1)

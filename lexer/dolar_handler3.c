@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   dolar_handler3.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 16:05:55 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/07 13:17:15 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/08 17:33:26 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*before_empty_dollar(char *env_str, char *after_dolar, char *tmp)
+static char	*before_empty_dollar(char *env_str, char *after_dolar, char *tmp)
 {
 	if (after_dolar[0] != '\0')
 		tmp = ft_strjoin(env_str, after_dolar);

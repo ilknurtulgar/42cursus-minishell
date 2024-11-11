@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_util_2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 18:54:27 by itulgar           #+#    #+#             */
-/*   Updated: 2024/11/07 14:37:55 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/08 14:41:41 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,9 @@ void	find_dollar_in_quotes(char *s, char q_type, int *i)
 {
 	if (q_type == '\"')
 	{
-		if (zi_strchr(s + (*i) + 1, 36, q_type) != 0)
-			return ;
 		(*i)++;
+		if (zi_strchr(s + (*i), 36, q_type) != 0)
+			return ;
 		while (s[*i] && s[*i] != q_type)
 			(*i)++;
 	}

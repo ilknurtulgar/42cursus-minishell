@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   dolar_handler.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 12:24:13 by itulgar           #+#    #+#             */
-/*   Updated: 2024/11/06 21:17:08 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/08 17:31:32 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static	char	*after_quote(t_lexer *parser_input, char *before_cmd, int *i)
+static char	*after_quote(t_lexer *parser_input, char *before_cmd, int *i)
 {
 	char	*se_dolar;
 	char	*before_tmp;
@@ -50,7 +50,7 @@ static char	*before_dolar_assign(t_program *program, t_lexer *parser_input,
 	return (tmp);
 }
 
-void	dq_dolar_env(t_program *program, t_lexer *parser_input, int *i,
+static void	dq_dolar_env(t_program *program, t_lexer *parser_input, int *i,
 		char *before_cmd)
 {
 	char	*tmp;
@@ -80,8 +80,13 @@ int	dolar_handler_last(t_program *program, t_lexer *parser_input, int *i,
 
 	len = 0;
 	dq_dolar_env(program, parser_input, i, before_cmd);
-	len = ft_strlen(parser_input->cmd);
-	*i = 0;
+	if (ft_strchr(parser_input->cmd, 36) == 0)
+		len = *i;
+	else
+	{
+		len = ft_strlen(parser_input->cmd);
+		*i = 0;
+	}
 	return (len);
 }
 

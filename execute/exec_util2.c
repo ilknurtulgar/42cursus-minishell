@@ -6,7 +6,7 @@
 /*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 15:00:15 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/07 21:15:10 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/11/08 17:10:49 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,13 +76,15 @@ void	exec_command(t_program *program)
 	fill_env_cmd(program);
 	find_path(program);
 	i = 0;
-	if (search_env("PATH", program->envp_list) == NULL && program->cmd[0][0] != '/')
+	if (search_env("PATH", program->envp_list) == NULL
+		&& program->cmd[0][0] != '/')
 	{
 		printf("minishell: %s: No such file or directory\n", program->cmd[i]);
 		program->status = 127;
 		return ;
 	}
-	if (program->cmd[0][0] == '.' || program->cmd[0][0] == '/')
+	if (program->cmd[0][0] == '.' || program->cmd[0][0] == '/'
+		|| ft_strchr(program->cmd[0], '/'))
 		relative_path(program);
 	while (program->sep_path && program->sep_path[i])
 	{
@@ -92,9 +94,7 @@ void	exec_command(t_program *program)
 		i++;
 		free(tmp_path);
 	}
-	free_array(program->sep_path);
-	free_array(program->env_cmd);
-	exec_error(program, " command not found", 127);
+	free_path(program);
 }
 
 void	run_one_cmd(t_program *program, int *i)
@@ -106,10 +106,10 @@ void	run_one_cmd(t_program *program, int *i)
 	{
 		stdout_backup = dup(STDOUT_FILENO);
 		stdin_backup = dup(STDIN_FILENO);
-		if (program->fd_output >= 2)
-			dup2(program->fd_output, STDOUT_FILENO);
 		if (program->fd_input >= 2)
 			dup2(program->fd_input, STDIN_FILENO);
+		if (program->fd_output >= 2)
+			dup2(program->fd_output, STDOUT_FILENO);
 	}
 	main_builtin(program);
 	if (redirect_c(program, i))

@@ -6,16 +6,12 @@
 /*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 16:54:01 by zayaz             #+#    #+#             */
-/*   Updated: 2024/11/07 19:17:05 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/11/08 17:59:32 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
-# define IN_HERADOC 2
-# define IN_PARENT 3
-# define INT_MIN -2147483648
-# define INT_MAX 2147483647
 
 # include <stdio.h>
 # include "includes/libft/libft.h"
@@ -28,6 +24,8 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
+# define INT_MIN -2147483648
+# define INT_MAX 2147483647
 # define IN_CAT 1
 # define IN_HERADOC 2
 # define IN_PARENT 3
@@ -87,6 +85,7 @@ typedef struct s_program
 	int				built_check;
 	int				finish_check;
 	int				start_cmd;
+	int				flag_identifier;
 
 }					t_program;
 void				ft_init_program(t_program *program, char **envp);
@@ -186,4 +185,8 @@ t_mlist				*zi_lstnew(void *content, char *key);
 void				zi_lstadd_back(t_mlist **lst, t_mlist *new);
 t_mlist				*zi_lstlast(t_mlist *lst);
 int					zi_lstsize(t_mlist *lst);
+void				free_path(t_program *program);
+void				cd_helper(t_program *program);
+void				cd_add_list(t_program *program, char *key, char *content);
+
 #endif
