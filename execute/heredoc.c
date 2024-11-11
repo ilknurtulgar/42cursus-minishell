@@ -3,86 +3,122 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zerrinayaz <zerrinayaz@student.42.fr>      +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 18:20:33 by zayaz             #+#    #+#             */
-/*   Updated: 2024/10/14 17:09:35 by zerrinayaz       ###   ########.fr       */
+/*   Updated: 2024/11/08 14:36:07 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int heredoc_count(t_program *program)
+static void	fork_with_heredoc(t_process hd_process, char *st)
 {
-	int i;
-	int j;
+	char	*line;
 
-	i = 0;
-	j = 0;
-	program->hd_count = 0;
-	while (program->parser_input[i])
-	{
-		j = 0;
-		while (program->parser_input[i][j])
-		{
-			if (zi_redirectchr(program->parser_input[i][j]->cmd, '<') != 0 && program->parser_input[i][j]->key == 7)
-				program->hd_count++;
-			j++;
-		}
-		i++;
-	}
-	return (program->hd_count);
-}
-
-int zi_strcmp(const char *s1, const char *s2)
-{
-	size_t i;
-
-	i = 0;
-
-	while (s1[i] == s2[i] && s1[i] && s2[i])
-		i++;
-	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
-}
-void heredoc(char *s)
-{
-	char *line;
-	printf(" hero %s:\n", s);
-
-	global_signal = IN_HERADOC;
+	close(hd_process.fd[0]);
 	while (1)
 	{
 		line = readline(">");
 		if (!line)
-			break;
-		if (zi_strcmp(s, line) == 0)
+			break ;
+		if (zi_strcmp(st, line) == 0)
 		{
-
-			printf("geldim hero\n");
+			close(hd_process.fd[1]);
 			free(line);
-			break;
+			break ;
 		}
+		ft_putstr_fd(line, hd_process.fd[1]);
+		ft_putchar_fd('\n', hd_process.fd[1]);
 		free(line);
+	}
+	free(st);
+}
+
+static void	handle_heredoc(t_program *program, char *s)
+{
+	t_process	hd_process;
+	char		*dst;
+	char		*st;
+
+	dst = NULL;
+	st = NULL;
+	if (pipe(hd_process.fd) == -1)
+	{
+		perror("minishell: pipe creation failed");
+		exit(1);
+	}
+	hd_process.pid = fork();
+	if (hd_process.pid == -1)
+		return ;
+	if (hd_process.pid == 0)
+	{
+		g_global_signal = IN_HERADOC;
+		st = del_quote(dst, s, ft_strlen(s));
+		fork_with_heredoc(hd_process, st);
+		free(dst);
+		close(hd_process.fd[1]);
+		exit(0);
+	}
+	else
+		parent_heredoc(program, hd_process);
+}
+
+void	doc_name_heredoc(t_program *program, int *i, int *j, int *z)
+{
+	char	*doc;
+
+	doc = NULL;
+	program->redi_type = program->parser_input[*i][*j]->cmd[*z];
+	if (program->parser_input[*i][*j]->cmd[*z] == '<'
+		&& (program->parser_input[*i][*j]->cmd[*z + 1]
+			&& program->parser_input[*i][*j]->cmd[*z + 1] == '<')
+		&& program->finish_check != 3)
+	{
+		(*z)++;
+		doc = take_redi_doc(program, i, j, z);
+		handle_heredoc_redirect(program, handle_heredoc, doc);
 	}
 }
 
-void heredoc_run(t_program *program)
+static void	find_heredoc_loc(t_program *program, int *i, int *j, int *z)
 {
-	int i;
-	int j;
-	//<<a<< a
+	while (program->parser_input[*i][*j]->cmd[*z])
+	{
+		quote_skip(program->parser_input[*i][*j]->cmd, z);
+		if (program->parser_input[*i][*j]->cmd[*z] == '<')
+			doc_name_heredoc(program, i, j, z);
+		if (program->parser_input[*i][*j]->cmd[*z] == '<'
+			&& program->parser_input[*i][*j]->cmd[*z + 1]
+			&& program->parser_input[*i][*j]->cmd[*z + 1] == '<')
+			continue ;
+		else if (program->parser_input[*i][*j]->cmd[*z]
+			&& program->parser_input[*i][*j]->cmd[*z] != '\''
+			&& program->parser_input[*i][*j]->cmd[*z] != '\"')
+			(*z)++;
+	}
+}
+
+void	heredoc_main(t_program *program)
+{
+	int	j;
+	int	z;
+	int	i;
+
 	i = 0;
+	program->redi_type = '\0';
 	j = 0;
+	z = 0;
 	while (program->parser_input[i])
 	{
 		j = 0;
-		while (program->parser_input[i][j])
+		while (program->parser_input[i][j] != NULL
+			&& program->parser_input[i][j]->cmd)
 		{
-			if (zi_redirectchr(program->parser_input[i][j]->cmd, '<') != 0 && program->parser_input[i][j]->key == 7)
-			{
-				go_redirect(program, heredoc, '<', &i, &j, 1);
-				program->hd_count -= 1;
-			}
+			z = 0;
+			find_heredoc_loc(program, &i, &j, &z);
+			if (program->finish_check == 3)
+				return ;
 			j++;
 		}
 		i++;

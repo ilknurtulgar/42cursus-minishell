@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   p_pipe.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zerrinayaz <zerrinayaz@student.42.fr>      +#+  +:+       +#+        */
+/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 18:11:08 by zayaz             #+#    #+#             */
-/*   Updated: 2024/09/30 19:46:49 by zerrinayaz       ###   ########.fr       */
+/*   Updated: 2024/11/07 14:06:28 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static char *min_pipe(char *input)
+static char	*min_pipe(char *input)
 {
 	while (*input && !(*input == '\'' || *input == '\"'))
 		input++;
@@ -21,7 +21,7 @@ static char *min_pipe(char *input)
 	return (input);
 }
 
-static char *pipe_in_ridect(char *input)
+static char	*pipe_in_ridect(char *input)
 {
 	while (*input == '<' || *input == '>')
 		input++;
@@ -29,11 +29,11 @@ static char *pipe_in_ridect(char *input)
 		input++;
 	return (input);
 }
-int p_pipe(t_program *program, char *input)
+
+int	p_pipe(t_program *program, char *input)
 {
-	(void)program;
 	if (*input == '|')
-		return (error_message("syntax error to pipe"));
+		return (p_error(program, "syntax error to pipe"));
 	while (*input)
 	{
 		if (*input == '\'' || *input == '\"')
@@ -42,7 +42,7 @@ int p_pipe(t_program *program, char *input)
 		{
 			input = pipe_in_ridect(input);
 			if (*input == '|')
-				return (error_message("syntax error to pipe"));
+				return (p_error(program, "syntax error to pipe"));
 		}
 		else if (*input == '|')
 		{
@@ -50,7 +50,7 @@ int p_pipe(t_program *program, char *input)
 			while (*input == 32)
 				input++;
 			if (*input == '\0' || *input == '|')
-				return (error_message("syntax error to pipe"));
+				return (p_error(program, "syntax error to pipe"));
 		}
 		if (*input != '\0')
 			input++;

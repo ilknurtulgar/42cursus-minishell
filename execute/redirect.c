@@ -3,133 +3,128 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zerrinayaz <zerrinayaz@student.42.fr>      +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 17:53:16 by zayaz             #+#    #+#             */
-/*   Updated: 2024/10/14 16:48:20 by zerrinayaz       ###   ########.fr       */
+/*   Updated: 2024/11/08 15:44:18 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int zi_redirectchr(const char *s, char c)
+char	*take_redi_doc(t_program *program, int *i, int *j, int *z)
 {
-	char type;
+	int		start;
+	char	*doc;
 
-	while (*s)
+	start = 0;
+	doc = NULL;
+	if (program->parser_input[*i][*j]->cmd[*z])
 	{
-		if (*s == '\'' || *s == '\"')
+		(*z)++;
+		if (program->parser_input[*i][*j]->cmd[*z] == '\0')
 		{
-			type = *s;
-			s++;
-			while (*s && *s != type)
-				s++;
-			s++;
+			start = 0;
+			*z = 0;
+			(*j)++;
 		}
-		if (*s == c && *(s + 1) == c)
-			return (1);
-		if (*s)
-			s++;
+		else
+			start = (*z);
 	}
-	return (0);
+	find_loc(program->parser_input[*i][*j]->cmd, z);
+	doc = ft_substr(program->parser_input[*i][*j]->cmd, start, ((*z) - start));
+	return (doc);
 }
 
-static void run_output(char *s)
+static void	handle_redirect(t_program *program, void run_redirect(t_program *,
+			char *), char *doc)
 {
-	int fd;
+	char	*clean_doc;
 
-	fd = open(s, O_CREAT | O_RDWR | O_TRUNC, 0644);
-	if (fd == -1)
+	clean_doc = NULL;
+	if (doc != NULL)
 	{
-		perror("Error opening file");
-		return;
-	}
-	if (dup2(fd, STDOUT_FILENO) == -1)
-	{
-		perror("Error opening file");
-		close(fd);
-		return;
-	}
-	close(fd);
-}
-
-static void run_input(char *s)
-{
-	int fd;
-
-	fd = open(s, O_RDWR);
-	if (fd == -1)
-	{
-		printf("minishell: %s: No such file or directoryss\n", s);
-		return;
-	}
-	if (dup2(fd, STDIN_FILENO) == -1)
-	{
-		perror("Error opening file");
-		close(fd);
-		return;
-	}
-	close(fd);
-}
-
-static void append_output(char *s)
-{
-	int fd;
-
-	fd = open(s, O_CREAT | O_RDWR | O_APPEND, 0644);
-	if (fd == -1)
-	{
-		perror("Error opening file");
-		return;
-	}
-	if (dup2(fd, STDOUT_FILENO) == -1)
-	{
-		perror("Error opening file");
-		close(fd);
-		return;
-	}
-	close(fd);
-}
-
-void go_redirect(t_program *program, void run_redirect(char *), char key,
-				 int *i, int *j, int split_rd)
-{
-	int k;
-	char **redi_cmd;
-	char *dst;
-	dst = NULL;
-	if (ft_strlen(program->parser_input[*i][*j]->cmd) > 1)
-	{
-		redi_cmd = zi_split(program, program->parser_input[*i][*j]->cmd, key,
-							split_rd);
-		k = 1;
-		while (redi_cmd[k])
+		clean_doc = del_quote(clean_doc, doc, ft_strlen(doc));
+		free(doc);
+		if (program->rdr_error == 2 || program->rdr_error == 1)
 		{
-			if (ft_strchr(redi_cmd[k], 34) || ft_strchr(redi_cmd[k], 39))
-				redi_cmd[k] = zi_sec_strlcpy(dst, redi_cmd[k],
-											 ft_strlen(redi_cmd[k]));
-			run_redirect(redi_cmd[k]);
-			k++;
+			free(clean_doc);
+			return ;
 		}
+		if (program->status != 1)
+			run_redirect(program, clean_doc);
+		free(clean_doc);
+		program->redi_flag = 1;
 	}
-	else
-		run_redirect(program->parser_input[*i][*j + 1]->cmd);
 }
 
-void redirect(t_program *program, int *i)
+static void	take_type_redi(t_program *program, int *i, int *j, int *z)
 {
-	int j;
+	char	*doc;
 
+	doc = NULL;
+	if (program->parser_input[*i][*j]->cmd[*z] == '>'
+		&& (program->parser_input[*i][*j]->cmd[*z + 1]
+			&& program->parser_input[*i][*j]->cmd[*z + 1] == '>'))
+	{
+		(*z)++;
+		doc = take_redi_doc(program, i, j, z);
+		handle_redirect(program, append_output, doc);
+	}
+	if (program->parser_input[*i][*j]->cmd[*z] == '<')
+	{
+		doc = take_redi_doc(program, i, j, z);
+		handle_redirect(program, run_input, doc);
+	}
+	if ((program->parser_input[*i][*j]->cmd[*z] == '>'
+		&& ft_strncmp(program->parser_input[*i][*j]->cmd + *z, ">>",
+		2) != 0))
+	{
+		doc = take_redi_doc(program, i, j, z);
+		handle_redirect(program, run_output, doc);
+	}
+}
+
+static void	find_redirect(t_program *program, int *i, int *j, int *z)
+{
+	quote_skip(program->parser_input[*i][*j]->cmd, z);
+	if (program->parser_input[*i][*j]->cmd[*z] == '<'
+		|| program->parser_input[*i][*j]->cmd[*z] == '>')
+	{
+		program->redi_type = program->parser_input[*i][*j]->cmd[*z];
+		if (program->parser_input[*i][*j]->cmd[*z] == '<'
+			&& (program->parser_input[*i][*j]->cmd[*z + 1]
+				&& program->parser_input[*i][*j]->cmd[*z + 1] == '<'))
+		{
+			(*z) += 2;
+		}
+		take_type_redi(program, i, j, z);
+	}
+	else if (program->parser_input[*i][*j]->cmd[*z]
+		&& program->parser_input[*i][*j]->cmd[*z] != '\''
+		&& program->parser_input[*i][*j]->cmd[*z] != '\"')
+		(*z)++;
+}
+
+void	redirect(t_program *program, int *i)
+{
+	int	j;
+	int	z;
+
+	if (*program->hd_flag == 0 && heredoc_count(program))
+	{
+		heredoc_main(program);
+		*program->hd_flag = 1;
+	}
+	program->redi_type = '\0';
 	j = 0;
-	// echo a > as
-	while (program->parser_input[*i][j] != NULL && program->parser_input[*i][j]->cmd)
+	z = 0;
+	while (program->parser_input[*i][j] != NULL
+		&& program->parser_input[*i][j]->cmd)
 	{
-		if (zi_redirectchr(program->parser_input[*i][j]->cmd, '>') && program->parser_input[*i][j]->key == 7)
-			go_redirect(program, append_output, '>', i, &j, 1);
-		else if (zi_redirectchr(program->parser_input[*i][j]->cmd, '<') != 1 && ft_strchr(program->parser_input[*i][j]->cmd, '<') != 0 && program->parser_input[*i][j]->key == 7)
-			go_redirect(program, run_input, '<', i, &j, 0);
-		else if (ft_strchr(program->parser_input[*i][j]->cmd, '>') != 0 && program->parser_input[*i][j]->key == 7)
-			go_redirect(program, run_output, '>', i, &j, 0);
+		z = 0;
+		while (program->parser_input[*i][j]->cmd[z])
+			find_redirect(program, i, &j, &z);
 		j++;
 	}
 }

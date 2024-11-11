@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   set_meta.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 19:24:42 by zayaz             #+#    #+#             */
-/*   Updated: 2024/10/08 17:45:08 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/07 17:52:57 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,23 +54,29 @@ static int	set_dolar(char *meta)
 	return (S_Dolar);
 }
 
-static int	set_redirect(char *meta)
+static void	set_quote_redi(char *meta, int *i)
 {
-	int		i;
 	char	q_type;
 
 	q_type = '\0';
+	q_type = meta[*i];
+	(*i)++;
+	while (meta[*i] && meta[*i] != q_type)
+		(*i)++;
+	if (meta[*i])
+		(*i)++;
+}
+
+static int	set_redirect(char *meta)
+{
+	int	i;
+
 	i = 0;
 	while (meta[i])
 	{
 		if (meta[i] && (meta[i] == '\"' || meta[i] == '\''))
 		{
-			q_type = meta[i];
-			i++;
-			while (meta[i] && meta[i] != q_type)
-				i++;
-			if (meta[i])
-				i++;
+			set_quote_redi(meta, &i);
 			continue ;
 		}
 		if (meta[i] != '\0' && (meta[i] == '<' || meta[i] == '>'
@@ -81,12 +87,11 @@ static int	set_redirect(char *meta)
 		}
 		i++;
 	}
-	return (412);
+	return (8);
 }
 
-int	set_meta(t_program *program, char *meta)
+int	set_meta( char *meta)
 {
-	(void)program;
 	if ((ft_strchr(meta, 34) == 0) && (ft_strchr(meta, 39) == 0))
 	{
 		if (!ft_strncmp(meta, "~", ft_strlen(meta)))

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_redirection.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
+/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 20:19:08 by zayaz             #+#    #+#             */
-/*   Updated: 2024/09/21 20:03:24 by itulgar          ###   ########.fr       */
+/*   Updated: 2024/11/07 14:07:02 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,13 @@
 
 static char	*skip_quote(char *input)
 {
-	while (*input && !(*input == '\'' || *input == '\"'))
+	char	type;
+
+	type = *input;
+	input++;
+	while (*input && *input != type)
 		input++;
-	if (*input)
+	if (*input == type)
 		input++;
 	return (input);
 }
@@ -38,27 +42,39 @@ static int	count_redirect(char *input)
 	return (1);
 }
 
+static int	redirect_check(char *input)
+{
+	if ((*input == '<' || *input == '>'))
+	{
+		if ((*input == '<' && *(input + 1) == '>') || (*input == '>' && *(input
+					+ 1) == '<'))
+		{
+			return (0);
+		}
+		while (*input == 32)
+			input++;
+		if (*input == '\0' || ((*(input) == '<' || *(input) == '>') && *(input
+					+ 1) == '\0'))
+			return (0);
+	}
+	return (1);
+}
+
 int	p_redirection(t_program *program, char *input)
 {
-	(void)program;
 	while (*input)
 	{
-		if (*input == '\'' || *input == '\"')
-			input = skip_quote(input + 1);
-		if (!count_redirect(input))
-			return (error_message("syntax error to redirection"));
-		if ((*input == '<' || *input == '>'))
+		if (*input && (*input == '\'' || *input == '\"'))
 		{
-			if ((*input == '<' && *(input + 1) == '>') || (*input == '>'
-					&& *(input + 1) == '<'))
-					return (error_message("syntax error to redirection1"));
-			while (*input == 32)
-				input++;
-			if (*input == '\0' || ((*(input) == '<' || *(input) == '>')
-					&& *(input + 1) == '\0'))
-				return (error_message("syntax error to redirection2"));
+			input = skip_quote(input);
+			if (*input == '\0')
+				break ;
 		}
-		if (*input != '\0')
+		if (!redirect_check(input))
+			return (p_error(program, "syntax error to redirection"));
+		if (!count_redirect(input))
+			return (p_error(program, "syntax error to redirection"));
+		if (*input && *input != '\'' && *input != '\"')
 			input++;
 	}
 	return (1);

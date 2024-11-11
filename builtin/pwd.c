@@ -6,17 +6,17 @@
 /*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 15:37:45 by zayaz             #+#    #+#             */
-/*   Updated: 2024/10/13 13:59:23 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/06 13:45:08 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	pwd(void)
+void	pwd(t_program *program)
 {
-	// büyük küçük harf duyarsız
-	char pwd[1024];
-	getcwd(pwd, sizeof(pwd));
+	char	pwd[1024];
+
+	getcwd(pwd, 1024);
 	printf("%s\n", pwd);
-	exit(0);
+	program->status = 0;
 }

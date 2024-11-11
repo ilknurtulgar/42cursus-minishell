@@ -3,56 +3,71 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zerrinayaz <zerrinayaz@student.42.fr>      +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 17:36:01 by itulgar           #+#    #+#             */
-/*   Updated: 2024/10/14 16:22:35 by zerrinayaz       ###   ########.fr       */
+/*   Updated: 2024/11/07 18:42:03 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static int	flag_control(char **cmd, int *j)
+static int	flag_helper(char *cmd, char c)
 {
-	int	i;
-
-	i = 0;
-	if (cmd[1][0] == '-' && cmd[1][1] == 'n' && cmd[1][2] == '\0')
+	if (*cmd == '\0')
+		return (0);
+	while (*cmd)
 	{
-		while (cmd[i] != NULL && ft_strncmp(cmd[i], "-n",
-				ft_strlen("-n")) == 0 && cmd[i][*j] == '\0')
+		if (*cmd == c)
+			cmd++;
+		else if (*cmd != '\0')
+			return (0);
+	}
+	return (1);
+}
+
+static int	flag_control(char **cmd, int *i)
+{
+	if (cmd[1][0] == '-' && cmd[1][1] == 'n')
+	{
+		if (cmd[*i] && cmd[*i][0] == '-' && (flag_helper(&cmd[*i][1], 'n') == 1
+				|| zi_strcmp(&cmd[*i][1], "-n") == 0))
 		{
-			if (cmd[i][*j])
-				(*j)++;
+			while (cmd[*i] && cmd[*i][0] == '-')
+			{
+				if (flag_helper(&cmd[*i][1], 'n') == 1 || zi_strcmp(&cmd[*i][1],
+						"-n") == 1)
+				{
+					(*i)++;
+					return (1);
+				}
+				if (cmd[*i])
+					(*i)++;
+			}
+			return (1);
 		}
-		return (1);
 	}
 	return (0);
 }
 
-void	echo(char **cmd)
+void	echo(t_program *program, char **cmd)
 {
 	int	flag;
 	int	i;
-	int	j;
 
-	i = 0;
-	j = 1;
-	if (!cmd[0][1])
-		return ;
-	flag = flag_control(cmd, &j);
-	while (cmd[i] && cmd[i][j])
+	i = 1;
+	if (cmd[i])
+		flag = flag_control(cmd, &i);
+	else
+		flag = 0;
+	while (cmd[i])
 	{
 		printf("%s", cmd[i]);
-		if (cmd[i] && cmd[i] && cmd[i])
-		{
+		i++;
+		if (cmd[i])
 			printf(" ");
-			j++;
-		}
-		if (!cmd[i][j])
-			break ;
 	}
 	if (!flag)
 		printf("\n");
-	exit(0);
+	program->status = 0;
 }

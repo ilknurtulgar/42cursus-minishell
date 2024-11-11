@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   p_quote.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zerrinayaz <zerrinayaz@student.42.fr>      +#+  +:+       +#+        */
+/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 18:10:17 by zayaz             #+#    #+#             */
-/*   Updated: 2024/09/30 19:47:09 by zerrinayaz       ###   ########.fr       */
+/*   Updated: 2024/11/05 16:13:43 by zayaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static char *quote_check(t_program *program, char *input, char c)
+static char	*quote_check(t_program *program, char *input, char c)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	program->check_quote = 0;
@@ -23,29 +23,31 @@ static char *quote_check(t_program *program, char *input, char c)
 		if (input[i] == c)
 		{
 			program->check_quote = 1;
-			break;
+			break ;
 		}
 		i++;
 	}
 	return (input + i);
 }
 
-static char *quote_handler(t_program *program, char *input, char quote)
+static char	*quote_handler(t_program *program, char *input, char quote)
 {
 	input = quote_check(program, input + 1, quote);
 	return (input);
 }
 
-int p_quote(t_program *program, char *input)
+int	p_quote(t_program *program, char *input)
 {
 	while (*input)
 	{
 		if (*input == '\'' || *input == '\"')
+		{
 			input = quote_handler(program, input, *input);
-		if (!program->check_quote)
-			return (error_message("syntax error to quote"));
+			if (program->check_quote == 0)
+				return (p_error(program, "syntax error to quote"), 0);
+		}
 		if (!*input)
-			break;
+			break ;
 		input++;
 	}
 	return (1);

@@ -3,97 +3,98 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zerrinayaz <zerrinayaz@student.42.fr>      +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 17:45:46 by zayaz             #+#    #+#             */
-/*   Updated: 2024/10/14 16:56:09 by zerrinayaz       ###   ########.fr       */
+/*   Updated: 2024/11/08 15:43:40 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void exec_command(t_program *program)
+static void	run_execve_cmd(t_program *program, int *i, pid_t *pid_fork)
 {
-	(void)program;
-	// exec
-}
-
-void exec_builtin(t_program *program)
-{
-	// if ((ft_strncmp(program->cmd[0], "exit",
-	//	ft_strlen(program->cmd[0])) == 0))
-	// 	echo(program->cmd);
-	if ((ft_strncmp(program->cmd[0], "echo", ft_strlen(program->cmd[0])) == 0))
-		echo(program->cmd);
-	else if ((ft_strncmp(program->cmd[0], "pwd",
-						 ft_strlen(program->cmd[0])) == 0))
-		pwd();
-	else if ((ft_strncmp(program->cmd[0], "cd",
-						 ft_strlen(program->cmd[0])) == 0))
-		cd(program, program->cmd);
-	else if ((ft_strncmp(program->cmd[0], "unset",
-						 ft_strlen(program->cmd[0])) == 0))
-		zi_unset(program, program->cmd);
-	else if ((ft_strncmp(program->cmd[0], "export",
-						 ft_strlen(program->cmd[0]) == 0)))
-		export(program, program->cmd);
-	else if ((ft_strncmp(program->cmd[0], "env",
-						 ft_strlen(program->cmd[0])) == 0))
-		env(program, program->cmd);
-}
-void create_fork(t_program *program, int *i)
-{
-	pid_t pid_fork;
-
-	pid_fork = fork();
-	// exit atman gerek burada
-	if (pid_fork == -1)
-		return;
-	if (pid_fork == 0)
+	program->built_check = is_builtin(program);
+	if (is_builtin(program) && program->p_count == 0)
+		run_one_cmd(program, i);
+	else
 	{
-		if (program->hd_count > 0)
+		g_global_signal = 1;
+		*pid_fork = fork();
+		if (*pid_fork == -1)
+			return ;
+		if (*pid_fork == 0)
 		{
-			printf("count: %d\n",program->hd_count);
-			
-			heredoc_run(program);
+			pipe_dup(program, i);
+			if (is_builtin(program) && program->p_count > 0)
+				child_builtin(program);
+			exec_command(program);
+			exit(127);
 		}
-		if (redirect_c(program, i))
-		{
-			printf("geldim rido\n");
-			redirect(program, i);
-		}
-		// echo a >as< biy
-		// program->cmd;
-		// redirect tırnağını temizlemeyi unutmayın
-		// exec_builtin(program);
-		//exec_command(program);
-		//printf("çıktım");
-		exit(0);
+		return ;
 	}
 }
-void zi_exec(t_program *program)
+
+static void	create_fork(t_program *program, int *i)
 {
-	int i;
+	pid_t	pid_fork;
+
+	pid_fork = 1;
+	exec_cmd(program, i);
+	if (redirect_c(program, i) || heredoc_count(program) > 0)
+	{
+		redirect(program, i);
+		if (program->finish_check == 3)
+			return ;
+		if (program->rdr_error == 1 || program->rdr_error == 2)
+		{
+			file_error(program);
+			return ;
+		}
+	}
+	if (!program->cmd[0])
+		return ;
+	if (program->cmd[0] && program->cmd)
+		run_execve_cmd(program, i, &pid_fork);
+	program->process[*i].pid = pid_fork;
+}
+
+static void	handle_cmd(t_program *program, int *i)
+{
+	program->rdr_error = 0;
+	program->status = 0;
+	if (program->redi_flag == 1)
+		program->redi_flag = 0;
+	create_fork(program, i);
+	if (program->cmd != NULL)
+		free_array(program->cmd);
+	return ;
+}
+
+void	zi_exec(t_program *program)
+{
+	int	i;
 
 	i = 0;
-	// process pipe için
-	// fork komut sayısı kadar
 	program->p_count = pipe_count(program);
-	program->hd_count = heredoc_count(program);
-	if (program->p_count > 0)
+	program->process = malloc(sizeof(t_process) * (program->p_count + 1));
+	program->here_fd = ft_calloc((program->p_count + 1), sizeof(int));
+	*program->hd_flag = 0;
+	program->redi_flag = 0;
+	while (i < program->p_count)
 	{
-		program->process = malloc(sizeof(t_process) * (program->p_count + 1));
-		while (i < program->p_count)
-			pipe(program->process[i++].fd);
+		pipe(program->process[i].fd);
+		i++;
 	}
 	i = 0;
 	while (i < program->p_count + 1)
 	{
-		create_fork(program, &i);
+		handle_cmd(program, &i);
+		if (program->finish_check == 3)
+			break ;
 		i++;
 	}
-	i = 0;
-	while (program->p_count > 0 && i < program->p_count)
-		waitpid(program->process[i++].pid, NULL, 0);
-	// close_pipe;
+	free(program->here_fd);
+	close_pipe(program);
+	exit_code_handler(program);
 }

@@ -3,52 +3,56 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zerrinayaz <zerrinayaz@student.42.fr>      +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 15:47:05 by zayaz             #+#    #+#             */
-/*   Updated: 2024/10/14 17:46:56 by zerrinayaz       ###   ########.fr       */
+/*   Updated: 2024/11/08 16:30:40 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static void export_env(t_program *program)
+static void	simple_export(t_program *program, char *cmd_item)
 {
-	t_list *list;
+	t_mlist	*node;
+
+	if (!check_key(cmd_item, program->export_list))
+	{
+		node = zi_lstnew("(null)", cmd_item);
+		zi_lstadd_back(&program->export_list, node);
+	}
+	if (program->flag_identifier != 1)
+		program->status = 0;
+}
+
+static void	export_env(t_program *program)
+{
+	t_mlist	*list;
 
 	list = program->export_list;
 	while (list != NULL)
 	{
 		if (list && (list->content != NULL && list->key != NULL))
 		{
-			if ((ft_strncmp(list->content, "(null)",
-							ft_strlen(list->content))) != 0)
-				printf("declare -x %s=%s\n", (char *)list->key,
-					   (char *)list->content);
-			else if (ft_strncmp(list->content, "(null)",
-								ft_strlen(list->content)) == 0)
+			if ((zi_strcmp(list->content, "(null)")) != 0)
+				printf("declare -x %s=\"%s\"\n", (char *)list->key,
+					(char *)list->content);
+			else if (zi_strcmp(list->content, "(null)") == 0)
 				printf("declare -x %s\n", (char *)list->key);
 		}
 		list = list->next;
 	}
 }
 
-static void equals(char *cmd, int *k)
+static char	*equals_key(char *cmd)
 {
-	while (cmd[*k] != '\0' && cmd[*k] != 61)
-		(*k)++;
-	if (cmd && cmd[*k] == 61)
-		(*k)++;
-}
-static char *equals_key(char *cmd)
-{
-	char *equ_key;
-	int len;
-	int i;
+	char	*equ_key;
+	int		len;
+	int		i;
 
 	equ_key = NULL;
 	len = ft_strlen(cmd);
-	equ_key = malloc(len + 1);
+	equ_key = malloc(sizeof(char) * (len + 1));
 	if (equ_key == NULL)
 		return (NULL);
 	i = 0;
@@ -66,38 +70,36 @@ static char *equals_key(char *cmd)
 	return (equ_key);
 }
 
-static void export_run(t_program *program, char *cmd, int i)
+static void	export_run(t_program *program, char **cmd, int i)
 {
-	char *equ_key;
-	t_list *node;
+	char	*equ_key;
 
 	while (cmd[i])
 	{
 		equ_key = equals_key(cmd[i]);
 		if (!check_identifier(equ_key))
-		{
-			printf("export: `%s':not a valid identifier\n",
-				   cmd[i]);
-			free(equ_key);
-		}
+			identifier_error(program, "export", cmd[i],
+				":not a valid identifier");
 		else if (ft_strchr(cmd[i], 61) != 0)
-			equal_in_export(program, cmd, &i);
-		else
 		{
-			node = ft_lstnew("(null)", cmd[i]);
-			ft_lstadd_back(&program->export_list, node);
+			equal_in_export(program, cmd, &i);
+			if (program->flag_identifier != 1)
+				program->status = 0;
 		}
-		free(equ_key);
+		else
+			simple_export(program, cmd[i]);
+		if (equ_key)
+			free(equ_key);
 		i++;
 	}
 }
 
-void export(t_program *program, char **cmd)
+void	export(t_program *program, char **cmd)
 {
-	int i;
+	int	i;
 
+	program->flag_identifier = 0;
 	i = 1;
-
 	if (!cmd[i])
 		export_env(program);
 	else if (cmd[i])

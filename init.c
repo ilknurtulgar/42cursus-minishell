@@ -3,30 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zerrinayaz <zerrinayaz@student.42.fr>      +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 18:32:15 by itulgar           #+#    #+#             */
-/*   Updated: 2024/10/14 17:11:51 by zerrinayaz       ###   ########.fr       */
+/*   Updated: 2024/11/07 19:09:49 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void print_list(t_list *list)
+static t_mlist	*set_env(char **envp)
 {
-
-	while (list != NULL)
-	{
-		printf("%s=%s\n", (char *)list->key, (char *)list->content);
-		list = list->next;
-	}
-}
-
-static t_list *set_env(char **envp)
-{
-	int i;
-	t_list *tmp_list;
-	char **tmp;
+	int		i;
+	t_mlist	*tmp_list;
+	char	**tmp;
 
 	tmp_list = NULL;
 	i = 0;
@@ -34,52 +24,29 @@ static t_list *set_env(char **envp)
 	{
 		tmp = ft_split(envp[i], '=');
 		if (tmp[0] && tmp[1])
-			ft_lstadd_back(&tmp_list, ft_lstnew(tmp[1], tmp[0]));
+			zi_lstadd_back(&tmp_list, zi_lstnew(tmp[1], tmp[0]));
 		free_array(tmp);
 		i++;
 	}
 	return (tmp_list);
 }
 
-void signal_handler(int sig)
-{
-	(void)sig;
-	//global_signal = sig;
-	if (global_signal == SIGINT)
-	{
-		printf("\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-	}
-	// else if (global_signal == EOF)
-	// {
-	// 	printf("exit\n");
-	// 	exit(1);
-	// }
-	else if (global_signal == IN_HERADOC)
-	{
-		write(1, "\n", 1);
-		exit(1);
-	}
-	global_signal = 0;
-}
-static void init_signal(void)
-{
-	signal(SIGINT, signal_handler);
-	// signal(EOF, signal_handler);
-	signal(SIGQUIT, SIG_IGN);
-}
-
-void ft_init_program(t_program *program, char **envp)
+void	ft_init_program(t_program *program, char **envp)
 {
 	program->input = NULL;
 	program->envp_list = set_env(envp);
 	program->export_list = set_env(envp);
-
-	global_signal = 0;
 	program->check_quote = 1;
+	program->p_count = 0;
+	program->fd_input = 0;
+	program->fd_output = 0;
 	program->control_q_split = 0;
 	program->control_p_split = 0;
-	init_signal();
+	program->status = 0;
+	program->hd_flag = malloc(sizeof(int));
+	*program->hd_flag = 0;
+	program->rdr_error = 0;
+	program->built_check = 0;
+	program->start_cmd = 0;
+	signal_init();
 }

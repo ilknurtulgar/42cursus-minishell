@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zayaz <zayaz@student.42istanbul.com.tr>    +#+  +:+       +#+        */
+/*   By: itulgar < itulgar@student.42istanbul.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 17:47:51 by itulgar           #+#    #+#             */
-/*   Updated: 2024/10/02 16:35:42 by zayaz            ###   ########.fr       */
+/*   Updated: 2024/11/07 18:59:25 by itulgar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	free_envp_list(t_list *envp_list)
+static void	free_envp_list(t_mlist *envp_list)
 {
-	t_list	*temp;
+	t_mlist	*temp;
 
 	while (envp_list)
 	{
@@ -25,12 +25,13 @@ static void	free_envp_list(t_list *envp_list)
 		envp_list = temp;
 	}
 }
+
 void	free_array(char **tmp)
 {
 	int	i;
 
 	i = 0;
-	while (tmp[i])
+	while (tmp && tmp[i])
 	{
 		free(tmp[i]);
 		i++;
@@ -38,6 +39,7 @@ void	free_array(char **tmp)
 	if (tmp)
 		free(tmp);
 }
+
 void	free_parser_input(t_program *program)
 {
 	int	i;
@@ -52,8 +54,9 @@ void	free_parser_input(t_program *program)
 		j = 0;
 		while (program->parser_input[i][j])
 		{
-			if (program->parser_input[i][j])
-				free(program->parser_input[i][j]);
+			if (program->parser_input[i][j]->cmd)
+				free(program->parser_input[i][j]->cmd);
+			free(program->parser_input[i][j]);
 			j++;
 		}
 		free(program->parser_input[i]);
@@ -68,7 +71,17 @@ void	free_program(t_program *program)
 		return ;
 	if (program->input)
 		free(program->input);
+	if (program->parser_input)
+		free_parser_input(program);
 	if (program->envp_list)
 		free_envp_list(program->envp_list);
 	free(program);
+}
+
+void	dolar_free(char *env_str, char *after_dolar)
+{
+	if (env_str != NULL && env_str[0] != '\0')
+		free(env_str);
+	if (after_dolar)
+		free(after_dolar);
 }
